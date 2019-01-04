@@ -1,0 +1,362 @@
+---
+title: "An algorithm for a spatial mapping using a hexagon tilegram, with application to Australia disease maps"
+author: "Stephanie"
+date: "6 December 2018"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Abstract
+
+<!--
+problem has been studied
+what is the goal of the thesis/paper
+brief statement on existing solutions and their drawbacks
+major  contributions  of  the  thesis
+State  briefly  assumptions  and  limitations. 
+The  abstract  should  also  include  major idea(s)
+the type (e.g. performance, complexity) and result of analysis done
+-->
+
+KEYWORDS: 
+
+# Introduction
+
+Representing the globe in 2D space has presented issues for many years. Methods have been established to visualise geographical space.
+We present a solution for alternate visualisations when the intention is to represent the spatial distribution.
+
+
+## Motivation
+<!--
+Problem   statement   (precise   definition   and   importance);   
+avoid   very   technical definitions  and  statements, give  good  intuition for your involved definitions or facts. 
+-->
+
+- Spatial distributions are not well presented when areas differ in size.
+- We want to understand the distribution among population
+- We can benefit from making the focus the distribution, not the geography
+
+<!--
+Existing  solutions  and  their  criticism  (limit  only  to  those  directly  relevant  to  the  contribution of the thesis; give a motivation for doing research on the topic); 
+-->
+
+- Presenting spatial distributions
+- Extremely small areas are lost not easily compared at a high level
+- Choropleths; unequal space on the display, difficult to represent Australia
+- Cartograms; strong distortions misrepresent Australia
+
+<!--
+With different characteristics or properties:
+
+-->
+
+- Unusual population settlement and dispersion over the geographical space: Australia
+Dense south east, sparse central and west
+
+
+- Applying alternative maps that allow for dense population areas when cities that are population dense are close together
+
+
+
+## Background
+<!--
+basic facts needed to tune the reader to the thesis or paper
+-->
+
+- Choropleth methods are accurate geographically.
+- Cartogram alternative map has been used historically.
+- Spatial relationships are preserved.
+
+<!--
+all  known  results  relevant  to  the  problem  stated,  
+whether  or  not  they  are  used  in  proposed  contributions
+-->
+
+<!--
+Discuss  advantages  and  drawbacks  of  known  solutions  that  are  relevant  to  your  problem, 
+discuss  the  relevance of each reviewed item to your topic and your solutions. 
+-->
+
+<!--
+For  every  discussed  reference,  it  is  very  important  to  relate  them  to  your  problem  and  contribution  in  one  of  several  ways:  
+it  does  not  exactly  solve  the  same  problem,
+it  solves  the  same  problem  but  makes  different  assumptions  about  the  system, 
+it  has  some  limitations  that you  do  not  have, 
+it  makes  the  same  assumptions  but  does  not  work  well  under  certain  
+conditions  and  scenarios  for  which  you  have  better  solutions,  or, 
+if  none  of  these  is  true,  you are   considering   it   as   valid   competitor,   and   will   try   to   defeat   it   in   your   analytical   or 
+
+experimental  comparisons.  
+-->
+## Proposed Solution
+
+<!--
+Contributions (proposed solutions; why they are expected to be better; essence of the idea(s) used in proposed solutions); 
+What the algorithm is trying to do:
+-->
+
+- Like Dorling, same shape will be used.
+Like tilegram, tesselation using equally sized shapes.
+
+- Allocate each geographic area to a map space of consistent tesselated shape
+
+which is different from existing algorithms:
+- contiguous, keeps exact neightbours, no recognisable shape
+- non contiguous, keeps shape, can lose neighbours
+
+
+<!--
+Why the reader should believe that it is correct or reasonable.
+-->
+- Clear to see spatial distribution, 
+_ Should keep neighbours relationships intact as geographic neighbours will have similar values
+
+<!--
+If it is supposed to be “better”, what is meant by better.
+-->
+Easier to read distribution at a distance, see a much larger area, general relationship at a glance
+
+<!--
+Conditions, assumptions and limitations of the research done; 
+-->
+Works well for America, states are almost homogeneous 
+Works well for England, London is the biggest issue, pushing out rural areas does not disturb population dense areas.
+
+<!--
+Analysis  (theoretical,  experimental,  simulations,  implementations, done  in  thesis;  under what conditions and scenarios is your solution best?  
+-->
+
+Our solution considers multiple population dense areas.
+
+Allows dispersion to be increased when needed, and distance from origin to be considered
+
+
+The Dorling maps in [@TVSSS] give examples of displacing central geographically small, population dense areas.
+This inspired the concept of this algorithm. 
+
+
+
+# Algorithm
+
+The algorithm operates on a set of polygons.
+There are parameters considered that may be provided, or will be automatically derived.
+All necessary functions are exported, with a main function `create_hexmap` used to step through automatically.
+
+When utilising individual functions, we recommend the following approach:
+
+## Polygon Information
+
+The collection of polygons should be considered first.
+There are several ways of providing the set of polygons.
+The following methods are available via the `read_shape` function.
+
+To utilise a shape file from a directory on your device, provide the file path for .shp file.
+The `st_read` function is applied internally to create the sf object.
+If the shape file is an .Rda file, it is loaded into the current environment.
+Empty geometries are removed from the sf object, and the remaining polygons are projected to the Australian standard.
+
+```{r}
+
+```
+
+The geometry column now contains projected polygons,
+the projected centroids are derived for all polygons remaining in the set.
+
+## Hexgon grid
+Create a grid of hexagon centroids using the `create_grid` function.
+
+The following parameter values are necessary for this step, and will be automatically derived in the `create_hexmap` function if not provided:
+
+- buffer distance: *the distance, in degrees, to extend the hexagon grid beyond the polygon centroids provided*
+- size of the hexagons: *a float value in degrees for the width of the hexagons to be placed on the map space*
+- filter distance: *the amount of hexagons around each centroid to consider for allocation, by default this is 10 hexagons*
+
+The grid creation takes several steps:
+
+
+```{r}
+# create grid calls these functions
+# call create grid here, or call these parts individually, may be a lot of code
+```
+
+
+### Step 1: Expand the grid
+Two sequences are used, one for longitude and another for latitude.
+The sequences begin at the minimum longitude or latitude, minus the buffer distance.
+Equally spaced intervals, the size of the hexagons, are created up to the maximum longitude or latitude, plus the buffer distance.
+
+An individual point is created from all combinations of longitude and latitude sequences.
+
+This grid is square, which will not facilitate tesselated hexagons. 
+Every second latitude (row) of points will be shifted right by half of the hexagon size.
+
+There are more points than necessary on this grid.
+To filter the grid for appropriate hexagons for allocation,
+the `create_buffer` function is used.
+
+### Step 2: Rolling windows
+The longitude columns and latitude rows are given integer id values.
+The rows and columns are then divided into 20 groups, 
+recording the amount of rows in each latitude group and the amount of columns in each longitude group.
+
+The amount of rows and columns are then used to make manual rolling windows.
+
+The first rolling window function finds the minimum and maximum centroid values for the longitude columns and latitude rows.
+
+The second rolling window function finds the average of the rolling minimum and rolling maximum centroid values, for the longitude columns and latitude rows.
+
+<!--
+Figure of rolling window construction
+-->
+
+### Step 3: Filtering the grid
+Only the grid points between the rolling average of the minimum and maximum centroid valuesare kept, for each row and column of the grid.
+
+<!--
+Grid point figure
+-->
+
+## Centroid to focal point distance 
+
+```{r}
+#map closest focal point function
+```
+
+For each polygon centroid in the set. Find the distance to each of the focal points provided. The closest focal point name, the distance to the polygon centroid, and the angle from focal point to polygon centroid will be returned and added to the polygon data set in the polygon centroid row. 
+
+The distance between the polygon centroid and it's closest focal point data set is used to arrange the data set for allocation. The points are arranged in ascending order, from the centroid closest to any of the focal points, to the furthest.
+
+## Allocation of centroids
+
+```{r}
+#loop of centroid allocation
+```
+
+
+Allocation of all centroids can now take place using the set of polygon centroids and the hexagon map grid. 
+For each polygon centroid, only the hexagon grid points that have not yet been used can be considered.
+The filter distance parameter is used to subset possible grid points to only those surrounding the polygon centroid within the filter distance.
+Using the angle between each polygon centroid, and it's the closest focal point, the subset of points is filtered again.
+Of these possible points, only those within a specific amount of degrees plus and minus a specific angle range are kept. This angle begins at 30 degrees by default, and may increase if necessary.
+
+<!--
+figure of angle growing to show allocation of hexagons
+-->
+
+If no available hexagon grid point is found within the original filter distance and angle, the distance is expanded, only when a maximum distance is reached will the angle expand to accomodate more possible grid points.  
+
+The allocation is returned and combined with the data relating to each polygon.
+
+<!--
+Prosecode:  Number each step, never break a loop over steps,
+use subnumbering for parts of each step, and
+include explanatory text.
+Literate code:  The algorithm is introduced gradually,
+intermingled with discussion of underlying ideas.
+-->
+
+## Applications of algorithm
+
+<!--
+Is  your  solution  always  working?  
+Can  you  prove it? 
+How does it work? 
+-->
+
+Examples of Melbourne, Victoria, Australia
+At different levels, distance from original centroids, change in area
+
+LGA of all australia
+sa2 for queensland
+
+<!--
+Is your analysis about worst case or average case? 
+What kind of theoretical and analytical support can you give for your proposed scheme/solution? 
+-->
+
+
+# Evaluation
+
+<!--
+The  performance  of  your  solution  can  be  compared  with  existing  solutions,  if  any  exists 
+under  same  or  similar  assumptions,  analytically  and/or  by  doing  a  simulation.
+
+Find examples of measures of cartogram effectiveness
+
+
+-->
+
+Measure changes to areas:
+Each hexagon area in the set of $npolys$ is standardised to 1 unit.
+Where 1 unit is the area of a hexagon of the designated size.
+
+$area_{h_i} = 1$
+
+$area_h = 1 * npolys$
+
+$y_i$ denotes the statistic of interest for polygon i, where i = 1,...,npolygs
+$x_i$ denotes the spatial area for polygon i, where i = 1,...,npolys
+
+Areal Statistic Distortion is the change in the areal distribution of the set of polygons.
+Difference between space taken by polygons and space taken by hexagons, with respect to the desired statistic. Setting the desired statistic to area givesthe change in map space used to represent the polygons. 
+
+The average when considering area used to display:
+
+$A = \sum_{i=1}^{npolys}y_ix_i/ \sum_{i=1}^{npolys}x_i$
+
+$H = \sum_{i=1}^{npolys}y_i/npolys$
+
+Using $w_i = x_i/\sum_{i=1}^{npolys}x_i$
+
+$\sqrt{ 1/npolys\sum_{i=1}^{npolys}(y_i - \bar y)^2 w_i }$
+
+Considering only a local area distortion: 
+Where the subset used contains only neighbours within a certain distance of the polygon centroid
+
+Where $\bar y_d$ is the average of the polygon statistics considering only the polygons where the distance between polygon centroid x_i and polygon centroid x_p is less than d:
+
+$d(x_ix_p) < d$
+
+
+$\sqrt{ 1/npolys\sum_{i=1}^{npolys}(y_i - \bar y_d)^2 w_i }$
+
+
+<!--
+Apply methods of evaluation used elsewhere
+Nusrat, Alam and Kobourov:
+- Statistical accuracy: how well do the modified areas
+represent the corresponding statistic shown (e.g.,
+population or GDP). This is measured in terms of
+“cartographic error.”
+- Geographical accuracy: how much do the modified
+shapes resemble the original geographic shapes and
+how well preserved are their relative positions.
+- Topological accuracy: how well does the topology (as
+measured by adjacent regions) of the cartogram
+match that of the original map.
+-->
+
+# Summary
+
+<!--
+What did you achieve with this research? 
+What are the drawbacks of your solution(s)? 
+What kind  of  future  work  can  be  done? 
+Do  you  have  some  ideas  that  you  intend  to  study  further? 
+The  ownership  of  some  other  possible  solutions,  not  fully  explored,  or  subject  of  your  
+forthcoming  different  article,  can  be  protected  by  outlining  them  briefly  in  the  conclusion  
+section, sometimes with reference to upcoming article. 
+-->
+
+# Discussion
+
+
+\pagebreak
+
+# Reference List
+
+<div id="refs"></div>
