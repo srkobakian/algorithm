@@ -1,0 +1,35 @@
+@article{HERDTC,
+author = {Sarah Almukhtar and Mike Andre and Wilson Andrews and Matthew Bloch and Jeremy Bowers and Larry Buchanan and Nate Cohn and Alastair Coote and Annie Daniel and Tiff Fehr and Samuel Jacoby and Josh Katz and Josh Keller and Aaron Krolik and Jasmine C. Lee and Rebecca Lieberman and Blacki Migliozzi and Paul Murray and Kevin Quealy and Jaymin Patel and Adam Pearce and Rachel Shorey and Michael Strickland and Rumsey Taylor and Isaac White and Maxine Whitely and and Josh Williams},
+title={House Election Results: Democrats Take Control}, 
+url={https://www.nytimes.com/interactive/2018/11/06/us/elections/results-house-elections.html}, 
+journal={The New York Times}, 
+publisher={A. G. Sulzberger}, 
+author={Almukhtar, Sarah and Andre, Mike and Andrews, Wilson and Bloch, Matthew and Bowers, Jeremy}, year={2018}, month={Nov}}
+
+
+
+@article{ISDTCV,
+author = {Natalia Andrienko and Gennady Andrienko},
+title ={Informed Spatial Decisions Through Coordinated Views},
+journal = {Information Visualization},
+volume = {2},
+number = {4},
+pages = {270-285},
+year = {2003},
+doi = {10.1057/palgrave.ivs.9500058},
+URL = {https://doi.org/10.1057/palgrave.ivs.9500058},
+eprint = {https://doi.org/10.1057/palgrave.ivs.9500058},
+abstract = { According to a commonly accepted view, the process of decision making comprises three major phases: intelligence (situation analysis and problem recognition), design (finding possible variants of problem solution), and choice (evaluation of the options and selection of the most appropriate ones). It is widely recognised that exploratory data visualisation is very helpful during the first phase of the decision-making process, while the other phases require different software tools. In particular, the choice phase is typically supported by various computational methods that find appropriate trade-offs among multiple conflicting criteria taking into account user-specified priorities. Visualisation plays a limited role: in the best case, it is used to represent the final results of the computations. We argue that conscious, well-substantiated choice requires a more extensive use of exploratory visualisation facilities, which need to be properly coordinated with the computational multi-criteria decision support methods. Extremely important is a high degree of user interactivity, which allows the user to probe the robustness and quality of computationally derived solutions. We suggest several mechanisms for linking and coordinating visual exploratory tools with two types of computational methods differing in the sort of output they produce. We demonstrate the use of this dynamic link with an example of a real spatially related decision problem. }
+}
+
+
+@article{CPISACA,
+author = {B Sue Bell and Richard E Hoskins and Linda Williams Pickle and Daniel Wartenberg},
+title = {Current practices in spatial analysis of cancer data: mapping health statistics to inform policymakers and the public},
+journal = {International Journal of Health Geographics},
+volume = {5},
+pages = {49},
+year = {2006},
+doi = {10.1186/1476-072X-5-49},
+    abstract = { BACKGROUND: To communicate population-based cancer statistics, cancer researchers have a long tradition of presenting data in a spatial representation, or map. Historically, health data were presented in printed atlases in which the map producer selected the content and format. The availability of geographic information systems (GIS) with comprehensive mapping and spatial analysis capability for desktop and Internet mapping has greatly expanded the number of producers and consumers of health maps, including policymakers and the public. Because health maps, particularly ones that show elevated cancer rates, historically have raised public concerns, it is essential that these maps be designed to be accurate, clear, and interpretable for the broad range of users who may view them. This article focuses on designing maps to communicate effectively. It is based on years of research into the use of health maps for communicating among public health researchers. RESULTS: The basics for designing maps that communicate effectively are similar to the basics for any mode of communication. Tasks include deciding on the purpose, knowing the audience and its characteristics, choosing a media suitable for both the purpose and the audience, and finally testing the map design to ensure that it suits the purpose with the intended audience, and communicates accurately and effectively. Special considerations for health maps include ensuring confidentiality and reflecting the uncertainty of small area statistics. Statistical maps need to be based on sound practices and principles developed by the statistical and cartographic communities. CONCLUSION: The biggest challenge is to ensure that maps of health statistics inform without misinforming. Advances in the sciences of cartography, statistics, and visualization of spatial data are constantly expanding the toolkit available to mapmakers to meet this challenge. Asking potential users to answer questions or to talk about what they see is still the best way to evaluate the effectiveness of a specific map design. }
+}

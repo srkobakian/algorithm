@@ -1,15 +1,18 @@
 ---
 title: "An algorithm for a spatial mapping using a hexagon tilegram, with application to Australia disease maps"
-author: "Stephanie"
-date: "6 December 2018"
-output:
-  pdf_document: default
-  html_document: default
+
+author:
+  - name: Stephanie Kobakian
+    url: https://github.com/srkobakian
+    affiliation: Queensland University of Technology
+date: "`r Sys.Date()`"
+output: radix::radix_article
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 ```
+
 # Abstract
 
 <!--
