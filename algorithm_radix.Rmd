@@ -103,12 +103,12 @@ What the algorithm is trying to do:
 -->
 
 - Like Dorling, same shape will be used.
-Like tilegram, tesselation using equally sized shapes.
+Like tilegram, tessellation using equally sized shapes.
 
-- Allocate each geographic area to a map space of consistent tesselated shape
+- Allocate each geographic area to a map space of consistent tessellated shape
 
 which is different from existing algorithms:
-- contiguous, keeps exact neightbours, no recognisable shape
+- contiguous, keeps exact neighbours, no recognisable shape
 - non contiguous, keeps shape, can lose neighbours
 
 
@@ -149,6 +149,57 @@ The algorithm operates on a set of polygons.
 There are parameters considered that may be provided, or will be automatically derived.
 All necessary functions are exported, with a main function `create_hexmap` used to step through automatically.
 
+## Parameters
+
+The `create_hexmap` functions requires several parameters. If not provided the information may be derived from the polygon set used. 
+
+**The following must be provided to `create_hexmap`:**
+
+The set of polygons to be made into a hexagon map:
+`shp: a shape file`
+
+The location of a set of polygons to be made into a hexagon map:
+`shp_path: character string location of shape file`
+
+A column of unique names or id values for each area
+`sf_id: name of a unique column that distinguishes areas`
+
+A data frame of reference points to determine the order of allocation
+`focal_points a data frame of reference locations when allocating hexagons, capital cities of Australia are provided as capital_cities`
+
+```{r}
+library(tidyverse)
+library(sugaRbag)
+
+shp_path <- "data/lga_2011.rda"
+sf_id <- "LGA_CODE11"
+focal_points <- sugaRbag::capital_cities
+```
+
+
+**The following will be determined within `create_hexmap` if not provided, but must be created for the following example:**
+
+- `projstring	a string to indicate the projection and epsg`
+- `epsg	the four character string to indicate the CRS`
+- `buffer_dist: a float value for distance in degrees to extend beyond the - geometry provided`
+- `hex_size	a float value in degrees for the diameter of the hexagons`
+- `filter_dist amount of hexagons around centroid to consider for allocation`
+- `width the angle used to filter the grid points around a centroid`
+
+These parameters will be created when they are needed in the example:
+
+```{r}
+width <- 30 # arbitrary angle width
+```
+
+
+<!--
+needed later:
+
+- filter distance: *the amount of hexagons around each centroid to consider for allocation, by default this is 10 hexagons*
+-->
+
+
 When utilising individual functions, we recommend the following approach:
 
 ## Polygon Information
@@ -157,33 +208,56 @@ The collection of polygons should be considered first.
 There are several ways of providing the set of polygons.
 The following methods are available via the `read_shape` function.
 
-To utilise a shape file from a directory on your device, provide the file path for .shp file.
-The `st_read` function is applied internally to create the sf object.
-If the shape file is an .Rda file, it is loaded into the current environment.
+- To utilise a shape file from a directory on your device, provide the file path for .shp file.
+- The `st_read` function is applied internally to create the sf object.
+- If the shape file is an .Rda file, it is loaded into the current environment.
+
 Empty geometries are removed from the sf object, and the remaining polygons are projected to the Australian standard.
 
-```{r}
+We will use the Local Government Areas of Hobart as an example:
 
+```{r}
+# Read in shape information
+tas_shp <- read_shape(shp_path = shp_path)
+
+# Convert to a simple features object
+tas_lga <- sf::st_as_sf(tas_shp)
+
+# Select only desired LGA areas, those from Tasmania.
+tas_lga <- tas_shp %>% filter(STE_NAME11 == "Tasmania")
+tas_lga[[sf_id]] <- droplevels(as.factor(tas_lga[[sf_id]]))
+
+## Not necessary within `create_hexmap`:
+## Derive projection information
+crs_info <- sf::st_crs(tas_lga)
+proj4string <- crs_info$proj4string
+epsg <- crs_info$epsg
+
+## For UTM as per shape file
+projstring <- paste0("+init=epsg:", epsg, " ", proj4string, collapse = "")
+## if long lat is preferred to UTM, and not in proj4string:
+projstring <- "+init=epsg:3112 +proj=longlat +lat_1=-18 +lat_2=-36 +lat_0=0 +lon_0=134 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs"
+
+## Use the create_centroids function to find polygon centroids:
+centroids <- create_centroids(shp_sf = tas_lga, sf_id = sf_id, projstring = projstring, verbose = FALSE)
 ```
 
-The geometry column now contains projected polygons,
-the projected centroids are derived for all polygons remaining in the set.
 
-## Hexgon grid
+
+## Hexagon grid
 Create a grid of hexagon centroids using the `create_grid` function.
 
-The following parameter values are necessary for this step, and will be automatically derived in the `create_hexmap` function if not provided:
-
-- buffer distance: *the distance, in degrees, to extend the hexagon grid beyond the polygon centroids provided*
-- size of the hexagons: *a float value in degrees for the width of the hexagons to be placed on the map space*
-- filter distance: *the amount of hexagons around each centroid to consider for allocation, by default this is 10 hexagons*
-
-The grid creation takes several steps:
-
+The grid creation takes several steps. It requires the centroids, the bounding box, the hexagon size and the buffer distance.
 
 ```{r}
-# create grid calls these functions
-# call create grid here, or call these parts individually, may be a lot of code
+## Not necessary within `create_hexmap`:
+## create the bounding box from the set of polygon centroids:
+bbox <- tibble::tibble(min = c(min(centroids$longitude), min(centroids$latitude)),
+        max = c(max(centroids$longitude), max(centroids$latitude)))
+
+hex_size <- (bbox$max[1] - bbox$min[1])/(bbox$max[2] - bbox$min[2]) / 10
+
+buffer_dist <- max((bbox$max[1] - bbox$min[1]), (bbox$max[2] - bbox$min[2]))*0.3
 ```
 
 
@@ -194,21 +268,53 @@ Equally spaced intervals, the size of the hexagons, are created up to the maximu
 
 An individual point is created from all combinations of longitude and latitude sequences.
 
-This grid is square, which will not facilitate tesselated hexagons. 
+```{r}
+grid <- tibble::as.tibble(expand.grid(hex_long = seq(bbox$min[1] - buffer_dist,
+    bbox$max[1] + buffer_dist,
+    hex_size),
+    hex_lat = seq(bbox$min[2] - buffer_dist,
+        bbox$max[2] + buffer_dist,
+        hex_size)))
+```
+
+This grid is square, which will not facilitate tessellated hexagons. 
 Every second latitude (row) of points will be shifted right by half of the hexagon size.
+
+```{r}
+# Find every second latitude
+shift_lat <- grid %>% dplyr::select(hex_lat) %>%
+    dplyr::distinct() %>%
+    dplyr::filter(dplyr::row_number() %% 2 == 1) %>% unlist()
+
+# Shift the longitude of every second latitude to the right to make hex structure
+grid <- grid %>%
+    dplyr::mutate(hex_long = ifelse(hex_lat %in% shift_lat, hex_long,
+        hex_long + (hex_size / 2))) %>%
+    dplyr::mutate(id=1:NROW(.)) %>%
+    dplyr::mutate(assigned=FALSE)
+```
+
+Each row and column is given an ID
+
+```{r}
+grid <- grid %>%
+    mutate(hex_long_int = dense_rank(hex_long)-1,
+        hex_lat_int = dense_rank(hex_lat)-1)
+```
 
 There are more points than necessary on this grid.
 To filter the grid for appropriate hexagons for allocation,
 the `create_buffer` function is used.
 
+```{r}
+return_grid <- create_buffer(centroids, grid, hex_size, buffer_dist)
+```
+
+
 ### Step 2: Rolling windows
-The longitude columns and latitude rows are given integer id values.
-The rows and columns are then divided into 20 groups, 
-recording the amount of rows in each latitude group and the amount of columns in each longitude group.
+The rows and columns are divided into 20 groups. The amount of rows in each latitude group and the amount of columns in each longitude group are then used as the width of manual rolling windows.
 
-The amount of rows and columns are then used to make manual rolling windows.
-
-The first rolling window function finds the minimum and maximum centroid values for the longitude columns and latitude rows.
+The first rolling window function finds the minimum and maximum centroid values for the groups of longitude columns and the groups of latitude rows.
 
 The second rolling window function finds the average of the rolling minimum and rolling maximum centroid values, for the longitude columns and latitude rows.
 
@@ -217,7 +323,7 @@ Figure of rolling window construction
 -->
 
 ### Step 3: Filtering the grid
-Only the grid points between the rolling average of the minimum and maximum centroid valuesare kept, for each row and column of the grid.
+Only the grid points between the rolling average of the minimum and maximum centroid values are kept, for each row and column of the grid.
 
 <!--
 Grid point figure
@@ -250,13 +356,13 @@ Of these possible points, only those within a specific amount of degrees plus an
 figure of angle growing to show allocation of hexagons
 -->
 
-If no available hexagon grid point is found within the original filter distance and angle, the distance is expanded, only when a maximum distance is reached will the angle expand to accomodate more possible grid points.  
+If no available hexagon grid point is found within the original filter distance and angle, the distance is expanded, only when a maximum distance is reached will the angle expand to accommodate more possible grid points.  
 
 The allocation is returned and combined with the data relating to each polygon.
 
 <!--
-Prosecode:  Number each step, never break a loop over steps,
-use subnumbering for parts of each step, and
+Prose code:  Number each step, never break a loop over steps,
+use sub numbering for parts of each step, and
 include explanatory text.
 Literate code:  The algorithm is introduced gradually,
 intermingled with discussion of underlying ideas.
@@ -270,11 +376,11 @@ Can  you  prove it?
 How does it work? 
 -->
 
-Examples of Melbourne, Victoria, Australia
+Examples of Melbourne, Tasmania, Australia
 At different levels, distance from original centroids, change in area
 
-LGA of all australia
-sa2 for queensland
+LGA of all Australia
+SA2 for Queensland
 
 <!--
 Is your analysis about worst case or average case? 
@@ -305,7 +411,7 @@ $y_i$ denotes the statistic of interest for polygon i, where i = 1,...,npolygs
 $x_i$ denotes the spatial area for polygon i, where i = 1,...,npolys
 
 Areal Statistic Distortion is the change in the areal distribution of the set of polygons.
-Difference between space taken by polygons and space taken by hexagons, with respect to the desired statistic. Setting the desired statistic to area givesthe change in map space used to represent the polygons. 
+Difference between space taken by polygons and space taken by hexagons, with respect to the desired statistic. Setting the desired statistic to area gives the change in map space used to represent the polygons. 
 
 The average when considering area used to display:
 
@@ -327,7 +433,7 @@ $d(x_ix_p) < d$
 
 $\sqrt{ 1/npolys\sum_{i=1}^{npolys}(y_i - \bar y_d)^2 w_i }$
 
-
+Old neighbours over new neighbours?
 <!--
 Apply methods of evaluation used elsewhere
 Nusrat, Alam and Kobourov:

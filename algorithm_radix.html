@@ -24,8 +24,8 @@
   
   
   <!--  https://schema.org/Article -->
-  <meta property="article:published" itemprop="datePublished" content="2019-01-04" />
-  <meta property="article:created" itemprop="dateCreated" content="2019-01-04" />
+  <meta property="article:published" itemprop="datePublished" content="2019-01-07" />
+  <meta property="article:created" itemprop="dateCreated" content="2019-01-07" />
   <meta name="article:author" content="Stephanie Kobakian" />
   
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
@@ -41,7 +41,7 @@
   <!--radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["An algorithm for a spatial mapping using a hexagon tilegram, with application to Australia disease maps"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url","affiliation"]}},"value":[{"type":"character","attributes":{},"value":["Stephanie Kobakian"]},{"type":"character","attributes":{},"value":["https://github.com/srkobakian"]},{"type":"character","attributes":{},"value":["Queensland University of Technology"]}]}]},{"type":"character","attributes":{},"value":["2019-01-04"]},{"type":"character","attributes":{},"value":["radix::radix_article"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["An algorithm for a spatial mapping using a hexagon tilegram, with application to Australia disease maps"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url","affiliation"]}},"value":[{"type":"character","attributes":{},"value":["Stephanie Kobakian"]},{"type":"character","attributes":{},"value":["https://github.com/srkobakian"]},{"type":"character","attributes":{},"value":["Queensland University of Technology"]}]}]},{"type":"character","attributes":{},"value":["2019-01-07"]},{"type":"character","attributes":{},"value":["radix::radix_article"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   
@@ -1935,7 +1935,7 @@ distill-header .nav a {
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"An algorithm for a spatial mapping using a hexagon tilegram, with application to Australia disease maps","authors":[{"author":"Stephanie Kobakian","authorURL":"https://github.com/srkobakian","affiliation":"Queensland University of Technology","affiliationURL":"#"}],"publishedDate":"2019-01-04T00:00:00.000+11:00","citationText":"Kobakian, 2019"}
+{"title":"An algorithm for a spatial mapping using a hexagon tilegram, with application to Australia disease maps","authors":[{"author":"Stephanie Kobakian","authorURL":"https://github.com/srkobakian","affiliation":"Queensland University of Technology","affiliationURL":"#"}],"publishedDate":"2019-01-07T00:00:00.000+11:00","citationText":"Kobakian, 2019"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -1952,7 +1952,7 @@ distill-header .nav a {
 <div class="d-byline">
   Stephanie Kobakian <a href="https://github.com/srkobakian" class="uri">https://github.com/srkobakian</a> (Queensland University of Technology)
   
-<br />2019-01-04
+<br />2019-01-07
 </div>
 
 <div class="d-article">
@@ -2030,10 +2030,10 @@ Contributions (proposed solutions; why they are expected to be better; essence o
 What the algorithm is trying to do:
 -->
 <ul>
-<li><p>Like Dorling, same shape will be used. Like tilegram, tesselation using equally sized shapes.</p></li>
-<li><p>Allocate each geographic area to a map space of consistent tesselated shape</p></li>
+<li><p>Like Dorling, same shape will be used. Like tilegram, tessellation using equally sized shapes.</p></li>
+<li><p>Allocate each geographic area to a map space of consistent tessellated shape</p></li>
 </ul>
-<p>which is different from existing algorithms: - contiguous, keeps exact neightbours, no recognisable shape - non contiguous, keeps shape, can lose neighbours</p>
+<p>which is different from existing algorithms: - contiguous, keeps exact neighbours, no recognisable shape - non contiguous, keeps shape, can lose neighbours</p>
 <!--
 Why the reader should believe that it is correct or reasonable.
 -->
@@ -2056,41 +2056,82 @@ Analysis  (theoretical,  experimental,  simulations,  implementations, done  in 
 <p>The Dorling maps in <span class="citation" data-cites="TVSSS">[@TVSSS]</span> give examples of displacing central geographically small, population dense areas. This inspired the concept of this algorithm.</p>
 <h1 id="algorithm">Algorithm</h1>
 <p>The algorithm operates on a set of polygons. There are parameters considered that may be provided, or will be automatically derived. All necessary functions are exported, with a main function <code>create_hexmap</code> used to step through automatically.</p>
-<p>When utilising individual functions, we recommend the following approach:</p>
-<h2 id="polygon-information">Polygon Information</h2>
-<p>The collection of polygons should be considered first. There are several ways of providing the set of polygons. The following methods are available via the <code>read_shape</code> function.</p>
-<p>To utilise a shape file from a directory on your device, provide the file path for .shp file. The <code>st_read</code> function is applied internally to create the sf object. If the shape file is an .Rda file, it is loaded into the current environment. Empty geometries are removed from the sf object, and the remaining polygons are projected to the Australian standard.</p>
+<h2 id="parameters">Parameters</h2>
+<p>The <code>create_hexmap</code> functions requires several parameters. If not provided the information may be derived from the polygon set used.</p>
+<p><strong>The following must be provided to <code>create_hexmap</code>:</strong></p>
+<p>The set of polygons to be made into a hexagon map: <code>shp: a shape file</code></p>
+<p>The location of a set of polygons to be made into a hexagon map: <code>shp_path: character string location of shape file</code></p>
+<p>A column of unique names or id values for each area <code>sf_id: name of a unique column that distinguishes areas</code></p>
+<p>A data frame of reference points to determine the order of allocation <code>focal_points a data frame of reference locations when allocating hexagons, capital cities of Australia are provided as capital_cities</code></p>
 <div class="layout-chunk" data-layout="l-body">
 
 </div>
-<p>The geometry column now contains projected polygons, the projected centroids are derived for all polygons remaining in the set.</p>
-<h2 id="hexgon-grid">Hexgon grid</h2>
-<p>Create a grid of hexagon centroids using the <code>create_grid</code> function.</p>
-<p>The following parameter values are necessary for this step, and will be automatically derived in the <code>create_hexmap</code> function if not provided:</p>
+<p><strong>The following will be determined within <code>create_hexmap</code> if not provided, but must be created for the following example:</strong></p>
 <ul>
-<li>buffer distance: <em>the distance, in degrees, to extend the hexagon grid beyond the polygon centroids provided</em></li>
-<li>size of the hexagons: <em>a float value in degrees for the width of the hexagons to be placed on the map space</em></li>
-<li>filter distance: <em>the amount of hexagons around each centroid to consider for allocation, by default this is 10 hexagons</em></li>
+<li><code>projstring   a string to indicate the projection and epsg</code></li>
+<li><code>epsg the four character string to indicate the CRS</code></li>
+<li><code>buffer_dist: a float value for distance in degrees to extend beyond the - geometry provided</code></li>
+<li><code>hex_size a float value in degrees for the diameter of the hexagons</code></li>
+<li><code>filter_dist amount of hexagons around centroid to consider for allocation</code></li>
+<li><code>width the angle used to filter the grid points around a centroid</code></li>
 </ul>
-<p>The grid creation takes several steps:</p>
+<p>These parameters will be created when they are needed in the example:</p>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
+<!--
+needed later:
+
+- filter distance: *the amount of hexagons around each centroid to consider for allocation, by default this is 10 hexagons*
+-->
+<p>When utilising individual functions, we recommend the following approach:</p>
+<h2 id="polygon-information">Polygon Information</h2>
+<p>The collection of polygons should be considered first. There are several ways of providing the set of polygons. The following methods are available via the <code>read_shape</code> function.</p>
+<ul>
+<li>To utilise a shape file from a directory on your device, provide the file path for .shp file.</li>
+<li>The <code>st_read</code> function is applied internally to create the sf object.</li>
+<li>If the shape file is an .Rda file, it is loaded into the current environment.</li>
+</ul>
+<p>Empty geometries are removed from the sf object, and the remaining polygons are projected to the Australian standard.</p>
+<p>We will use the Local Government Areas of Hobart as an example:</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre><code>
+Loading objects:
+  lga_2011</code></pre>
+</div>
+<h2 id="hexagon-grid">Hexagon grid</h2>
+<p>Create a grid of hexagon centroids using the <code>create_grid</code> function.</p>
+<p>The grid creation takes several steps. It requires the centroids, the bounding box, the hexagon size and the buffer distance.</p>
 <div class="layout-chunk" data-layout="l-body">
 
 </div>
 <h3 id="step-1-expand-the-grid">Step 1: Expand the grid</h3>
 <p>Two sequences are used, one for longitude and another for latitude. The sequences begin at the minimum longitude or latitude, minus the buffer distance. Equally spaced intervals, the size of the hexagons, are created up to the maximum longitude or latitude, plus the buffer distance.</p>
 <p>An individual point is created from all combinations of longitude and latitude sequences.</p>
-<p>This grid is square, which will not facilitate tesselated hexagons. Every second latitude (row) of points will be shifted right by half of the hexagon size.</p>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
+<p>This grid is square, which will not facilitate tessellated hexagons. Every second latitude (row) of points will be shifted right by half of the hexagon size.</p>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
+<p>Each row and column is given an ID</p>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
 <p>There are more points than necessary on this grid. To filter the grid for appropriate hexagons for allocation, the <code>create_buffer</code> function is used.</p>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
 <h3 id="step-2-rolling-windows">Step 2: Rolling windows</h3>
-<p>The longitude columns and latitude rows are given integer id values. The rows and columns are then divided into 20 groups, recording the amount of rows in each latitude group and the amount of columns in each longitude group.</p>
-<p>The amount of rows and columns are then used to make manual rolling windows.</p>
-<p>The first rolling window function finds the minimum and maximum centroid values for the longitude columns and latitude rows.</p>
+<p>The rows and columns are divided into 20 groups. The amount of rows in each latitude group and the amount of columns in each longitude group are then used as the width of manual rolling windows.</p>
+<p>The first rolling window function finds the minimum and maximum centroid values for the groups of longitude columns and the groups of latitude rows.</p>
 <p>The second rolling window function finds the average of the rolling minimum and rolling maximum centroid values, for the longitude columns and latitude rows.</p>
 <!--
 Figure of rolling window construction
 -->
 <h3 id="step-3-filtering-the-grid">Step 3: Filtering the grid</h3>
-<p>Only the grid points between the rolling average of the minimum and maximum centroid valuesare kept, for each row and column of the grid.</p>
+<p>Only the grid points between the rolling average of the minimum and maximum centroid values are kept, for each row and column of the grid.</p>
 <!--
 Grid point figure
 -->
@@ -2108,11 +2149,11 @@ Grid point figure
 <!--
 figure of angle growing to show allocation of hexagons
 -->
-<p>If no available hexagon grid point is found within the original filter distance and angle, the distance is expanded, only when a maximum distance is reached will the angle expand to accomodate more possible grid points.</p>
+<p>If no available hexagon grid point is found within the original filter distance and angle, the distance is expanded, only when a maximum distance is reached will the angle expand to accommodate more possible grid points.</p>
 <p>The allocation is returned and combined with the data relating to each polygon.</p>
 <!--
-Prosecode:  Number each step, never break a loop over steps,
-use subnumbering for parts of each step, and
+Prose code:  Number each step, never break a loop over steps,
+use sub numbering for parts of each step, and
 include explanatory text.
 Literate code:  The algorithm is introduced gradually,
 intermingled with discussion of underlying ideas.
@@ -2123,8 +2164,8 @@ Is  your  solution  always  working?
 Can  you  prove it? 
 How does it work? 
 -->
-<p>Examples of Melbourne, Victoria, Australia At different levels, distance from original centroids, change in area</p>
-<p>LGA of all australia sa2 for queensland</p>
+<p>Examples of Melbourne, Tasmania, Australia At different levels, distance from original centroids, change in area</p>
+<p>LGA of all Australia SA2 for Queensland</p>
 <!--
 Is your analysis about worst case or average case? 
 What kind of theoretical and analytical support can you give for your proposed scheme/solution? 
@@ -2142,7 +2183,7 @@ Find examples of measures of cartogram effectiveness
 <p><span class="math inline">\(area_{h_i} = 1\)</span></p>
 <p><span class="math inline">\(area_h = 1 * npolys\)</span></p>
 <p><span class="math inline">\(y_i\)</span> denotes the statistic of interest for polygon i, where i = 1,…,npolygs <span class="math inline">\(x_i\)</span> denotes the spatial area for polygon i, where i = 1,…,npolys</p>
-<p>Areal Statistic Distortion is the change in the areal distribution of the set of polygons. Difference between space taken by polygons and space taken by hexagons, with respect to the desired statistic. Setting the desired statistic to area givesthe change in map space used to represent the polygons.</p>
+<p>Areal Statistic Distortion is the change in the areal distribution of the set of polygons. Difference between space taken by polygons and space taken by hexagons, with respect to the desired statistic. Setting the desired statistic to area gives the change in map space used to represent the polygons.</p>
 <p>The average when considering area used to display:</p>
 <p><span class="math inline">\(A = \sum_{i=1}^{npolys}y_ix_i/ \sum_{i=1}^{npolys}x_i\)</span></p>
 <p><span class="math inline">\(H = \sum_{i=1}^{npolys}y_i/npolys\)</span></p>
@@ -2152,7 +2193,7 @@ Find examples of measures of cartogram effectiveness
 <p>Where <span class="math inline">\(\bar y_d\)</span> is the average of the polygon statistics considering only the polygons where the distance between polygon centroid x_i and polygon centroid x_p is less than d:</p>
 <p><span class="math inline">\(d(x_ix_p) &lt; d\)</span></p>
 <p><span class="math inline">\(\sqrt{ 1/npolys\sum_{i=1}^{npolys}(y_i - \bar y_d)^2 w_i }\)</span></p>
-<!--
+<p>Old neighbours over new neighbours? <!--
 Apply methods of evaluation used elsewhere
 Nusrat, Alam and Kobourov:
 - Statistical accuracy: how well do the modified areas
@@ -2165,7 +2206,7 @@ how well preserved are their relative positions.
 - Topological accuracy: how well does the topology (as
 measured by adjacent regions) of the cartogram
 match that of the original map.
--->
+--></p>
 <h1 id="summary">Summary</h1>
 <!--
 What did you achieve with this research? 
