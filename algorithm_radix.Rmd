@@ -238,13 +238,22 @@ projstring <- paste0("+init=epsg:", epsg, " ", proj4string, collapse = "")
 ## if long lat is preferred to UTM, and not in proj4string:
 projstring <- "+init=epsg:3112 +proj=longlat +lat_1=-18 +lat_2=-36 +lat_0=0 +lon_0=134 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs"
 
+tas_lga <- tas_lga %>%
+    sf::st_transform(., crs = projstring)
+
 ## Use the create_centroids function to find polygon centroids:
 centroids <- create_centroids(shp_sf = tas_lga, sf_id = sf_id, projstring = projstring, verbose = FALSE)
 ```
 
 
+```{r, fig.cap="Tasmanian Local Government Areas and derived centroids."}
+fort_tas <- fortify_sfc(tas_lga, projstring = projstring)
+ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "green") + geom_point(aes(x=longitude, y = latitude),data= centroids)
+```
+
 
 ## Hexagon grid
+
 Create a grid of hexagon centroids using the `create_grid` function.
 
 The grid creation takes several steps. It requires the centroids, the bounding box, the hexagon size and the buffer distance.
@@ -297,21 +306,22 @@ grid <- grid %>%
 Each row and column is given an ID
 
 ```{r}
-grid <- grid %>%
+full_grid <- grid %>%
     mutate(hex_long_int = dense_rank(hex_long)-1,
         hex_lat_int = dense_rank(hex_lat)-1)
 ```
 
 There are more points than necessary on this grid.
+
+### Step 2: Rolling windows
+
 To filter the grid for appropriate hexagons for allocation,
 the `create_buffer` function is used.
 
 ```{r}
-return_grid <- create_buffer(centroids, grid, hex_size, buffer_dist)
+grid <- create_buffer(centroids, full_grid, hex_size, buffer_dist)
 ```
 
-
-### Step 2: Rolling windows
 The rows and columns are divided into 20 groups. The amount of rows in each latitude group and the amount of columns in each longitude group are then used as the width of manual rolling windows.
 
 The first rolling window function finds the minimum and maximum centroid values for the groups of longitude columns and the groups of latitude rows.
@@ -325,6 +335,12 @@ Figure of rolling window construction
 ### Step 3: Filtering the grid
 Only the grid points between the rolling average of the minimum and maximum centroid values are kept, for each row and column of the grid.
 
+```{r}
+ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "green") + geom_point(aes(x=longitude, y = latitude), colour = "red", data= centroids) +
+  geom_point(aes(x = hex_long, y = hex_lat), colour = "black", data = full_grid, size = 0.5) +
+  geom_point(aes(x = hex_long, y = hex_lat), colour = "grey", data = grid, size = 0.75)
+```
+
 <!--
 Grid point figure
 -->
@@ -332,7 +348,12 @@ Grid point figure
 ## Centroid to focal point distance 
 
 ```{r}
-#map closest focal point function
+# Split the centroid data set
+centroids <- centroids %>% 
+  nest(longitude, latitude) %>% 
+  mutate(closest = map(data, closest_focal_point, focal_points = focal_points)) %>% 
+  unnest(data, closest) %>% 
+  arrange(focal_distance)
 ```
 
 For each polygon centroid in the set. Find the distance to each of the focal points provided. The closest focal point name, the distance to the polygon centroid, and the angle from focal point to polygon centroid will be returned and added to the polygon data set in the polygon centroid row. 
@@ -341,8 +362,26 @@ The distance between the polygon centroid and it's closest focal point data set 
 
 ## Allocation of centroids
 
+Define a distance around a centroid to consider for possible hexagon location.
+
 ```{r}
-#loop of centroid allocation
+## Not necessary within `create_hexmap`:
+## Consider hexagon points up to a certain distance from centroid
+
+filter_dist <- (hex_size)*10
+```
+
+Allocate each centroid, beginning with the closest to a focal point, extending to the furthest. Will preserve spatial relationship.
+
+```{r}
+hexmap_allocation <- allocate(centroids = centroids,
+        hex_grid = grid,
+        hex_size = hex_size,
+        filter_dist = filter_dist,
+        width = width,
+        focal_points = focal_points,
+        verbose = TRUE,
+        id = sf_id)
 ```
 
 
