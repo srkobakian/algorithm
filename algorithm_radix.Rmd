@@ -3,7 +3,7 @@ title: "An algorithm for a spatial mapping using a hexagon tilegram, with applic
 author:
   - name: Stephanie Kobakian
     url: https://github.com/srkobakian
-    affiliation: Queensland University of Technology
+    affiliation: nswmania University of Technology
 date: "`r Sys.Date()`"
 output: radix::radix_article
 ---
@@ -28,8 +28,7 @@ KEYWORDS:
 
 # Introduction
 
-Representing the globe in 2D space has presented issues for many years. Methods have been established to visualise geographical space.
-We present a solution for alternate visualisations when the intention is to represent the spatial distribution.
+Spatial distrbutions have utilised alternative representations of geography for many years. In modern times with the ease of interactivity and animation, alternative representations have been popularised by online news sites. Applications are iincreasingly widespread, especially in the area of disease mapping.
 
 
 ## Motivation
@@ -38,29 +37,27 @@ Problem   statement   (precise   definition   and   importance);
 avoid   very   technical definitions  and  statements, give  good  intuition for your involved definitions or facts. 
 -->
 
-- Spatial distributions are not well presented when areas differ in size.
-- We want to understand the distribution among population
-- We can benefit from making the focus the distribution, not the geography
+Spatial distributions of people and human related statistics are not well presented in geographic maps. Populations congregate around major cities and the lack of land available encourages vertical living. Government bodies define localities, attempting to evenly distribute the population into measureable areas. As the rural areas of Australia are often sparsely populated in comparison to their urban centres the square meterage of the geographic areas may vastly differ in size.
+
+Alternative mapping methods allow increased understanding of the spatial distribution of a variable amongst the population. Allowing the focus to be placed on the distribution of the statistics between the groups of areas, not the geography.
 
 <!--
 Existing  solutions  and  their  criticism  (limit  only  to  those  directly  relevant  to  the  contribution of the thesis; give a motivation for doing research on the topic); 
 -->
 
-- Presenting spatial distributions
-- Extremely small areas are lost not easily compared at a high level
-- Choropleths; unequal space on the display, difficult to represent Australia
-- Cartograms; strong distortions misrepresent Australia
+Extremely small geographic areas are lost on large geographic maps, areas in Sydney or Melbourne are not easily compared at a high level.
+Cartograms allow an alternative view. Placingimportance on the statistic of interest, allowing unequal map space on the display to represent differences in the statistic. These maps rely on the statistic of interest to determine the layout, and often fail to preserve a recognisable view of Australia.
+Tile grams allow a better preservation of relationships. Decrease the emphasis on the amount of geograhic area considered to be interesting. Focus on the relationship between neighbours, in considering aggregated statistics of heterogeneous regions.
 
 <!--
 With different characteristics or properties:
 
 -->
 
-- Unusual population settlement and dispersion over the geographical space: Australia
-Dense south east, sparse central and west
+Australia and Canada present an application that contains an unusual population settlement and dispersion over the geographical space: 
+- Australia: Dense south east, sparse central and west
 
-
-- Applying alternative maps that allow for dense population areas when cities that are population dense are close together
+This provides an opportunity for a new class of
 
 
 
@@ -145,28 +142,27 @@ This inspired the concept of this algorithm.
 # Algorithm
 
 The algorithm operates on a set of polygons.
-There are parameters needed that may be provided, or will be automatically derived.
+There are parameters used in the process that may be provided, or will be automatically derived.
 All necessary functions are exported, with a main function `create_hexmap` used to step through automatically.
 
 ## Parameters
 
-The `create_hexmap` functions requires several parameters. If not provided the information may be derived from the polygon set used. 
+As the `create_hexmap` function requires several parameters, if they are not provided, the information will be derived from the polygon set used. 
 
 **The following must be provided to `create_hexmap`:**
+```{r table_necessary}
+knitr::kable(tibble::tibble(parameter = c('shp', 
+  'shp_path',
+  'sf_id',
+  'focal_points'),
+  description = c('a shape file', 'character string location of shape file', 'name of a unique column that distinguishes areas',
+    'a data frame of reference locations when allocating hexagons, capital cities of Australia are provided as capital_cities'
+    )))
 
-The set of polygons to be made into a hexagon map:
-`shp: a shape file`
+```
 
-The location of a set of polygons to be made into a hexagon map:
-`shp_path: character string location of shape file`
 
-A column of unique names or id values for each area
-`sf_id: name of a unique column that distinguishes areas`
-
-A data frame of reference points to determine the order of allocation
-`focal_points a data frame of reference locations when allocating hexagons, capital cities of Australia are provided as capital_cities`
-
-```{r}
+```{r data}
 library(tidyverse)
 library(sugaRbag)
 
@@ -176,59 +172,53 @@ focal_points <- sugaRbag::capital_cities
 ```
 
 
-**The following will be determined within `create_hexmap` if not provided, but must be created for the following example:**
+**The following will be determined within `create_hexmap` if not provided. They are created throughout the following example:**
 
-- `projstring	a string to indicate the projection and epsg`
-- `epsg	the four character string to indicate the CRS`
-- `buffer_dist: a float value for distance in degrees to extend beyond the - geometry provided`
-- `hex_size	a float value in degrees for the diameter of the hexagons`
-- `filter_dist amount of hexagons around centroid to consider for allocation`
-- `width the angle used to filter the grid points around a centroid`
+```{r}
+knitr::kable(tibble(parameter = c('projstring', 
+  'epsg', 'buffer_dist', 'hex_size',  'filter_dist', 'width'),
+  description = c('a string to indicate the projection and epsg', 'the four character string to indicate the CRS', 
+    'a float value for distance in degrees to extend beyond the - geometry provided',
+    'a float value in degrees for the diameter of the hexagons', 'amount of hexagons around centroid to consider for allocation',
+    'the angle used to filter the grid points around a centroid')))
+```
 
-These parameters will be created when they are needed in the example:
 
 ```{r}
 width <- 30 # arbitrary angle width
 ```
 
 
-<!--
-needed later:
 
-- filter distance: *the amount of hexagons around each centroid to consider for allocation, by default this is 10 hexagons*
--->
-
-
-When utilising individual functions, we recommend the following approach:
+When utilising individual `sugaRbag` functions, we recommend the following approach:
 
 ## Polygon Information
 
-The collection of polygons should be considered first.
+Begin with a set of polygons.
 There are several ways of providing the set of polygons.
-The following methods are available via the `read_shape` function.
+The following methods are available via the `read_shape` function. It utilises the `st_read` function is to create the sf object.
 
 - To utilise a shape file from a directory on your device, provide the file path for .shp file.
-- The `st_read` function is applied internally to create the sf object.
 - If the shape file is an .Rda file, it is loaded into the current environment.
 
-Empty geometries are removed from the sf object, and the remaining polygons are projected to the Australian standard.
+Empty geometries are removed from the sf object, and the remaining polygons are projected to the Australian standard using `projstring`.
 
 We will use the Local Government Areas of Hobart as an example:
 
 ```{r}
 # Read in shape information
-tas_shp <- read_shape(shp_path = shp_path)
+nsw_shp <- read_shape(shp_path = shp_path)
 
 # Convert to a simple features object
-tas_lga <- sf::st_as_sf(tas_shp)
+nsw_lga <- sf::st_as_sf(nsw_shp)
 
-# Select only desired LGA areas, those from Tasmania.
-tas_lga <- tas_shp %>% filter(STE_NAME11 == "Tasmania")
-tas_lga[[sf_id]] <- droplevels(as.factor(tas_lga[[sf_id]]))
+# Select only desired LGA areas, those from nswmania.
+nsw_lga <- nsw_shp %>% filter(STE_NAME11 == "New South Wales")
+nsw_lga[[sf_id]] <- droplevels(as.factor(nsw_lga[[sf_id]]))
 
-## Not necessary within `create_hexmap`:
+## Not necessary when using `create_hexmap`:
 ## Derive projection information
-crs_info <- sf::st_crs(tas_lga)
+crs_info <- sf::st_crs(nsw_lga)
 proj4string <- crs_info$proj4string
 epsg <- crs_info$epsg
 
@@ -237,18 +227,18 @@ projstring <- paste0("+init=epsg:", epsg, " ", proj4string, collapse = "")
 ## if long lat is preferred to UTM, and not in proj4string:
 projstring <- "+init=epsg:3112 +proj=longlat +lat_1=-18 +lat_2=-36 +lat_0=0 +lon_0=134 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs"
 
-tas_lga <- tas_lga %>%
+nsw_lga <- nsw_lga %>%
     sf::st_transform(., crs = projstring)
 
 ## Use the create_centroids function to find polygon centroids:
-centroids <- create_centroids(shp_sf = tas_lga, sf_id = sf_id, projstring = projstring, verbose = FALSE)
+centroids <- create_centroids(shp_sf = nsw_lga, sf_id = sf_id, projstring = projstring, verbose = FALSE)
 ```
 
 
-```{r, fig.cap="Tasmanian Local Government Areas and derived centroids."}
-fort_tas <- fortify_sfc(tas_lga, projstring = projstring)
+```{r, fig.cap="nswmania Local Government Areas and derived centroids."}
+fort_nsw <- fortify_sfc(nsw_lga, projstring = projstring)
 ggplot() + 
-  geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude), data= centroids, colour = "#b2df8a") + theme_void() + coord_equal()
+  geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude), data= centroids, colour = "#b2df8a") + theme_void() + coord_equal()
 ```
 
 
@@ -259,13 +249,12 @@ Create a grid of hexagon centroids using the `create_grid` function.
 The grid creation takes several steps. It requires the centroids, the bounding box, the hexagon size and the buffer distance.
 
 ```{r}
-## Not necessary within `create_hexmap`:
+## Not necessary when using `create_hexmap`:
 ## create the bounding box from the set of polygon centroids:
 bbox <- tibble::tibble(min = c(min(centroids$longitude), min(centroids$latitude)),
         max = c(max(centroids$longitude), max(centroids$latitude)))
 
-hex_size <- (bbox$max[1] - bbox$min[1])/(bbox$max[2] - bbox$min[2]) / 10
-hex_size <- 0.2
+hex_size <- (bbox$max[1] - bbox$min[1])/(bbox$max[2] - bbox$min[2]) / 5
   
 buffer_dist <- max((bbox$max[1] - bbox$min[1]), (bbox$max[2] - bbox$min[2]))*0.3
 ```
@@ -287,8 +276,8 @@ grid <- tibble::as_tibble(expand.grid(hex_long = seq(bbox$min[1] - buffer_dist,
         hex_size)))
 ```
 
-```{r, fig}
-ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude), data= centroids, colour = "#b2df8a") + theme_void() + coord_equal() +
+```{r}
+ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude), data= centroids, colour = "#b2df8a") + theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = grid, size = 0.75) 
 ```
 
@@ -310,7 +299,7 @@ grid <- grid %>%
 ```
 
 ```{r}
-ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroids, fill = "#b2df8a", fill = "red") + theme_void() + coord_equal() +
+ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroids, fill = "#b2df8a") + theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = grid, size = 0.75) 
 ```
 
@@ -347,7 +336,7 @@ Figure of rolling window construction
 Only the grid points between the rolling average of the minimum and maximum centroid values are kept, for each row and column of the grid.
 
 ```{r}
-ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroids, fill = "#b2df8a", fill = "red") + theme_void() + coord_equal() +
+ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroids, fill = "#b2df8a", fill = "red") + theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#a6cee3", data = full_grid, size = 0.25) +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = grid, size = 0.75)
 ```
@@ -373,7 +362,7 @@ The distance between the polygon centroid and it's closest focal point data set 
 Define a distance around a centroid to consider for possible hexagon location.
 
 ```{r}
-## Not necessary within `create_hexmap`:
+## Not necessary when using `create_hexmap`:
 ## Consider hexagon points up to a certain distance from centroid
 
 filter_dist <- (hex_size)*10
@@ -439,7 +428,7 @@ hex_grid <- hex_grid %>% ungroup() %>%
 
 Create a box filter
 ```{r, echo = FALSE}
-ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroid1, fill = "red") + theme_void() + coord_equal() +
+ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroid1, fill = "red") + theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#a6cee3", data = grid, size = 0.25) +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = hex_grid, size = 0.75)
 
@@ -478,7 +467,7 @@ Create circle filter
 
 
 ```{r, echo = FALSE}
-ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroid1, fill = "red") + theme_void() + coord_equal() +
+ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroid1, fill = "red") + theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#a6cee3", data = grid, size = 0.25) +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = hex_grid, size = 0.75)
 ```
@@ -507,7 +496,7 @@ Filter for angle within circle, relates hexagon location to focal point, Hobart.
 
 ```{r}
 
-ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroid1, fill = "red") + theme_void() + coord_equal() +
+ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroid1, fill = "red") + theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#a6cee3", data = grid, size = 0.25) +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = hex_grid, size = 0.75)
 
@@ -560,22 +549,24 @@ ggplot(hex_points_df) +
 ```
 
 
+```{r fullhexmap}
+lga_map <- create_hexmap(shp = nsw_lga, sf_id = "LGA_CODE11", buffer_dist = NULL, filter_dist = 10, export_shp = FALSE, focal_points = sugaRbag::capital_cities, projstring = projstring, verbose = TRUE)
+
+hexmap_lga <- left_join(nsw_lga, 
+  lga_map)
+
+```
+
+
 ```{r}
-allocation <- centroid_allocation
-hexmap_lga <- left_join(tas_lga, allocation)
 ggplot() + 
-  geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") +
+  geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, fill = "grey", colour = "white") +
   theme_void() + coord_equal() +
     geom_hex(aes(x = hex_long, y = hex_lat, fill = AREA_SQKM), data = hexmap_lga, 
       position = "identity", stat = "identity")
 ```
 
 
-```{r, eval = FALSE}
-hexmap_lga <- left_join(tas_lga, 
-  create_hexmap(shp = tas_lga, sf_id = "LGA_CODE11", buffer_dist = NULL, filter_dist = 10, hex_size = 0.2, export_shp = FALSE, focal_points = sugaRbag::capital_citie, verbose = TRUE)
-)
-```
 
 ## Applications of algorithm
 
@@ -585,11 +576,11 @@ Can  you  prove it?
 How does it work? 
 -->
 
-Examples of Melbourne, Tasmania, Australia
+Examples of Melbourne, nswmania, Australia
 At different levels, distance from original centroids, change in area
 
 LGA of all Australia
-SA2 for Queensland
+SA2 for nswmania
 
 <!--
 Is your analysis about worst case or average case? 
