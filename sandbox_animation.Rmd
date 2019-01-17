@@ -1,0 +1,114 @@
+---
+title: "Untitled"
+author: "Stephanie"
+date: "15/01/2019"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+
+library(tidyverse)
+library(sugaRbag)
+```
+
+```{r}
+
+
+hexmap_allocation <- allocate(centroids = centroids,
+  hex_grid = grid,
+  hex_size = hex_size,
+  filter_dist = filter_dist,
+  width = width,
+  focal_points = sugaRbag::capital_cities,
+  verbose = TRUE,
+  id = sf_id)
+
+hex_points_df <- hexmap_allocation %>% 
+  group_by(LGA_CODE11) %>%
+  nest() %>%
+  mutate(hex_points = 
+      map(.x = data,.f = function(a) {
+        fortify_hexagon(data = a, hex_size = hex_size)})) %>%
+  unnest(data) %>%
+  unnest(hex_points)
+
+
+
+# hexagon data
+hex_cents <- hex_points_df %>% dplyr::select(LGA_CODE11, starts_with("hex_"), hexv_id, hex_id) %>%
+  gather(key = "hex", value = "location", starts_with("hex_"), -hexv_id, -hex_id, -LGA_CODE11) %>%
+  separate(hex, into = c("point_type", "axis")) %>%
+  spread(axis, location) 
+
+# variable data
+areasq <- bind_cols(LGA_CODE11 = tas_lga$LGA_CODE11, 
+  area = tas_lga$AREA_SQKM)
+
+hex_verts <-  hex_points_df %>% dplyr::select(LGA_CODE11, starts_with("hexv_"), hexv_id, hex_id) %>%
+  gather(key = "hexv", value = "location", starts_with("hexv_"), -hexv_id, -hexv_id, -LGA_CODE11) %>%
+  separate(hexv, into = c("point_type", "axis")) %>%
+  spread(axis, location) %>%
+  mutate(group = LGA_CODE11,
+    order = hexv_id) %>%
+  left_join(areasq)
+
+geo_verts <- fort_tas %>% dplyr::select(LGA_CODE11, long, lat, group, order, area = AREA_SQKM) %>% mutate(point_type = "polygon") %>% left_join(
+  hex_verts %>% 
+    dplyr::select(LGA_CODE11, hex_id))
+
+hex_animate <- bind_rows(hex_verts, geo_verts)
+
+
+library(ggplot2)
+library(gganimate)
+
+# Create static plot
+ggplot(hex_animate) + 
+  geom_polygon(aes(x = long, y = lat, group = LGA_CODE11))
+
+# Create animated plot
+hex <- ggplot(hex_animate) + 
+  geom_polygon(aes(x = long, y = lat, group = group, fill = area, order = order)) + coord_equal() + 
+  transition_states(states = point_type, transition_length = 1, state_length = 2) +
+  ease_aes('quadratic-in')
+
+animate(hex)
+
+```
+
+
+
+
+### SF ALTERNATIVE
+```{r}
+
+
+hex_points_polys <- sf::st_as_sf(hex_points_df, coords = c("hexv_long", "hexv_lat")) %>% 
+  group_by(hex_id) %>% 
+  summarize(do_union=FALSE) %>%
+  sf::st_cast("POLYGON") %>%
+  left_join(hex_points_df %>% group_by(LGA_CODE11) %>% top_n(1) %>%
+      select(LGA_CODE11, hex_id, focal_dist)) %>% mutate(point_type = "hexagon")
+
+# colnames(hex_points_polys)
+#"hex_id"     "LGA_CODE11" "focal_dist" "point_type" "geometry" 
+
+sf_animate <- bind_rows(hex_points_polys, tas_lga %>% mutate(point_type = "geography"))
+
+```
+
+
+# Create animated plot sf_anim
+```{r}
+ggplot() +
+  geom_sf(data = tas_lga) 
+```
+
++
+  transition_states(states = point_type, 
+    transition_length = 1, state_length = 2) +
+  ease_aes('quadratic-in')
+
+animate(sf_anim)

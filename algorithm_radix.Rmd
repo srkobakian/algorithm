@@ -1,6 +1,5 @@
 ---
 title: "An algorithm for a spatial mapping using a hexagon tilegram, with application to Australia disease maps"
-
 author:
   - name: Stephanie Kobakian
     url: https://github.com/srkobakian
@@ -248,7 +247,8 @@ centroids <- create_centroids(shp_sf = tas_lga, sf_id = sf_id, projstring = proj
 
 ```{r, fig.cap="Tasmanian Local Government Areas and derived centroids."}
 fort_tas <- fortify_sfc(tas_lga, projstring = projstring)
-ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "green") + geom_point(aes(x=longitude, y = latitude),data= centroids)
+ggplot() + 
+  geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude), data= centroids, colour = "#b2df8a") + theme_void() + coord_equal()
 ```
 
 
@@ -265,7 +265,8 @@ bbox <- tibble::tibble(min = c(min(centroids$longitude), min(centroids$latitude)
         max = c(max(centroids$longitude), max(centroids$latitude)))
 
 hex_size <- (bbox$max[1] - bbox$min[1])/(bbox$max[2] - bbox$min[2]) / 10
-
+hex_size <- 0.2
+  
 buffer_dist <- max((bbox$max[1] - bbox$min[1]), (bbox$max[2] - bbox$min[2]))*0.3
 ```
 
@@ -278,12 +279,17 @@ Equally spaced intervals, the size of the hexagons, are created up to the maximu
 An individual point is created from all combinations of longitude and latitude sequences.
 
 ```{r}
-grid <- tibble::as.tibble(expand.grid(hex_long = seq(bbox$min[1] - buffer_dist,
+grid <- tibble::as_tibble(expand.grid(hex_long = seq(bbox$min[1] - buffer_dist,
     bbox$max[1] + buffer_dist,
     hex_size),
     hex_lat = seq(bbox$min[2] - buffer_dist,
         bbox$max[2] + buffer_dist,
         hex_size)))
+```
+
+```{r, fig}
+ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude), data= centroids, colour = "#b2df8a") + theme_void() + coord_equal() +
+  geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = grid, size = 0.75) 
 ```
 
 This grid is square, which will not facilitate tessellated hexagons. 
@@ -301,6 +307,11 @@ grid <- grid %>%
         hex_long + (hex_size / 2))) %>%
     dplyr::mutate(id=1:NROW(.)) %>%
     dplyr::mutate(assigned=FALSE)
+```
+
+```{r}
+ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroids, fill = "#b2df8a", fill = "red") + theme_void() + coord_equal() +
+  geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = grid, size = 0.75) 
 ```
 
 Each row and column is given an ID
@@ -336,14 +347,11 @@ Figure of rolling window construction
 Only the grid points between the rolling average of the minimum and maximum centroid values are kept, for each row and column of the grid.
 
 ```{r}
-ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "green") + geom_point(aes(x=longitude, y = latitude), colour = "red", data= centroids) +
-  geom_point(aes(x = hex_long, y = hex_lat), colour = "black", data = full_grid, size = 0.5) +
-  geom_point(aes(x = hex_long, y = hex_lat), colour = "grey", data = grid, size = 0.75)
+ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroids, fill = "#b2df8a", fill = "red") + theme_void() + coord_equal() +
+  geom_point(aes(x = hex_long, y = hex_lat), colour = "#a6cee3", data = full_grid, size = 0.25) +
+  geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = grid, size = 0.75)
 ```
 
-<!--
-Grid point figure
--->
 
 ## Centroid to focal point distance 
 
@@ -417,7 +425,6 @@ hex_grid <- grid %>% filter(!assigned)
 
 ### Step 2: Filter the grid points for those closest to the centroid
 ```{r}
-
 # filter grid for avaiable points
 centroid1 <- centroids %>% head(1)
 
@@ -432,36 +439,22 @@ hex_grid <- hex_grid %>% ungroup() %>%
 
 Create a box filter
 ```{r, echo = FALSE}
-ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "green") + geom_point(aes(x=longitude, y = latitude), colour = "red", data= centroids[1,]) +
-  geom_point(aes(x = hex_long, y = hex_lat), colour = "grey", data = hex_grid, size = 0.75) +
-  geom_point(aes(x = hex_long, y = hex_lat), colour = "orange", data = hex_grid, size = 0.75)
+ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroid1, fill = "red") + theme_void() + coord_equal() +
+  geom_point(aes(x = hex_long, y = hex_lat), colour = "#a6cee3", data = grid, size = 0.25) +
+  geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = hex_grid, size = 0.75)
+
 ```
 
 
+Create circle filter
 ```{r}
-    grid <- grid %>%
+    hex_grid <- hex_grid %>%
         rowwise %>%
         mutate(
         hex_lat_c = hex_lat - flat,
         hex_long_c = hex_long - flong) %>%
         mutate(hyp = ((hex_lat_c^2) + (hex_long_c^2))^(1/2))
 
-```
-
-Create circle filter
-
-```{r, echo = FALSE}
-ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "green") + geom_point(aes(x=longitude, y = latitude), colour = "red", data= centroids[1,]) +
-  geom_point(aes(x = hex_long, y = hex_lat), colour = "grey", data = hex_grid, size = 0.75) +
-  geom_point(aes(x = hex_long, y = hex_lat), colour = "orange", data = hex_grid, size = 0.75)
-```
-
-
-
-```{r}
-
-    # Filter for angle within circle
-    if ("focal_distance" %in% colnames(centroid1)) {
 
         f_angle <- centroid1 %>%
             mutate(atan = atan2(latitude-latitude1,longitude-longitude1),
@@ -469,31 +462,42 @@ ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, 
                 pangle = ifelse(angle<0, angle +360, angle)) %>% pull()
 
 
-        grid <- grid %>%
+        hex_grid <- hex_grid %>%
             # create circle of radius: filter_dist
             filter(hyp < filter_dist) %>%
             mutate(
                 # geosphere takes a long time
                 angle = f_angle,
-                angle_plus = (angle + angle_width)%%360,
-                angle_minus = (angle - angle_width)%%360,
+                angle_plus = (angle + width)%%360,
+                angle_minus = (angle - width)%%360,
                 atan = atan2(hex_lat_c, hex_long_c),
                 hex_angle = (atan*180/pi),
                 hex_angle = ifelse(hex_angle<0, hex_angle +360, hex_angle))
 
+```
 
-        if (grid$angle_minus[1] < grid$angle_plus[1]) {
-            grid <- grid %>%
+
+```{r, echo = FALSE}
+ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroid1, fill = "red") + theme_void() + coord_equal() +
+  geom_point(aes(x = hex_long, y = hex_lat), colour = "#a6cee3", data = grid, size = 0.25) +
+  geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = hex_grid, size = 0.75)
+```
+
+
+Filter for angle within circle, relates hexagon location to focal point, Hobart.
+
+```{r}
+# Filter for angle within circle
+
+        if (hex_grid$angle_minus[1] < hex_grid$angle_plus[1]) {
+            hex_grid <- hex_grid %>%
                 # create slice of 60 degrees from centroid
                 filter(angle_minus < hex_angle & hex_angle < angle_plus)
-        }
-        else {
-            grid <- grid %>%
+        } else {
+            hex_grid <- hex_grid %>%
                 # create slice of 60 degrees from centroid
                 filter(hex_angle < angle_plus | angle_minus > hex_angle)
         }
-
-    }
 
 ```
 
@@ -502,9 +506,11 @@ ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, 
 
 
 ```{r}
-ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "green") + geom_point(aes(x=longitude, y = latitude), colour = "red", data= centroids[1,]) +
-  geom_point(aes(x = hex_long, y = hex_lat), colour = "grey", data = hex_grid, size = 0.75) +
-  geom_point(aes(x = hex_long, y = hex_lat), colour = "orange", data = hex_grid, size = 0.75)
+
+ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroid1, fill = "red") + theme_void() + coord_equal() +
+  geom_point(aes(x = hex_long, y = hex_lat), colour = "#a6cee3", data = grid, size = 0.25) +
+  geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = hex_grid, size = 0.75)
+
 ```
 
 
@@ -523,7 +529,7 @@ ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, 
         #update grid to show this centroid as assigned
         hex_grid[which(hex_grid$id == hex$hex_id),]$assigned <- TRUE
 
-        centroid_allocation <- bind_rows(centroid_allocation, dplyr::bind_cols(cent, hex)) %>% as.tibble()
+        centroid_allocation <- bind_rows(centroid_allocation, dplyr::bind_cols(cent, hex)) %>% as_tibble()
 
 ```
 
@@ -531,21 +537,45 @@ ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, 
 Using the angle between each polygon centroid, and it's the closest focal point, the subset of points is filtered again.
 Of these possible points, only those within a specific amount of degrees plus and minus a specific angle range are kept. This angle begins at 30 degrees by default, and may increase if necessary.
 
-<!--
-figure of angle growing to show allocation of hexagons
--->
-
 If no available hexagon grid point is found within the original filter distance and angle, the distance is expanded, only when a maximum distance is reached will the angle expand to accommodate more possible grid points.  
 
 The allocation is returned and combined with the data relating to each polygon.
+```{r}
+hex_points_df <- centroid_allocation %>% 
+  group_by(LGA_CODE11) %>%
+  nest() %>%
+  mutate(hex_points = 
+      map(.x = data,.f = function(a) { 
+        fortify_hexagon(data = a, hex_size = hex_size)})) %>%
+  unnest(data) %>%
+  unnest(hex_points)
+```
 
-<!--
-Prose code:  Number each step, never break a loop over steps,
-use sub numbering for parts of each step, and
-include explanatory text.
-Literate code:  The algorithm is introduced gradually,
-intermingled with discussion of underlying ideas.
--->
+```{r}
+ggplot(hex_points_df) + 
+  geom_polygon(aes(x = hexv_long, y = hexv_lat, group = LGA_CODE11)) +
+  coord_equal() +
+  geom_point(aes(x = hex_long, y = hex_lat), colour = "#a6cee3", data = grid, size = 0.25) +
+  geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = hex_grid, size = 0.75)
+```
+
+
+```{r}
+allocation <- centroid_allocation
+hexmap_lga <- left_join(tas_lga, allocation)
+ggplot() + 
+  geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") +
+  theme_void() + coord_equal() +
+    geom_hex(aes(x = hex_long, y = hex_lat, fill = AREA_SQKM), data = hexmap_lga, 
+      position = "identity", stat = "identity")
+```
+
+
+```{r, eval = FALSE}
+hexmap_lga <- left_join(tas_lga, 
+  create_hexmap(shp = tas_lga, sf_id = "LGA_CODE11", buffer_dist = NULL, filter_dist = 10, hex_size = 0.2, export_shp = FALSE, focal_points = sugaRbag::capital_citie, verbose = TRUE)
+)
+```
 
 ## Applications of algorithm
 
