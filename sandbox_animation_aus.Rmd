@@ -108,7 +108,7 @@ hex <- ggplot(hex_animate, aes(group = LGA_CODE11)) +
     transition_length = 1, state_length = 2) +
   ease_aes('quadratic-in') 
 
-anim <- animate(hex)
+system.time(anim <- animate(hex))
 anim
 anim_save(filename = paste0("hex_aus_anim", hex_size, ".gif"))
 ```
