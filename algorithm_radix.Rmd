@@ -3,7 +3,7 @@ title: "An algorithm for a spatial mapping using a hexagon tilegram, with applic
 author:
   - name: Stephanie Kobakian
     url: https://github.com/srkobakian
-    affiliation: nswmania University of Technology
+    affiliation: Queensland University of Technology
 date: "`r Sys.Date()`"
 output: radix::radix_article
 ---
@@ -28,7 +28,7 @@ KEYWORDS:
 
 # Introduction
 
-Spatial distrbutions have utilised alternative representations of geography for many years. In modern times with the ease of interactivity and animation, alternative representations have been popularised by online news sites. Applications are iincreasingly widespread, especially in the area of disease mapping.
+Spatial distrbutions have utilised alternative representations of geography for many years. In modern times with the ease of interactivity and animation, alternative representations have been popularised by online news sites, with a focus on public consumption. Applications are increasingly widespread, especially in the area of disease mapping, election results and .
 
 
 ## Motivation
@@ -57,7 +57,6 @@ With different characteristics or properties:
 Australia and Canada present an application that contains an unusual population settlement and dispersion over the geographical space: 
 - Australia: Dense south east, sparse central and west
 
-This provides an opportunity for a new class of
 
 
 
@@ -185,7 +184,7 @@ knitr::kable(tibble(parameter = c('projstring',
 
 
 ```{r}
-width <- 30 # arbitrary angle width
+width <- 15 # arbitrary angle width
 ```
 
 
@@ -232,6 +231,8 @@ nsw_lga <- nsw_lga %>%
 
 ## Use the create_centroids function to find polygon centroids:
 centroids <- create_centroids(shp_sf = nsw_lga, sf_id = sf_id, projstring = projstring, verbose = FALSE)
+
+fort_nsw <- fortify_sfc(nsw_lga, projstring = projstring)
 ```
 
 
