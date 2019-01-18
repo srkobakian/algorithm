@@ -39,14 +39,17 @@ lga_2011 <- lga_2011 %>%
 
 ```{r}
 # Change this for a more detailed map
-fort_aus <- fortify_sfc(lga_2011, projstring = projstring, simplify = 0.2)
+fort_aus <- fortify_sfc(lga_2011, projstring = projstring, simplify = 0.6)
 ```
 
 
 ```{r}
-hex_size <- 0.2
+hex_size <- 0.5
 
 lga_map <- create_hexmap(shp = lga_2011, sf_id = "LGA_CODE11", buffer_dist = NULL, filter_dist = 10, hex_size = hex_size, export_shp = FALSE, focal_points = sugaRbag::capital_cities, projstring = projstring, verbose = TRUE)
+
+lga_map5 <- lga_map
+save(lga_map5, file = "lga_map3")
 
 hexmap_lga <- left_join(lga_2011, 
   lga_map)
@@ -107,5 +110,6 @@ hex <- ggplot(hex_animate, aes(group = LGA_CODE11)) +
 
 anim <- animate(hex)
 anim
+anim_save(filename = paste0("hex_aus_anim", hex_size, ".gif"))
 ```
 
