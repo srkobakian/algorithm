@@ -9,7 +9,7 @@ output: radix::radix_article
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, cache = FALSE)
 ```
 
 # Abstract
@@ -154,18 +154,22 @@ knitr::kable(tibble::tibble(parameter = c('shp',
   'shp_path',
   'sf_id',
   'focal_points'),
-  description = c('a shape file', 'character string location of shape file', 'name of a unique column that distinguishes areas',
+  description = c('an Rdata object containing the polygon information', 'character string location of the shape file that contains the polygon information', 'name of a unique column that distinguishes areas',
     'a data frame of reference locations when allocating hexagons, capital cities of Australia are provided as capital_cities'
     )))
 
 ```
 
+```{r libraries}
+library(tidyverse)
+# To install:
+# devtools::install_github("srkobakian/sugaRbag")
+library(sugaRbag)
+```
+
+The polygon set of Local Government Areas in Australia in 2011 is stored in the sugaRbag package as `lga_2011`.
 
 ```{r data}
-library(tidyverse)
-library(sugaRbag)
-
-shp_path <- "data/lga_2011.rda"
 sf_id <- "LGA_CODE11"
 focal_points <- sugaRbag::capital_cities
 ```
@@ -183,11 +187,6 @@ knitr::kable(tibble(parameter = c('projstring',
 ```
 
 
-```{r}
-width <- 15 # arbitrary angle width
-```
-
-
 
 When utilising individual `sugaRbag` functions, we recommend the following approach:
 
@@ -197,24 +196,33 @@ Begin with a set of polygons.
 There are several ways of providing the set of polygons.
 The following methods are available via the `read_shape` function. It utilises the `st_read` function is to create the sf object.
 
-- To utilise a shape file from a directory on your device, provide the file path for .shp file.
 - If the shape file is an .Rda file, it is loaded into the current environment.
+- To utilise a custom shape file from a directory on your device, provide the file path for .shp file.
+
+```{r, eval = FALSE}
+# Read in shape information
+shp <- read_shape(shp_path = shp_path)
+
+# Convert to a simple features object
+shp_sf <- sf::st_as_sf(shp)
+```
+
 
 Empty geometries are removed from the sf object, and the remaining polygons are projected to the Australian standard using `projstring`.
 
-We will use the Local Government Areas of Hobart as an example:
+We will use the Local Government Areas of Australia in the `lga_2011` data set, and take only those from New South Wales as an example:
 
 ```{r}
-# Read in shape information
-nsw_shp <- read_shape(shp_path = shp_path)
+shp_sf <- sugaRbag::lga_2011
 
-# Convert to a simple features object
-nsw_lga <- sf::st_as_sf(nsw_shp)
-
-# Select only desired LGA areas, those from nswmania.
-nsw_lga <- nsw_shp %>% filter(STE_NAME11 == "New South Wales")
+nsw_lga <- shp_sf %>% dplyr::filter(STE_NAME11 == "New South Wales")
+# Select only desired LGA areas, those from nsw.
 nsw_lga[[sf_id]] <- droplevels(as.factor(nsw_lga[[sf_id]]))
+```
 
+
+
+```{r project}
 ## Not necessary when using `create_hexmap`:
 ## Derive projection information
 crs_info <- sf::st_crs(nsw_lga)
@@ -226,20 +234,30 @@ projstring <- paste0("+init=epsg:", epsg, " ", proj4string, collapse = "")
 ## if long lat is preferred to UTM, and not in proj4string:
 projstring <- "+init=epsg:3112 +proj=longlat +lat_1=-18 +lat_2=-36 +lat_0=0 +lon_0=134 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs"
 
-nsw_lga <- nsw_lga %>%
-    sf::st_transform(., crs = projstring)
+nsw_lga <- sf::st_transform(nsw_lga, crs = projstring)
+```
 
+
+```{r area_variable}
+nsw_lga <- nsw_lga %>% mutate(logarea = log(AREA_SQKM))
+```
+
+```{r centroids}
 ## Use the create_centroids function to find polygon centroids:
 centroids <- create_centroids(shp_sf = nsw_lga, sf_id = sf_id, projstring = projstring, verbose = FALSE)
 
+centroids$logarea <- nsw_lga$logarea 
+  
 fort_nsw <- fortify_sfc(nsw_lga, projstring = projstring)
 ```
 
 
-```{r, fig.cap="nswmania Local Government Areas and derived centroids."}
+```{r, fig.cap="NSW Local Government Areas and derived centroids."}
 fort_nsw <- fortify_sfc(nsw_lga, projstring = projstring)
-ggplot() + 
-  geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude), data= centroids, colour = "#b2df8a") + theme_void() + coord_equal()
+
+end_cents <- ggplot() + 
+  geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude, colour = logarea), data= centroids) + theme_void() + coord_equal()
+end_cents
 ```
 
 
@@ -249,7 +267,7 @@ Create a grid of hexagon centroids using the `create_grid` function.
 
 The grid creation takes several steps. It requires the centroids, the bounding box, the hexagon size and the buffer distance.
 
-```{r}
+```{r bbox}
 ## Not necessary when using `create_hexmap`:
 ## create the bounding box from the set of polygon centroids:
 bbox <- tibble::tibble(min = c(min(centroids$longitude), min(centroids$latitude)),
@@ -268,7 +286,7 @@ Equally spaced intervals, the size of the hexagons, are created up to the maximu
 
 An individual point is created from all combinations of longitude and latitude sequences.
 
-```{r}
+```{r grid}
 grid <- tibble::as_tibble(expand.grid(hex_long = seq(bbox$min[1] - buffer_dist,
     bbox$max[1] + buffer_dist,
     hex_size),
@@ -277,7 +295,7 @@ grid <- tibble::as_tibble(expand.grid(hex_long = seq(bbox$min[1] - buffer_dist,
         hex_size)))
 ```
 
-```{r}
+```{r plot_grid}
 ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude), data= centroids, colour = "#b2df8a") + theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = grid, size = 0.75) 
 ```
@@ -285,7 +303,7 @@ ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, 
 This grid is square, which will not facilitate tessellated hexagons. 
 Every second latitude (row) of points will be shifted right by half of the hexagon size.
 
-```{r}
+```{r shift}
 # Find every second latitude
 shift_lat <- grid %>% dplyr::select(hex_lat) %>%
     dplyr::distinct() %>%
@@ -299,14 +317,14 @@ grid <- grid %>%
     dplyr::mutate(assigned=FALSE)
 ```
 
-```{r}
+```{r plot_shift}
 ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroids, fill = "#b2df8a") + theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = grid, size = 0.75) 
 ```
 
 Each row and column is given an ID
 
-```{r}
+```{r grid_id}
 full_grid <- grid %>%
     mutate(hex_long_int = dense_rank(hex_long)-1,
         hex_lat_int = dense_rank(hex_lat)-1)
@@ -319,7 +337,7 @@ There are more points than necessary on this grid.
 To filter the grid for appropriate hexagons for allocation,
 the `create_buffer` function is used.
 
-```{r}
+```{r buffer}
 grid <- create_buffer(centroids, full_grid, hex_size, buffer_dist)
 ```
 
@@ -334,9 +352,10 @@ Figure of rolling window construction
 -->
 
 ### Step 3: Filtering the grid
+
 Only the grid points between the rolling average of the minimum and maximum centroid values are kept, for each row and column of the grid.
 
-```{r}
+```{r plot_buffer}
 ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroids, fill = "#b2df8a", fill = "red") + theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#a6cee3", data = full_grid, size = 0.25) +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = grid, size = 0.75)
@@ -345,7 +364,7 @@ ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, 
 
 ## Centroid to focal point distance 
 
-```{r}
+```{r split_centroids}
 # Split the centroid data set
 centroids <- centroids %>% 
   nest(longitude, latitude) %>% 
@@ -362,7 +381,7 @@ The distance between the polygon centroid and it's closest focal point data set 
 
 Define a distance around a centroid to consider for possible hexagon location.
 
-```{r}
+```{r f_dist}
 ## Not necessary when using `create_hexmap`:
 ## Consider hexagon points up to a certain distance from centroid
 
@@ -376,7 +395,7 @@ hexmap_allocation <- allocate(centroids = centroids,
         hex_grid = grid,
         hex_size = hex_size,
         filter_dist = filter_dist,
-        width = width,
+        width = 15,
         focal_points = focal_points,
         verbose = TRUE,
         id = sf_id)
@@ -386,7 +405,7 @@ hexmap_allocation <- allocate(centroids = centroids,
 Allocation of all centroids can now take place using the set of polygon centroids and the hexagon map grid. 
 For each polygon centroid, only the hexagon grid points that have not yet been used can be considered.
 
-```{r}
+```{r arrange}
 s_centroids <- centroids %>% arrange(focal_distance)
 
 s_centroids <- split(s_centroids, s_centroids[["focal_distance"]])
@@ -397,7 +416,7 @@ centroid_allocation <- NULL
 
 The filter distance parameter is used to subset possible grid points to only those surrounding the polygon centroid within the filter distance.
 
-```{r}
+```{r orig_dist}
 # keep value to reset expanded distances
 expand_dist <- filter_dist
 ```
@@ -408,13 +427,18 @@ These steps are repeated for each polygon.
 
 ### Step 1: Filter the grid for unassigned hexagon points
 
-```{r}
+Keep only the available hexagon points, this will prevent multiple areas being allocated to the same hexagon.
+
+```{r available_points}
 # filter for only the available hex grid points
 hex_grid <- grid %>% filter(!assigned)
 ```
 
 ### Step 2: Filter the grid points for those closest to the centroid
-```{r}
+
+This will allow only the closest points, that are not assigned, to be considered.
+
+```{r close_points}
 # filter grid for avaiable points
 centroid1 <- centroids %>% head(1)
 
@@ -428,6 +452,7 @@ hex_grid <- hex_grid %>% ungroup() %>%
 ```
 
 Create a box filter
+
 ```{r, echo = FALSE}
 ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroid1, fill = "red") + theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#a6cee3", data = grid, size = 0.25) +
@@ -437,6 +462,7 @@ ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, 
 
 
 Create circle filter
+
 ```{r}
     hex_grid <- hex_grid %>%
         rowwise %>%
@@ -474,7 +500,7 @@ ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, 
 ```
 
 
-Filter for angle within circle, relates hexagon location to focal point, Hobart.
+Filter for angle within circle, relates hexagon location to focal point, Sydney.
 
 ```{r}
 # Filter for angle within circle
@@ -530,6 +556,7 @@ Of these possible points, only those within a specific amount of degrees plus an
 If no available hexagon grid point is found within the original filter distance and angle, the distance is expanded, only when a maximum distance is reached will the angle expand to accommodate more possible grid points.  
 
 The allocation is returned and combined with the data relating to each polygon.
+
 ```{r}
 hex_points_df <- centroid_allocation %>% 
   group_by(LGA_CODE11) %>%
@@ -560,11 +587,13 @@ hexmap_lga <- left_join(nsw_lga,
 
 
 ```{r}
-ggplot() + 
+end_hex <- ggplot() + 
   geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, fill = "grey", colour = "white") +
   theme_void() + coord_equal() +
     geom_hex(aes(x = hex_long, y = hex_lat, fill = AREA_SQKM), data = hexmap_lga, 
       position = "identity", stat = "identity")
+
+gridExtra::grid.arrange(end_hex, end_cents)
 ```
 
 
@@ -577,11 +606,11 @@ Can  you  prove it?
 How does it work? 
 -->
 
-Examples of Melbourne, nswmania, Australia
+Examples of Melbourne, nsw, Australia
 At different levels, distance from original centroids, change in area
 
 LGA of all Australia
-SA2 for nswmania
+SA2 for nsw
 
 <!--
 Is your analysis about worst case or average case? 
