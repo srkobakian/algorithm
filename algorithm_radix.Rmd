@@ -660,7 +660,7 @@ The allocation is returned and combined with the data relating to each polygon.
 
 ```{r}
 hex_points_df <- centroid_allocation %>% 
-  group_by(SA2_CODE11) %>%
+  group_by(SA2_5DIG16) %>%
   nest() %>%
   mutate(hex_points = 
       map(.x = data,.f = function(a) { 
@@ -671,7 +671,7 @@ hex_points_df <- centroid_allocation %>%
 
 ```{r}
 ggplot(hex_points_df) + 
-  geom_polygon(aes(x = hexv_long, y = hexv_lat, group = SA2_CODE11)) +
+  geom_polygon(aes(x = hexv_long, y = hexv_lat, group = SA2_5DIG16)) +
   coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#a6cee3", data = grid, size = 0.25) +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = hex_grid, size = 0.75)
@@ -679,7 +679,7 @@ ggplot(hex_points_df) +
 
 
 ```{r fullhexmap}
-lga_map <- create_hexmap(shp = tas_sa2, sf_id = "SA2_CODE11", buffer_dist = NULL, filter_dist = 10, export_shp = FALSE, focal_points = sugaRbag::capital_cities, projstring = projstring, verbose = TRUE)
+lga_map <- create_hexmap(shp = tas_sa2, sf_id = "SA2_5DIG16", buffer_dist = NULL, filter_dist = 10, export_shp = FALSE, focal_points = sugaRbag::capital_cities, projstring = projstring, verbose = TRUE)
 
 hexmap_lga <- left_join(tas_sa2, 
   lga_map)
