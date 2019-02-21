@@ -227,7 +227,7 @@ We will use the Statical Areas (Level 2) of Australia, provided by Australian Bu
 # Convert to a simple features object
 tas_sa2 <- sf::st_as_sf(tas_sa2)
 
-# Select only desired LGA areas, those from tas.
+# Select only desired SA2 areas, those from tas.
 tas_sa2[[sf_id]] <- droplevels(as.factor(tas_sa2[[sf_id]]))
 
 fort_tas <- fortify_sfc(tas_sa2)
@@ -250,7 +250,7 @@ centroids <- create_centroids(shp_sf = tas_sa2, sf_id = sf_id) %>%
 
 ```{r, fig.cap="tas Local Government Areas and derived centroids."}
 end_cents <- ggplot() + 
-  geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude, colour = log(AREASQKM16)), data= centroids) + theme_void() + coord_equal()
+  geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude), data= centroids) + theme_void() + coord_equal()
 end_cents
 
 #ggplot() + geom_histogram(aes(x = log(AREASQKM16), fill = log(AREASQKM16)), data= centroids, bins = 20) 
@@ -660,8 +660,7 @@ The allocation is returned and combined with the data relating to each polygon.
 
 ```{r}
 hex_points_df <- centroid_allocation %>% 
-  group_by(SA2_5DIG16) %>%
-  nest() %>%
+  group_nest(SA2_5DIG16) %>%
   mutate(hex_points = 
       map(.x = data,.f = function(a) { 
         fortify_hexagon(data = a, hex_size = hex_size)})) %>%
@@ -679,20 +678,33 @@ ggplot(hex_points_df) +
 
 
 ```{r fullhexmap}
-lga_map <- create_hexmap(shp = tas_sa2, sf_id = "SA2_5DIG16", buffer_dist = NULL, filter_dist = 10, export_shp = FALSE, focal_points = sugaRbag::capital_cities, projstring = projstring, verbose = TRUE)
-
-hexmap_lga <- left_join(tas_sa2, 
-  lga_map)
-
+# Create centroids set
+centroids <- create_centroids(tas_sa2, "SA2_5DIG16")
+# Create hexagon location grid
+grid <- create_grid(centroids = centroids, hex_size = 0.1, buffer_dist = 0.1)
+# Allocate polygon centroids to hexagon grid points
+hex_allocated <- allocate(centroids = centroids,
+hex_grid = grid,
+hex_size = 0.1, # same size used in create_grid
+filter_dist = 0.25,
+focal_points = sugaRbag::capital_cities,
+width = 30,
+id = "SA2_5DIG16", verbose = TRUE) # same column used in create_centroids
 ```
 
 
 ```{r}
-end_hex <- ggplot() + 
-  geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") +
-  theme_void() + coord_equal() +
-    geom_hex(aes(x = hex_long, y = hex_lat, fill = AREA_SQKM), data = hexmap_lga, 
-      position = "identity", stat = "identity")
+h1 <- hex_allocated %>%
+  dplyr::group_nest(SA2_5DIG16) %>%
+                mutate(hex = purrr::map(data, fortify_hexagon, hex_size = 0.1)) %>%
+                unnest(data) %>% 
+  unnest(hex) %>% left_join(., tas_sa2)
+
+p1 <- fortify_sfc(tas_sa2)
+
+ggplot(mapping = aes(fill = SA4_NAME16)) +
+  geom_polygon(data = p1, aes(x=long, lat, group = group), alpha = 0.1) +
+  geom_polygon(data = h1, aes(x=hexv_long, hexv_lat, group = SA2_5DIG16))
 
 gridExtra::grid.arrange(end_hex, end_cents)
 ```
