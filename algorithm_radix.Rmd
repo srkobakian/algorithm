@@ -162,15 +162,28 @@ knitr::kable(tibble::tibble(parameter = c('shp',
 
 ```{r libraries}
 library(tidyverse)
-# To install:
+# To install sugaRbag:
 # devtools::install_github("srkobakian/sugaRbag")
 library(sugaRbag)
 ```
 
-The polygon set of Local Government Areas in Australia in 2011 is stored in the sugaRbag package as `lga_2011`.
+The polygon set of Local Government Areas in Australia in 2011 is stored in the sugaRbag package data as `tas_sa2`. To create this object:
+
+```
+# Download resource 
+# link to folder containing .shp file on sugaRbag site.
+
+aus_sa2 <- read_shape("file location")
+
+filter for Tasmanian areas
+
+tas_sa2 <- filter(aus_sa2, aus_sa2$STE_NAME11 == "Tasmania)
+```
+
+A column of the data set must be used as a unique identifier of areas.
 
 ```{r data}
-sf_id <- "LGA_CODE11"
+sf_id <- "SA2_5DIG16"
 focal_points <- sugaRbag::capital_cities
 ```
 
@@ -199,65 +212,48 @@ The following methods are available via the `read_shape` function. It utilises t
 - If the shape file is an .Rda file, it is loaded into the current environment.
 - To utilise a custom shape file from a directory on your device, provide the file path for .shp file.
 
-```{r, eval = FALSE}
+<!--
+```
 # Read in shape information
 shp <- read_shape(shp_path = shp_path)
-
-# Convert to a simple features object
-shp_sf <- sf::st_as_sf(shp)
 ```
-
+-->
 
 Empty geometries are removed from the sf object, and the remaining polygons are projected to the Australian standard using `projstring`.
 
-We will use the Local Government Areas of Australia in the `lga_2011` data set, and take only those from New South Wales as an example:
+We will use the Statical Areas (Level 2) of Australia, provided by Australian Bureau of Statistics. With only those from Tasmania as an example:
 
 ```{r}
-shp_sf <- sugaRbag::lga_2011
+# Convert to a simple features object
+tas_sa2 <- sf::st_as_sf(tas_sa2)
 
-nsw_lga <- shp_sf %>% dplyr::filter(STE_NAME11 == "New South Wales")
-# Select only desired LGA areas, those from nsw.
-nsw_lga[[sf_id]] <- droplevels(as.factor(nsw_lga[[sf_id]]))
+# Select only desired LGA areas, those from tas.
+tas_sa2[[sf_id]] <- droplevels(as.factor(tas_sa2[[sf_id]]))
+
+fort_tas <- fortify_sfc(tas_sa2)
 ```
 
-
-
-```{r project}
-## Not necessary when using `create_hexmap`:
-## Derive projection information
-crs_info <- sf::st_crs(nsw_lga)
-proj4string <- crs_info$proj4string
-epsg <- crs_info$epsg
-
-## For UTM as per shape file
-projstring <- paste0("+init=epsg:", epsg, " ", proj4string, collapse = "")
-## if long lat is preferred to UTM, and not in proj4string:
-projstring <- "+init=epsg:3112 +proj=longlat +lat_1=-18 +lat_2=-36 +lat_0=0 +lon_0=134 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs"
-
-nsw_lga <- sf::st_transform(nsw_lga, crs = projstring)
+```{r}
+# Include area variable
+area_var <- fort_tas %>% 
+  distinct(SA2_5DIG16, .keep_all = TRUE) %>% 
+  select(SA2_5DIG16, AREASQKM16)
 ```
 
-
-```{r area_variable}
-nsw_lga <- nsw_lga %>% mutate(logarea = log(AREA_SQKM))
-```
 
 ```{r centroids}
 ## Use the create_centroids function to find polygon centroids:
-centroids <- create_centroids(shp_sf = nsw_lga, sf_id = sf_id, projstring = projstring, verbose = FALSE)
-
-centroids$logarea <- nsw_lga$logarea 
-  
-fort_nsw <- fortify_sfc(nsw_lga, projstring = projstring)
+centroids <- create_centroids(shp_sf = tas_sa2, sf_id = sf_id) %>%
+  left_join(., select(area_var, SA2_5DIG16, AREASQKM16), by = "SA2_5DIG16")
 ```
 
 
-```{r, fig.cap="NSW Local Government Areas and derived centroids."}
-fort_nsw <- fortify_sfc(nsw_lga, projstring = projstring)
-
+```{r, fig.cap="tas Local Government Areas and derived centroids."}
 end_cents <- ggplot() + 
-  geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude, colour = logarea), data= centroids) + theme_void() + coord_equal()
+  geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude, colour = log(AREASQKM16)), data= centroids) + theme_void() + coord_equal()
 end_cents
+
+#ggplot() + geom_histogram(aes(x = log(AREASQKM16), fill = log(AREASQKM16)), data= centroids, bins = 20) 
 ```
 
 
@@ -296,7 +292,7 @@ grid <- tibble::as_tibble(expand.grid(hex_long = seq(bbox$min[1] - buffer_dist,
 ```
 
 ```{r plot_grid}
-ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude), data= centroids, colour = "#b2df8a") + theme_void() + coord_equal() +
+ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude), data= centroids, colour = "#b2df8a") + theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = grid, size = 0.75) 
 ```
 
@@ -318,14 +314,14 @@ grid <- grid %>%
 ```
 
 ```{r plot_shift}
-ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroids, fill = "#b2df8a") + theme_void() + coord_equal() +
+ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroids, fill = "#b2df8a") + theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = grid, size = 0.75) 
 ```
 
 Each row and column is given an ID
 
 ```{r grid_id}
-full_grid <- grid %>%
+full_grid <- grid <- grid %>%
     mutate(hex_long_int = dense_rank(hex_long)-1,
         hex_lat_int = dense_rank(hex_lat)-1)
 ```
@@ -335,17 +331,99 @@ There are more points than necessary on this grid.
 ### Step 2: Rolling windows
 
 To filter the grid for appropriate hexagons for allocation,
-the `create_buffer` function is used.
+the `create_buffer` function is called from `create_grid`.
 
-```{r buffer}
-grid <- create_buffer(centroids, full_grid, hex_size, buffer_dist)
+It finds the amount of columns and rows needed to capture the set of centroids.
+
+```{r}
+nlong <- length(unique(grid$hex_long))
+nlat <- length(unique(grid$hex_lat))
+
+centroids <- centroids %>%
+  mutate(long_int = round((longitude-min(grid$hex_long))/(max(grid$hex_long)-min(grid$hex_long))*nlong, 0),
+          lat_int = round((latitude-min(grid$hex_lat))/(max(grid$hex_lat)-min(grid$hex_lat))*nlat, 0))
 ```
 
 The rows and columns are divided into 20 groups. The amount of rows in each latitude group and the amount of columns in each longitude group are then used as the width of manual rolling windows.
 
+```{r echo = FALSE}
+# Amount of lats and longs in each group
+lat_size = round(nlat/20,0)
+long_size = round(nlong/20,0)
+```
+
 The first rolling window function finds the minimum and maximum centroid values for the groups of longitude columns and the groups of latitude rows.
+The specific rows and columns in the rolling windows are defined.
+
+```{r echo = FALSE}
+ # make a list of groups, manual sliding windows
+    nlat_list <- purrr::map2(seq(1:nlat), lat_size + seq(1:nlat), c)
+    nlong_list <- purrr::map2(seq(1:nlong), long_size + seq(1:nlong), c)
+
+
+    lat_window <- function(x, cents = centroids, maximum = nlat){
+        max_int = min(x[2],maximum)
+
+        cents_in <- filter(cents, between(lat_int, x[1], max_int))
+        return(cents_in)
+    }
+
+    long_window <- function(x, cents = centroids, maximum = nlong){
+        max_int = x[2]
+        while (max_int > maximum){
+            max_int = max_int - 1
+        }
+
+        cents_in <- filter(cents, between(long_int, x[1], max_int))
+        return(cents_in)
+    }
+    
+
+    # LATITUDE ROWS FILTER
+    # amount of latitude in sliding window
+    lat_windows <- purrr::map(.x = nlat_list, .f = lat_window)
+
+    # find the min and max longitude for each latitude
+    range_rows <- purrr::map_dfr(.x = lat_windows,
+        .f = function(x) {x %>%
+                dplyr::summarise(
+                    long_min = ifelse(purrr::is_empty(long_int), NA, min(x$long_int)),
+                    long_max = ifelse(purrr::is_empty(long_int), NA, max(x$long_int))
+                )}
+    )
+```
+
+
 
 The second rolling window function finds the average of the rolling minimum and rolling maximum centroid values, for the longitude columns and latitude rows.
+
+```{r echo = FALSE}
+ # smooth the minimums
+    av_range_rows <- purrr::map_dfr(.x = nlat_list, .f = function(x, rows = range_rows) {
+        rows[x[1]:min(x[2], NROW(rows)),] %>%
+            dplyr::summarise(mean_long_min = mean(long_min, na.rm=T), mean_long_max = mean(long_max, na.rm=T))
+    }) %>%
+        bind_cols(lat_id = c(seq(1:nlat) +lat_size), .)
+
+    # LONGITUDE COLS FILTER
+    long_windows <- purrr::map(.x = nlong_list, .f = long_window, centroids, nlong)
+
+    # find the min and max longitude for each latitude
+    range_cols <- purrr::map_dfr(.x = long_windows, .f = function(x) { x %>%
+            dplyr::summarise(
+                lat_min = ifelse(purrr::is_empty(lat_int), NA, min(x$lat_int)),
+                lat_max = ifelse(purrr::is_empty(lat_int), NA, max(x$lat_int))
+            )}
+    )
+
+    # smooth the minimums
+    av_range_cols <- purrr::map_dfr(.x = nlong_list, .f = function(x, cols = range_cols) {
+        cols[x[1]:min(x[2], NROW(cols)),] %>%
+            dplyr::summarise(mean_lat_min = mean(lat_min, na.rm=T), mean_lat_max = mean(lat_max, na.rm=T))
+    }) %>%
+        bind_cols(long_id = c(seq(1:nlong) + round(long_size/2)), .)
+
+```
 
 <!--
 Figure of rolling window construction
@@ -355,8 +433,26 @@ Figure of rolling window construction
 
 Only the grid points between the rolling average of the minimum and maximum centroid values are kept, for each row and column of the grid.
 
+```{r echo = FALSE}
+    # APPLY A BUFFER
+    # change buffer to amount of hexagons (ints) either side
+    hex_buffer <- floor(buffer_dist/hex_size)
+
+    grid <- grid %>%
+        left_join(., av_range_rows, by = c("hex_lat_int" = "lat_id")) %>%
+        left_join(., av_range_cols, by = c("hex_long_int" = "long_id")) %>%
+        rowwise() %>%
+        mutate(long_buffer = ifelse(between(hex_long_int,mean_long_min - hex_buffer,
+            mean_long_max + hex_buffer), "in", "out")) %>%
+        mutate(lat_buffer = ifelse(between(hex_lat_int,mean_lat_min - hex_buffer,
+            mean_lat_max + hex_buffer), "in", "out")) %>%
+        filter(lat_buffer =="in" | long_buffer == "in")
+
+```
+
+
 ```{r plot_buffer}
-ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroids, fill = "#b2df8a", fill = "red") + theme_void() + coord_equal() +
+ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroids, fill = "#b2df8a", fill = "red") + theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#a6cee3", data = full_grid, size = 0.25) +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = grid, size = 0.75)
 ```
@@ -390,12 +486,17 @@ filter_dist <- (hex_size)*10
 
 Allocate each centroid, beginning with the closest to a focal point, extending to the furthest. Will preserve spatial relationship.
 
+```{r}
+width = 15
+```
+
+
 ```{r, eval = FALSE}
 hexmap_allocation <- allocate(centroids = centroids,
         hex_grid = grid,
         hex_size = hex_size,
         filter_dist = filter_dist,
-        width = 15,
+        width = width,
         focal_points = focal_points,
         verbose = TRUE,
         id = sf_id)
@@ -454,7 +555,7 @@ hex_grid <- hex_grid %>% ungroup() %>%
 Create a box filter
 
 ```{r, echo = FALSE}
-ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroid1, fill = "red") + theme_void() + coord_equal() +
+ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroid1, fill = "red") + theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#a6cee3", data = grid, size = 0.25) +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = hex_grid, size = 0.75)
 
@@ -494,7 +595,7 @@ Create circle filter
 
 
 ```{r, echo = FALSE}
-ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroid1, fill = "red") + theme_void() + coord_equal() +
+ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroid1, fill = "red") + theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#a6cee3", data = grid, size = 0.25) +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = hex_grid, size = 0.75)
 ```
@@ -523,7 +624,7 @@ Filter for angle within circle, relates hexagon location to focal point, Sydney.
 
 ```{r}
 
-ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroid1, fill = "red") + theme_void() + coord_equal() +
+ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") + geom_point(aes(x=longitude, y = latitude),data= centroid1, fill = "red") + theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#a6cee3", data = grid, size = 0.25) +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = hex_grid, size = 0.75)
 
@@ -559,7 +660,7 @@ The allocation is returned and combined with the data relating to each polygon.
 
 ```{r}
 hex_points_df <- centroid_allocation %>% 
-  group_by(LGA_CODE11) %>%
+  group_by(SA2_CODE11) %>%
   nest() %>%
   mutate(hex_points = 
       map(.x = data,.f = function(a) { 
@@ -570,7 +671,7 @@ hex_points_df <- centroid_allocation %>%
 
 ```{r}
 ggplot(hex_points_df) + 
-  geom_polygon(aes(x = hexv_long, y = hexv_lat, group = LGA_CODE11)) +
+  geom_polygon(aes(x = hexv_long, y = hexv_lat, group = SA2_CODE11)) +
   coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#a6cee3", data = grid, size = 0.25) +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = hex_grid, size = 0.75)
@@ -578,9 +679,9 @@ ggplot(hex_points_df) +
 
 
 ```{r fullhexmap}
-lga_map <- create_hexmap(shp = nsw_lga, sf_id = "LGA_CODE11", buffer_dist = NULL, filter_dist = 10, export_shp = FALSE, focal_points = sugaRbag::capital_cities, projstring = projstring, verbose = TRUE)
+lga_map <- create_hexmap(shp = tas_sa2, sf_id = "SA2_CODE11", buffer_dist = NULL, filter_dist = 10, export_shp = FALSE, focal_points = sugaRbag::capital_cities, projstring = projstring, verbose = TRUE)
 
-hexmap_lga <- left_join(nsw_lga, 
+hexmap_lga <- left_join(tas_sa2, 
   lga_map)
 
 ```
@@ -588,7 +689,7 @@ hexmap_lga <- left_join(nsw_lga,
 
 ```{r}
 end_hex <- ggplot() + 
-  geom_polygon(aes(x = long, y = lat, group = group), data = fort_nsw, fill = "grey", colour = "white") +
+  geom_polygon(aes(x = long, y = lat, group = group), data = fort_tas, fill = "grey", colour = "white") +
   theme_void() + coord_equal() +
     geom_hex(aes(x = hex_long, y = hex_lat, fill = AREA_SQKM), data = hexmap_lga, 
       position = "identity", stat = "identity")
@@ -606,11 +707,11 @@ Can  you  prove it?
 How does it work? 
 -->
 
-Examples of Melbourne, nsw, Australia
+Examples of Melbourne, tas, Australia
 At different levels, distance from original centroids, change in area
 
 LGA of all Australia
-SA2 for nsw
+SA2 for tas
 
 <!--
 Is your analysis about worst case or average case? 
