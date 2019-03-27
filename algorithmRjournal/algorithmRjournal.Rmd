@@ -411,6 +411,8 @@ hex_grid <- grid %>% filter(!assigned)
 This will allow only the closest points, that are not assigned, to be considered.
 
 ```{r close_points}
+filter_dist <- hex_filter*hex_size
+
 # filter grid for avaiable points
 centroid1 <- centroids %>% head(1)
 
@@ -418,8 +420,8 @@ flong <- centroid1$longitude
 flat <- centroid1$latitude
 
 hex_grid <- hex_grid %>% ungroup() %>%
-        filter(flat - buffer_dist < hex_lat & hex_lat < flat + buffer_dist) %>%
-        filter(flong - buffer_dist < hex_long & hex_long < flong + buffer_dist)
+        filter(flat - filter_dist < hex_lat & hex_lat < flat + filter_dist) %>%
+        filter(flong - filter_dist < hex_long & hex_long < flong + filter_dist)
 
 ```
 
@@ -452,7 +454,7 @@ Create circle filter
 
         hex_grid <- hex_grid %>%
             # create circle of radius: hex_filter
-            filter(hyp < hex_filter) %>%
+            filter(hyp < filter_dist) %>%
             mutate(
                 # geosphere takes a long time
                 angle = f_angle,
