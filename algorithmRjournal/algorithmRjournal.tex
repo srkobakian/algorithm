@@ -270,30 +270,29 @@ centroid}\label{step-2-filter-the-grid-points-for-those-closest-to-the-centroid}
 This will allow only the closest points, that are not assigned, to be
 considered.
 
-Create a box filter
+Create a box of possible hexagon locations areoung the centroid. The
+bottom of the box will not be square as the buffer has already removed
+unnecessary points from over the ocean.
 
 \begin{Schunk}
 
 \includegraphics{algorithmRjournal_files/figure-latex/unnamed-chunk-12-1} \end{Schunk}
 
-Create circle filter
+The algorithm removes the outer corners of the square, creating a cricle
+of points, by only keeping points within a certain radius around the
+original centroid location.
 
 \begin{Schunk}
 
 \includegraphics{algorithmRjournal_files/figure-latex/unnamed-chunk-14-1} \end{Schunk}
 
-Filter for angle within circle, relates hexagon location to focal point,
-Sydney.
-
-\begin{Schunk}
-
-\includegraphics{algorithmRjournal_files/figure-latex/unnamed-chunk-16-1} \end{Schunk}
-
-Using the angle between each polygon centroid, and it's the closest
-focal point, the subset of points is filtered again. Of these possible
-points, only those within a specific amount of degrees plus and minus a
-specific angle range are kept. This angle begins at 30 degrees by
-default, and may increase if necessary.
+The width parameter is now used. Of the remaining points, a slice is
+taken. This uses the angle from the closest capital city, to the current
+centroid. If it is not the closest to the capital there may have been
+points available that were taken by closer centroids. This allows the
+spatial relationship to be preserved, even when it gets allocated to a
+hexagon that is further from the city centre. This angle begins at 30
+degrees by default, and may increase if necessary.
 
 If no available hexagon grid point is found within the original filter
 distance and angle, the distance is expanded, only when a maximum
@@ -305,19 +304,59 @@ polygon.
 
 \begin{Schunk}
 
+\includegraphics{algorithmRjournal_files/figure-latex/unnamed-chunk-16-1} \end{Schunk}
+
+This area was the very closest to the Hobart central point ( coloured
+pink) provided in the capital cities data set, it gets a hexagon point
+(coloured blue) extremely close to it's centroid (coloured green).
+
+\begin{Schunk}
+
 \includegraphics{algorithmRjournal_files/figure-latex/unnamed-chunk-19-1} \end{Schunk}
+
+The following code creates a map for all the Local Government Areas in
+Tasmania:
+
+\begin{Schunk}
+\begin{Sinput}
+# Create centroids set
+centroids <- create_centroids(tas_lga, "LGA_CODE16")
+# Create hexagon location grid
+grid <- create_grid(centroids = centroids,
+    hex_size = 0.25,
+    buffer_dist = 1.2)
+# Allocate polygon centroids to hexagon grid points
+hex_allocated <- allocate(
+  centroids = centroids,
+  hex_grid = grid,
+  sf_id = "LGA_CODE16",
+  # same column used in create_centroids
+  hex_size = 0.25,
+  # same size used in create_grid
+  hex_filter = 10,
+  focal_points = capital_cities %>% filter(points == "Hobart"),
+  width = 30,
+  verbose = FALSE
+)
+\end{Sinput}
+\end{Schunk}
 
 \begin{Schunk}
 
 \includegraphics{algorithmRjournal_files/figure-latex/unnamed-chunk-20-1} \end{Schunk}
 
-\hypertarget{applications-of-algorithm}{%
-\subsection{Applications of algorithm}\label{applications-of-algorithm}}
+\hypertarget{summary}{%
+\subsection{Summary}\label{summary}}
 
-Examples of Melbourne, lga, Australia At different levels, distance from
-original centroids, change in area
+It is possible to use alternative maps to communicate spatial
+distributions. Current methods do not always work for Australia due to
+the large gaps between denseley populated capital cities.
 
-LGA of all Australia SA2 for lga
+\hypertarget{code}{%
+\subsection{Code}\label{code}}
+
+This map algorithm is found in the \texttt{sugarbag} package, currently
+available on github: \url{https://github.com/srkobakian/sugarbag}
 
 \bibliography{algorithmbib}
 
