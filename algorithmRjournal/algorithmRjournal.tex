@@ -9,8 +9,8 @@ Application to Australian Maps}
 This algorithm creates a hexagon to represent each of the spatial
 polygons provided. It allocates these hexagon in a manner that preserves
 the spatial relationship of the areas. It showcases spatial
-distributions, by emphasising the small geograhical regions that are
-often diffcult to locate on large geographic maps.
+distributions, by emphasising the small geographical regions that are
+often difficult to locate on large geographic maps.
 }
 
 % Any extra LaTeX you need in the preamble
@@ -18,7 +18,7 @@ often diffcult to locate on large geographic maps.
 \hypertarget{introduction}{%
 \subsection{Introduction}\label{introduction}}
 
-Spatial distrbutions have utilised alternative representations of
+Spatial distributions have utilised alternative representations of
 geography for many years. In modern times interactivity and animation
 have begun to play a larger role, as alternative representations have
 been popularised by online news sites, with a focus on public
@@ -31,13 +31,13 @@ areas of disease mapping, and election results.
 Spatial distributions of people and human related statistics can be
 misrepresented in geographic maps. Populations congregate around major
 cities and vertical living is increasingly common. Population statistics
-often requires dividing people into smaller, measureable areas.
+often requires dividing people into smaller, measurable areas.
 Government bodies such as the Australian Bureau of Statistics, or
 intentionally segregated organisations, like the Australian Electoral
-Comission hold the responsibility of the division. Australia is an
+Commission hold the responsibility of the division. Australia is an
 example of strong urbanisation, the rural areas are often sparsely
 populated in comparison to the urban centres. To divide the population
-equally, the square meterage of the geographic areas differ dramatically
+equally, the square meters of the geographic areas differ dramatically
 in size.
 
 Alternative mapping methods allow increased understanding of the spatial
@@ -52,7 +52,7 @@ allowing distorted map space on the display to represent differences in
 the statistic. These maps rely on the statistic of interest to determine
 the layout, and for Australia, often fail to preserve a recognisable
 view. Tilegrams allow preservation of spatial relationships as they
-decrease the emphasis on the amount of geograhic area considered to be
+decrease the emphasis on the amount of geographic area considered to be
 interesting. These maps focus on the relationship between neighbours, in
 considering aggregated statistics of heterogeneous regions.
 
@@ -103,7 +103,7 @@ the unique LGA codes associated with each LGA have been used, their
 names could have also been used.
 
 The centre of the population hubs are used to distribute areas around
-the closest captial city.
+the closest capital city.
 
 \textbf{The following parameters will be determined within
 \texttt{create\_hexmap} if not provided. They are created throughout the
@@ -136,7 +136,7 @@ following approach:
 Begin with a set of polygons. The set should be provided as an
 \texttt{sf} object, this is a data frame containing a \texttt{geometry}
 column. The \texttt{read\_shape} function can assist in creating this
-object. We will use the Loca Goverment Areas of Tasmania, sourced from
+object. We will use the Local Government Areas of Tasmania, sourced from
 the Australian Bureau of Statistics.
 
 \begin{Schunk}
@@ -148,8 +148,8 @@ the Australian Bureau of Statistics.
 \hypertarget{hexagon-grid}{%
 \subsection{Hexagon grid}\label{hexagon-grid}}
 
-Each new hexagon will need to tesselate, a grid is created to ensure a
-close point is found, that will allow all areas to tesselate, this is
+Each new hexagon will need to tessellate, a grid is created to ensure a
+close point is found, that will allow all areas to tessellate, this is
 inspired by tilegrams. The grid of possible hexagon centroids can be
 made using the \texttt{create\_grid} function. The grid creation takes
 several steps. It requires the centroids, the hexagon size and the
@@ -246,8 +246,8 @@ centroids and the hexagon map grid. For each polygon centroid, only the
 hexagon grid points that have not yet been used can be considered.
 Allocate each centroid, beginning with the closest centroid to a focal
 point. This will preserve spatial relationship with the capital, as the
-inner areas will be allowed closest to the captial, and the areas that
-are further will be accomodated after.
+inner areas will be allowed closest to the capital, and the areas that
+are further will be accommodated after.
 
 The filter parameter is used to subset possible grid points to only
 those surrounding the polygon centroid within the filter distance,
@@ -270,7 +270,7 @@ centroid}\label{step-2-filter-the-grid-points-for-those-closest-to-the-centroid}
 This will allow only the closest points, that are not assigned, to be
 considered.
 
-Create a box of possible hexagon locations areoung the centroid. The
+Create a box of possible hexagon locations around the centroid. The
 bottom of the box will not be square as the buffer has already removed
 unnecessary points from over the ocean.
 
@@ -278,7 +278,7 @@ unnecessary points from over the ocean.
 
 \includegraphics{algorithmRjournal_files/figure-latex/unnamed-chunk-12-1} \end{Schunk}
 
-The algorithm removes the outer corners of the square, creating a cricle
+The algorithm removes the outer corners of the square, creating a circle
 of points, by only keeping points within a certain radius around the
 original centroid location.
 
@@ -350,7 +350,7 @@ hex_allocated <- allocate(
 
 It is possible to use alternative maps to communicate spatial
 distributions. Current methods do not always work for Australia due to
-the large gaps between denseley populated capital cities.
+the large gaps between densely populated capital cities.
 
 \hypertarget{code}{%
 \subsection{Code}\label{code}}

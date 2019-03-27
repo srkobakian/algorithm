@@ -8,7 +8,7 @@ author:
     affiliation: Monash University
     email:  dicook@monash.edu
 abstract: >
-  This algorithm creates a hexagon to represent each of the spatial polygons provided. It allocates these hexagon in a manner that preserves the spatial relationship of the areas. It showcases spatial distributions, by emphasising the small geograhical regions that are often diffcult to locate on large geographic maps.
+  This algorithm creates a hexagon to represent each of the spatial polygons provided. It allocates these hexagon in a manner that preserves the spatial relationship of the areas. It showcases spatial distributions, by emphasising the small geographical regions that are often difficult to locate on large geographic maps.
 output:
   rticles::rjournal_article:
     includes:
@@ -26,17 +26,17 @@ knitr::opts_chunk$set(echo = FALSE,
 
 ## Introduction
 
-Spatial distrbutions have utilised alternative representations of geography for many years. In modern times interactivity and animation have begun to play a larger role, as alternative representations have been popularised by online news sites, with a focus on public consumption. Applications are increasingly widespread, especially in the areas of disease mapping, and election results.
+Spatial distributions have utilised alternative representations of geography for many years. In modern times interactivity and animation have begun to play a larger role, as alternative representations have been popularised by online news sites, with a focus on public consumption. Applications are increasingly widespread, especially in the areas of disease mapping, and election results.
 
 ## Motivation
 
-Spatial distributions of people and human related statistics can be misrepresented in geographic maps. Populations congregate around major cities and vertical living is increasingly common. Population statistics often requires dividing people into smaller, measureable areas. Government bodies such as the Australian Bureau of Statistics, or intentionally segregated organisations, like the Australian Electoral Comission hold the responsibility of the division. Australia is an example of strong urbanisation, the rural areas are often sparsely populated in comparison to the urban centres. To divide the population equally, the square meterage of the geographic areas differ dramatically in size.
+Spatial distributions of people and human related statistics can be misrepresented in geographic maps. Populations congregate around major cities and vertical living is increasingly common. Population statistics often requires dividing people into smaller, measurable areas. Government bodies such as the Australian Bureau of Statistics, or intentionally segregated organisations, like the Australian Electoral Commission hold the responsibility of the division. Australia is an example of strong urbanisation, the rural areas are often sparsely populated in comparison to the urban centres. To divide the population equally, the square meters of the geographic areas differ dramatically in size.
 
 Alternative mapping methods allow increased understanding of the spatial distribution of a variable across the population. Alternative maps allow the focus to be placed on the distribution of the statistics between the groups of areas.
 
 Extremely small geographic areas are lost on large geographic maps, small inner areas of Sydney or Melbourne are not easily compared at a high level.
 Cartograms place importance on the statistic of interest, allowing distorted map space on the display to represent differences in the statistic. These maps rely on the statistic of interest to determine the layout, and for Australia, often fail to preserve a recognisable view.
-Tilegrams allow preservation of spatial relationships as they decrease the emphasis on the amount of geograhic area considered to be interesting. These maps focus on the relationship between neighbours, in considering aggregated statistics of heterogeneous regions.
+Tilegrams allow preservation of spatial relationships as they decrease the emphasis on the amount of geographic area considered to be interesting. These maps focus on the relationship between neighbours, in considering aggregated statistics of heterogeneous regions.
 
 Our case is an extension of these concepts. Extending the tilegram to Australian applications required preserving the spatial relationships. It emphasises the capital cities as population hubs, and recognises the populations distributed across the large rural areas. 
 
@@ -77,7 +77,7 @@ A single column of the data set must be used as a unique identifier of areas. In
 sf_id <- "LGA_CODE16"
 ```
 
-The centre of the population hubs are used to distribute areas around the closest captial city.
+The centre of the population hubs are used to distribute areas around the closest capital city.
 
 ```{r data}
 data(capital_cities)
@@ -99,7 +99,7 @@ When utilising individual `sugarbag` functions, we recommend the following appro
 
 ## Polygon Information
 
-Begin with a set of polygons. The set should be provided as an `sf` object, this is a data frame containing a `geometry` column. The `read_shape` function can assist in creating this object. We will use the Loca Goverment Areas of Tasmania, sourced from the Australian Bureau of Statistics. 
+Begin with a set of polygons. The set should be provided as an `sf` object, this is a data frame containing a `geometry` column. The `read_shape` function can assist in creating this object. We will use the Local Government Areas of Tasmania, sourced from the Australian Bureau of Statistics. 
 
 ```{r}
 # Create a suitable data set for plotting
@@ -130,7 +130,7 @@ end_cents
 
 ## Hexagon grid
 
-Each new hexagon will need to tesselate, a grid is created to ensure a close point is found, that will allow all areas to tesselate, this is inspired by tilegrams. The grid of possible hexagon centroids can be made using the `create_grid` function. The grid creation takes several steps. It requires the centroids, the hexagon size and the buffer distance.
+Each new hexagon will need to tessellate, a grid is created to ensure a close point is found, that will allow all areas to tessellate, this is inspired by tilegrams. The grid of possible hexagon centroids can be made using the `create_grid` function. The grid creation takes several steps. It requires the centroids, the hexagon size and the buffer distance.
 
 ```{r bbox}
 ## create the bounding box from the set of polygon centroids:
@@ -376,7 +376,7 @@ hexmap_allocation <- allocate(centroids = centroids,
 Allocation of all centroids can now take place using the set of polygon centroids and the hexagon map grid. 
 For each polygon centroid, only the hexagon grid points that have not yet been used can be considered.
 Allocate each centroid, beginning with the closest centroid to a focal point.
-This will preserve spatial relationship with the capital, as the inner areas will be allowed closest to the captial, and the areas that are further will be accomodated after.
+This will preserve spatial relationship with the capital, as the inner areas will be allowed closest to the capital, and the areas that are further will be accommodated after.
 
 ```{r arrange}
 s_centroids <- centroids %>% arrange(focal_distance)
@@ -425,7 +425,7 @@ hex_grid <- hex_grid %>% ungroup() %>%
 
 ```
 
-Create a box of possible hexagon locations areoung the centroid. The bottom of the box will not be square as the buffer has already removed unnecessary points from over the ocean.
+Create a box of possible hexagon locations around the centroid. The bottom of the box will not be square as the buffer has already removed unnecessary points from over the ocean.
 
 ```{r, echo = FALSE}
 ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_lga, fill = "grey", size = 0.3, colour = "lightgrey") + geom_point(aes(x=longitude, y = latitude), data = centroid1, fill = "red") + theme_void() + coord_equal() +
@@ -435,7 +435,7 @@ ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_lga, 
 ```
 
 
-The algorithm removes the outer corners of the square, creating a cricle of points, by only keeping points within a certain radius around the original centroid location.
+The algorithm removes the outer corners of the square, creating a circle of points, by only keeping points within a certain radius around the original centroid location.
 
 ```{r}
     hex_grid <- hex_grid %>%
@@ -584,7 +584,7 @@ gridExtra::grid.arrange(end_cents, end_hex, nrow = 1)
 ## Summary
 
 It is possible to use alternative maps to communicate spatial distributions.
-Current methods do not always work for Australia due to the large gaps between denseley populated capital cities.
+Current methods do not always work for Australia due to the large gaps between densely populated capital cities.
 
 ## Code 
 
