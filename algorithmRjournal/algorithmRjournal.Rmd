@@ -2,7 +2,7 @@
 title: An Algorithm For Spatial Mapping Using a Hexagon Tilegram, With Application to Australian Maps
 author:
   - name: Stephanie Kobakian
-    affiliation: Queensland Univeristy of Technology
+    affiliation: Queensland University of Technology
     email:  stephanie.kobakian@monash.edu
   - name: Dianne Cook
     affiliation: Monash University
@@ -26,60 +26,100 @@ knitr::opts_chunk$set(echo = FALSE,
 
 ## Introduction
 
-Spatial distributions have utilised alternative representations of geography for many years. In modern times interactivity and animation have begun to play a larger role, as alternative representations have been popularised by online news sites, with a focus on public consumption. Applications are increasingly widespread, especially in the areas of disease mapping, and election results.
+Spatial distributions have utilised alternative representations of geography for many years. In modern times, interactivity and animation have begun to play a larger role, as alternative representations have been popularised by online news sites, and atlas websites with a focus on public consumption. Applications are increasingly widespread, especially in the areas of disease mapping, and election results.
 
-## Motivation
+<!-- Motivation to map -->
 
-Spatial distributions of people and human related statistics can be misrepresented in geographic maps. Populations congregate around major cities and vertical living is increasingly common. Population statistics often requires dividing people into smaller, measurable areas. Government bodies such as the Australian Bureau of Statistics, or intentionally segregated organisations, like the Australian Electoral Commission hold the responsibility of the division. Australia is an example of strong urbanisation, the rural areas are often sparsely populated in comparison to the urban centres. To divide the population equally, the square meters of the geographic areas differ dramatically in size.
+Choropleths are the current best practice approach for presenting geographical data as
+maps highlight the geographic patterns in geospatially related statistics [@SAMGIS].
+The land on the map space is divided to separate each area, these boundaries are usually administrative. The areas are filled with colour to represent the value of the statistic for the area [@EI].
 
-Alternative mapping methods allow increased understanding of the spatial distribution of a variable across the population. Alternative maps allow the focus to be placed on the distribution of the statistics between the groups of areas.
+<!-- urbanisation -->
+In Australia, government bodies such as the Australian Bureau of Statistics, or the Australian Electoral Commission hold the responsibility for the division of areas. These boundaries are often adjusted as the population in areas increase. Australian people are increasingly congregating around major cities, the rural areas are often sparsely populated in comparison to the urban centres. 
+The division of the population into equal population areas results in dramatically different square meterage of the geographic areas. 
+This results in an unequal presentation of the statistic in each area, this can misrepresent the spatial distributions of the human related statistics in geographic maps. 
 
-Extremely small geographic areas are lost on large geographic maps, small inner areas of Sydney or Melbourne are not easily compared at a high level.
-Cartograms place importance on the statistic of interest, allowing distorted map space on the display to represent differences in the statistic. These maps rely on the statistic of interest to determine the layout, and for Australia, often fail to preserve a recognisable view.
-Tilegrams allow preservation of spatial relationships as they decrease the emphasis on the amount of geographic area considered to be interesting. These maps focus on the relationship between neighbours, in considering aggregated statistics of heterogeneous regions.
+<!-- solutions -->
+Beginning with the geography, cartograms apply a transformation to place importance on the statistic of interest. They result in a distortion of the map space to represent differences in the statistic. 
+These displays rely on the statistic of interest to determine the layout, however for Australia, many cartograms fail to preserve a recognisable display.
+Contiguous cartograms change the shape of an area, preserving neighbouring relationships. Non-contiguous cartograms maintain the shape of each area, but lose the connection to neighbours.
 
-Our case is an extension of these concepts. Extending the tilegram to Australian applications required preserving the spatial relationships. It emphasises the capital cities as population hubs, and recognises the populations distributed across the large rural areas. 
+
+Alternative maps shift the focus from land area, to the value of the statistics in a group of areas.
+Alternative mapping methods allow increased understanding of the spatial distribution of a variable across the population, by fairly representing each administrative area.
+
+Tilegrams are an extension of Dorling cartograms, using one simple shape to represnt each area. This allows preservation of spatial relationships and decreases the emphasis from the amount of geographic area. These maps focus on the relationship between neighbours attempting to preserve connections, and disregard the unique shapes of the administrative boundaries.
+
+The sugarbag package provides a new method to implement hexagon tilegrams. 
+Extending the tilegram to Australian applications required preserving the spatial relationships. It emphasises the capital cities as population hubs, and recognises the distances between locations of populations distributed across the large rural areas. 
 
 
 # Algorithm
 
-Our solution operates on a set of polygons.
+This solution operates on a set of `sf` [@sf] polygons.
+
+There are four necessary tasks to create a hexagon tilegram.
+These steps can be executed by the main function, `create_hexmap`, or can be applied separately for more flexibility.
+
+They perform the following tasks:
+ - Create the set of centroids to allocate
+ - Create the set of hexagons to use
+ - Allocate each centroid to an available hexagon
+ - Transform the data for plotting
+
+```{r, eval = FALSE}
+tibble::tibble(
+  Step = c("1", "2", "3", "4"),
+  Task = c("Create the set of centroids to allocate",
+    "Create the set of hexagons to use", 
+    "Allocate each centroid to an available hexagon",
+    "Transform the data for plotting"),
+  #Function = c("create_centroids", "create_grid", "allocate", "fortify_hexagon"),
+  Input = 
+    c("1", "2", "3",
+    "Allocated hexagons, identifying column, size of hexagons"),
+  Output = c("1", "2", "3", "Fortified data frame")
+  )
+```
+
+
 There are parameters used in the process that may be provided, or will be automatically derived.
-All necessary functions are exported, with a main function `create_hexmap` used to step through these automatically.
 
-## Parameters
+### Use the sugarbag package
 
-The `create_hexmap` function requires several parameters, if they are not provided, the information will be derived from the polygon set used. 
+```{r libraries}
+# To install sugarbag:
+# devtools::install_github("srkobakian/sugarbag")
+library(sugarbag)
+
+library(tidyverse)
+```
+
+### Parameters
+
+The `create_hexmap` function requires several parameters, if they are not provided, the information will be derived from the polygon set used. If users already have a grid and set of centroids they may choose to only use the `allocate` function.
 
 **The following must be provided to `create_hexmap`:**
 ```{r table_necessary}
 knitr::kable(tibble::tibble(parameter = c('shp', 
-  'shp_path',
   'sf_id',
-  'capital_cities'),
-  description = c('an Rdata object containing the polygon information', 'character string location of the shape file that contains the polygon information', 'name of a unique column that distinguishes areas',
+  'focal_points'),
+  description = c(
+    'an sf object containing the polygon information', 
+    'name of a column that distinguishes unique areas',
     'a data frame of reference locations used to allocate hexagons'
     )), format = "latex")
-
 ```
 
-```{r libraries}
-library(tidyverse)
-# To install sugarbag:
-# devtools::install_github("srkobakian/sugarbag")
-library(sugarbag)
-```
 
-The polygon set of Local Government Areas in Tasmania in 2016 is stored in the sugarbag package data as `tas_lga`. 
-A single column of the data set must be used as a unique identifier of areas. In this case, the unique LGA codes associated with each LGA have been used, their names could have also been used.
+### Example data
 
-```{r id}
-sf_id <- "LGA_CODE16"
-```
+The polygon set of Local Government Areas of Tasmania in 2016 is provided with the sugarbag package as `tas_lga`. 
+A single column of the data set must be used as a unique identifier of areas. In this case, the unique LGA codes associated with each LGA have been used.
 
-The centre of the population hubs are used to distribute areas around the closest capital city.
+The longitude and latitude centre of the capital cities of Australia are used to  allocate areas around the closest capital city.
 
-```{r data}
+```{r capital_cities}
 data(capital_cities)
 ```
 
@@ -88,56 +128,59 @@ data(capital_cities)
 
 ```{r}
 knitr::kable(tibble(parameter = c('buffer_dist', 'hex_size',  'hex_filter', 'width'),
-  description = c('a float value for distance in degrees to extend beyond the - geometry provided',
+  description = c('a float value for distance in degrees to extend beyond the geometry provided',
     'a float value in degrees for the diameter of the hexagons', 'amount of hexagons around centroid to consider for allocation',
     'the angle used to filter the grid points around a centroid')), format = "latex")
 ```
 
 
 
+
+## Create the set of centroid points
+
 When utilising individual `sugarbag` functions, we recommend the following approach:
+Begin with a set of polygons. The set should be provided as an `sf` object, this is a data frame containing a `geometry` column. ^[The `read_shape` function can assist in creating this object.] We will use the Local Government Areas of Tasmania, downloaded from the Australian Bureau of Statistics. 
 
-## Polygon Information
 
-Begin with a set of polygons. The set should be provided as an `sf` object, this is a data frame containing a `geometry` column. The `read_shape` function can assist in creating this object. We will use the Local Government Areas of Tasmania, sourced from the Australian Bureau of Statistics. 
-
-```{r}
-# Create a suitable data set for plotting
-fort_lga <- fortify_sfc(tas_lga)
-
-# Include area variable
-area_var <- fort_lga %>% 
-  distinct(LGA_CODE16, .keep_all = TRUE) %>% 
-  select(LGA_CODE16, AREASQKM16)
-```
-
+The centroids can be derived from the set of polygons:
 
 ```{r centroids}
 ## Use the create_centroids function to find polygon centroids:
-centroids <- create_centroids(shp_sf = tas_lga, sf_id = sf_id) %>%
-  left_join(., select(area_var, LGA_CODE16, AREASQKM16), by = "LGA_CODE16")
+centroids <- create_centroids(shp_sf = tas_lga, sf_id = "LGA_CODE16")
+## Join to data for each area
+centroids <- left_join(centroids, as_tibble(tas_lga), by = "LGA_CODE16")
+
+
 ```
 
 
-```{r, fig.cap="lga Local Government Areas and derived centroids."}
-end_cents <- ggplot() + 
-  geom_polygon(aes(x = long, y = lat, group = group), data = fort_lga, fill = "grey", size = 0.3, colour = "lightgrey") + geom_point(aes(x=longitude, y = latitude), data = centroids) + theme_void() + coord_equal()
-end_cents
+```{r end_cents, fig.cap="Local Government Areas and derived centroids.", fig.height = 3.5, fig.width = 7}
+fort_lga <- fortify_sfc(tas_lga)
+polys <- ggplot() + 
+  geom_polygon(aes(x = long, y = lat, group = interaction(LGA_NAME16, polygon)), data = fort_lga, fill = "grey", size = 0.3, colour = "lightgrey") +theme_void() + coord_equal()
 
-#ggplot() + geom_histogram(aes(x = log(AREASQKM16), fill = log(AREASQKM16)), data= centroids, bins = 20) 
+cents <- ggplot() + 
+  geom_polygon(aes(x = long, y = lat, group = interaction(LGA_NAME16, polygon)), data = fort_lga, fill = "grey", size = 0.3, colour = "lightgrey") + geom_point(aes(x=longitude, y = latitude), data = centroids) + theme_void() + coord_equal()
+
+gridExtra::grid.arrange(polys, cents, nrow = 1)
 ```
 
 
 ## Hexagon grid
 
-Each new hexagon will need to tessellate, a grid is created to ensure a close point is found, that will allow all areas to tessellate, this is inspired by tilegrams. The grid of possible hexagon centroids can be made using the `create_grid` function. The grid creation takes several steps. It requires the centroids, the hexagon size and the buffer distance.
+A tilegram allows areas to be allocated to a tellesated set of tiles.
+The grid is created to ensure a close point is found, that ensures tessellation with other previously allocated points.
+
+The grid of possible hexagon centroids can be made using the `create_grid` function.
+The grid creation requires several steps.
+It uses the centroids, the hexagon size and the buffer distance.
 
 ```{r bbox}
 ## create the bounding box from the set of polygon centroids:
 bbox <- tibble::tibble(min = c(min(centroids$longitude, na.rm = TRUE), min(centroids$latitude, na.rm = TRUE)),
         max = c(max(centroids$longitude, na.rm = TRUE), max(centroids$latitude, na.rm = TRUE)))
 
-hex_size <- 0.25
+hex_size = 0.3
  
 # default size calculation:
 #(bbox$max[1] - bbox$min[1])/(bbox$max[2] - bbox$min[2]) / 5
@@ -148,10 +191,10 @@ buffer_dist <- max((bbox$max[1] - bbox$min[1]), (bbox$max[2] - bbox$min[2]))*0.3
 
 ### Step 1: Expand the grid
 
-One sequence is created for longitude columns, and another for latitude rows.
+A sequence is created for longitude columns, and another for latitude rows.
 
-The sequences begin at the minimum longitude or latitude, minus the buffer distance.
-Equally spaced intervals the size of the hexagons are created up to the maximum longitude or latitude, plus the buffer distance.
+The sequences begin at the minimum longitude (latitude), minus the buffer distance.
+Equally spaced intervals the size of the hexagons are created up to the maximum longitude (latitude), plus the buffer distance.
 
 An individual point is created from all intersections of the longitude columns and latitude row sequences.
 
@@ -167,7 +210,7 @@ grid <- tibble::as_tibble(
 ```
 
 ```{r plot_grid}
-ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_lga, fill = "grey", size = 0.3, colour = "lightgrey") + geom_point(aes(x=longitude, y = latitude), data= centroids, colour = "#b2df8a") + theme_void() + coord_equal() +
+grid1 <- ggplot() + geom_polygon(aes(x = long, y = lat, group = interaction(LGA_NAME16, polygon)), data = fort_lga, fill = "grey", size = 0.3, colour = "lightgrey") + geom_point(aes(x=longitude, y = latitude), data= centroids, colour = "#b2df8a") + theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = grid, size = 0.75) 
 ```
 
@@ -188,7 +231,7 @@ grid <- grid %>%
 ```
 
 ```{r plot_shift}
-ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_lga, fill = "grey", size = 0.3, colour = "lightgrey") + geom_point(aes(x=longitude, y = latitude), data = centroids, colour = "#b2df8a") + theme_void() + coord_equal() +
+grid2 <- ggplot() + geom_polygon(aes(x = long, y = lat, group = interaction(LGA_NAME16, polygon)), data = fort_lga, fill = "grey", size = 0.3, colour = "lightgrey") + geom_point(aes(x=longitude, y = latitude), data = centroids, colour = "#b2df8a") + theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = grid, size = 0.75) 
 ```
 
@@ -200,13 +243,17 @@ full_grid <- grid <- grid %>%
         hex_lat_int = dense_rank(hex_lat)-1)
 ```
 
+```{r, fig.cap="Grid points to create a tilegram.", fig.height = 3.5, fig.width = 7}
+gridExtra::grid.arrange(grid1, grid2, nrow = 1)
+```
+
 
 ### Step 2: Rolling windows
 
-Not all of the grid points will be used, especially if islands impact the overall space covered.
+Not all of the grid points will be used, especially if islands result in a large grid space.
 To filter the grid for appropriate points for allocation,
 the `create_buffer` function is called from `create_grid`.
-It finds the amount of columns and rows needed to best capture the set of centroids.
+It finds the grid points needed to best capture the set of centroids.
 
 ```{r}
 nlong <- length(unique(grid$hex_long))
@@ -217,7 +264,9 @@ centroids <- centroids %>%
           lat_int = round((latitude-min(grid$hex_lat))/(max(grid$hex_lat)-min(grid$hex_lat))*nlat, 0))
 ```
 
-The rows and columns are divided into 20 groups. The amount of rows in each latitude group and the amount of columns in each longitude group are then used as the width of manual rolling windows. This will tailor the available points to the areas most likely to be used. It helps reduce amount of time taken.
+The rows and columns are divided into 20 groups.
+The amount of rows in each latitude group and the amount of columns in each longitude group are then used as the width of rolling windows. This will tailor the available grid points to the most likely to be used point.
+It also helps reduce amount of time taken, as it decreases the amount of points considered.
 
 ```{r echo = FALSE}
 # Amount of lats and longs in each group
@@ -225,7 +274,7 @@ lat_size = round(nlat/20,0)
 long_size = round(nlong/20,0)
 ```
 
-The specific rows and columns in the rolling windows are defined.The first rolling window function finds the minimum and maximum centroid values for the sliding groups of longitude columns and the groups of latitude rows.
+The first rolling window function finds the minimum and maximum centroid values for the sliding groups of longitude columns and the groups of latitude rows.
 
 
 ```{r echo = FALSE}
@@ -255,6 +304,8 @@ The specific rows and columns in the rolling windows are defined.The first rolli
     # LATITUDE ROWS FILTER
     # amount of latitude in sliding window
     lat_windows <- purrr::map(.x = nlat_list, .f = lat_window)
+    # LONGITUDE COLS FILTER
+    long_windows <- purrr::map(.x = nlong_list, .f = long_window)
 
     # find the min and max longitude for each latitude
     range_rows <- purrr::map_dfr(.x = lat_windows,
@@ -264,23 +315,7 @@ The specific rows and columns in the rolling windows are defined.The first rolli
                     long_max = ifelse(purrr::is_empty(long_int), NA, max(x$long_int))
                 )}
     )
-```
-
-
-
-The second rolling window function finds the average of the rolling minimum and rolling maximum centroid values, for the longitude columns and latitude rows.
-
-```{r echo = FALSE}
- # smooth the minimums
-    av_range_rows <- purrr::map_dfr(.x = nlat_list, .f = function(x, rows = range_rows) {
-        rows[x[1]:min(x[2], NROW(rows)),] %>%
-            dplyr::summarise(mean_long_min = mean(long_min, na.rm=T), mean_long_max = mean(long_max, na.rm=T))
-    }) %>%
-        bind_cols(lat_id = c(seq(1:nlat) +lat_size), .)
-
-    # LONGITUDE COLS FILTER
-    long_windows <- purrr::map(.x = nlong_list, .f = long_window, centroids, nlong)
-
+    
     # find the min and max longitude for each latitude
     range_cols <- purrr::map_dfr(.x = long_windows, .f = function(x) { x %>%
             dplyr::summarise(
@@ -288,13 +323,27 @@ The second rolling window function finds the average of the rolling minimum and 
                 lat_max = ifelse(purrr::is_empty(lat_int), NA, max(x$lat_int))
             )}
     )
+```
 
+
+
+The second rolling window function finds the average of the rolling centroid values minimum and maximum, for the longitude columns and latitude rows.
+
+```{r echo = FALSE}
+ # smooth the minimums
+    av_range_rows <- purrr::map_dfr(.x = nlat_list, .f = function(x, rows = range_rows) {
+        rows[x[1]:min(x[2], NROW(rows)),] %>%
+            dplyr::summarise(mean_long_min = mean(long_min, na.rm=T), mean_long_max = mean(long_max, na.rm=T))
+    }) %>%
+        bind_cols(lat_id = c(seq(1:nlat) + lat_size), .)
+
+    
     # smooth the minimums
     av_range_cols <- purrr::map_dfr(.x = nlong_list, .f = function(x, cols = range_cols) {
         cols[x[1]:min(x[2], NROW(cols)),] %>%
             dplyr::summarise(mean_lat_min = mean(lat_min, na.rm=T), mean_lat_max = mean(lat_max, na.rm=T))
     }) %>%
-        bind_cols(long_id = c(seq(1:nlong) + round(long_size/2)), .)
+        bind_cols(long_id = c(seq(1:nlong) + long_size + round(long_size/2)), .)
 
 ```
 
@@ -325,7 +374,7 @@ Only the grid points between the rolling average of the minimum and maximum cent
 
 
 ```{r plot_buffer}
-ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_lga, fill = "grey", size = 0.3, colour = "lightgrey") + geom_point(aes(x=longitude, y = latitude), data = centroids, colour = "#b2df8a", fill = "red") + theme_void() + coord_equal() +
+ggplot() + geom_polygon(aes(x = long, y = lat, group = interaction(LGA_NAME16, polygon)), data = fort_lga, fill = "grey", size = 0.3, colour = "lightgrey") + geom_point(aes(x=longitude, y = latitude), data = centroids, colour = "#b2df8a", fill = "red") + theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#a6cee3", data = full_grid, size = 0.25) +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = grid, size = 0.75)
 ```
@@ -336,6 +385,7 @@ ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_lga, 
 ```{r split_centroids}
 # Split the centroid data set
 centroids <- centroids %>% 
+  select(-geometry) %>% 
   nest(longitude, latitude) %>% 
   mutate(closest = map(data, closest_focal_point, focal_points = capital_cities %>% filter(points == "Hobart"))) %>% 
   unnest(data, closest) %>% 
@@ -350,26 +400,18 @@ The distance between the polygon centroid and it's closest focal point data set 
 
 The distance around a centroid to consider for possible hexagon locations is determined by the hex_filter. It multiplies the amount given by hex_filter, by the size of the hexagons to find the distance. 
 
-```{r}
-## Consider hexagon points up to a certain distance from centroid
-hex_filter <- 10
-```
-
-
-```{r}
-width = 15
-```
-
 
 ```{r, eval = FALSE}
-hexmap_allocation <- allocate(centroids = centroids,
-        hex_grid = grid,
-        hex_size = hex_size,
-        hex_filter = hex_filter,
-        width = width,
-        focal_points = capital_cities,
-        verbose = TRUE,
-        id = sf_id)
+hexmap_allocation <- allocate(
+  centroids = centroids,
+  sf_id = "LGA_CODE16",
+  hex_grid = grid,
+  hex_size = 0.2, # same size used in create_grid
+  hex_filter = 10,
+  width = 35,
+  focal_points = capital_cities,
+  verbose = TRUE
+)
 ```
 
 
@@ -390,6 +432,8 @@ centroid_allocation <- NULL
 The filter parameter is used to subset possible grid points to only those surrounding the polygon centroid within the filter distance, smaller distance will increase speed, but can decrease accuracy.
 
 ```{r orig_dist}
+hex_filter = 10
+width = 35
 # keep value to reset expanded distances
 expand_dist <- hex_filter
 ```
@@ -428,7 +472,7 @@ hex_grid <- hex_grid %>% ungroup() %>%
 Create a box of possible hexagon locations around the centroid. The bottom of the box will not be square as the buffer has already removed unnecessary points from over the ocean.
 
 ```{r, echo = FALSE}
-ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_lga, fill = "grey", size = 0.3, colour = "lightgrey") + geom_point(aes(x=longitude, y = latitude), data = centroid1, fill = "red") + theme_void() + coord_equal() +
+ggplot() + geom_polygon(aes(x = long, y = lat, group = interaction(LGA_NAME16, polygon)), data = fort_lga, fill = "grey", size = 0.3, colour = "lightgrey") + geom_point(aes(x=longitude, y = latitude), data = centroid1, fill = "red") + theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#a6cee3", data = grid, size = 0.25) +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = hex_grid, size = 0.75)
 
@@ -468,7 +512,7 @@ The algorithm removes the outer corners of the square, creating a circle of poin
 
 
 ```{r, echo = FALSE}
-ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_lga, fill = "grey", size = 0.3, colour = "lightgrey") + geom_point(aes(x=longitude, y = latitude), data = centroid1, colour = "#b2df8a") + theme_void() + coord_equal() +
+ggplot() + geom_polygon(aes(x = long, y = lat, group = interaction(LGA_NAME16, polygon)), data = fort_lga, fill = "grey", size = 0.3, colour = "lightgrey") + geom_point(aes(x=longitude, y = latitude), data = centroid1, colour = "#b2df8a") + theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#a6cee3", data = grid, size = 0.25) +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = hex_grid, size = 0.75)
 ```
@@ -499,7 +543,7 @@ The allocation is returned and combined with the data relating to each polygon.
 
 
 ```{r}
-ggplot() + geom_polygon(aes(x = long, y = lat, group = group), data = fort_lga, fill = "grey", size = 0.3, colour = "lightgrey") + theme_void() + coord_equal() +
+ggplot() + geom_polygon(aes(x = long, y = lat, group = interaction(LGA_NAME16, polygon)), data = fort_lga, fill = "grey", size = 0.3, colour = "lightgrey") + theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#a6cee3", data = grid, size = 0.25) +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = hex_grid, size = 0.75) + 
   geom_point(aes(x=longitude, y = latitude), data = centroid1, colour = "#b2df8a", size = 0.8) 
@@ -529,12 +573,13 @@ centroid_allocation <- bind_rows(centroid_allocation, dplyr::bind_cols(cent, hex
 
 ```{r}
 hex_points_df <- centroid_allocation %>% 
-  fortify_hexagon(hex_size = hex_size)
+  fortify_hexagon(hex_size = hex_size,
+  sf_id = "LGA_CODE16")
 ```
 
 ```{r}
 ggplot() + 
-  geom_polygon(aes(x = long, y = lat, group = group), data = fort_lga %>% filter(LGA_CODE16=="62810"), fill = "grey", size = 0.3, colour = "lightgrey") +
+  geom_polygon(aes(x = long, y = lat, group = interaction(LGA_NAME16, polygon)), data = fort_lga %>% filter(LGA_CODE16=="62810"), fill = "grey", size = 0.3, colour = "lightgrey") +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = hex_grid, size = 0.75) + 
   geom_point(aes(x=longitude1, y = latitude1), data = centroid1, colour = "#fb9a99", size = 1) + 
   geom_point(aes(x=longitude, y = latitude), data = centroid1, colour = "#b2df8a", size = 0.8) + 
@@ -549,7 +594,7 @@ The following code creates a map for all the Local Government Areas in Tasmania:
 centroids <- create_centroids(tas_lga, "LGA_CODE16")
 # Create hexagon location grid
 grid <- create_grid(centroids = centroids,
-    hex_size = 0.25,
+    hex_size = 0.3,
     buffer_dist = 1.2)
 # Allocate polygon centroids to hexagon grid points
 hex_allocated <- allocate(
@@ -557,11 +602,11 @@ hex_allocated <- allocate(
   hex_grid = grid,
   sf_id = "LGA_CODE16",
   # same column used in create_centroids
-  hex_size = 0.25,
+  hex_size = 0.3,
   # same size used in create_grid
   hex_filter = 10,
   focal_points = capital_cities %>% filter(points == "Hobart"),
-  width = 30,
+  width = 35,
   verbose = FALSE
 )
 ```
@@ -569,16 +614,16 @@ hex_allocated <- allocate(
 
 ```{r, fig.height=2.5, fig.width = 5}
 h1 <- hex_allocated %>%
-  fortify_hexagon(hex_size = 0.25) %>% 
+  fortify_hexagon(hex_size = 0.3, 
+  sf_id = "LGA_CODE16") %>% 
   left_join(., tas_lga)
 
 p1 <- fortify_sfc(tas_lga)
-
 end_hex <- ggplot() +
-  geom_polygon(data = p1, aes(x=long, lat, group = group), fill = "grey", size = 0.3, colour = "lightgrey") +
+  geom_polygon(data = p1, aes(x=long, lat, group = interaction(LGA_NAME16, polygon)), fill = "grey", size = 0.3, colour = "lightgrey") +
   geom_polygon(data = h1, aes(x=long, lat, group = LGA_CODE16)) + theme_void() + coord_equal()
 
-gridExtra::grid.arrange(end_cents, end_hex, nrow = 1)
+gridExtra::grid.arrange(cents, end_hex, nrow = 1)
 ```
 
 ## Summary

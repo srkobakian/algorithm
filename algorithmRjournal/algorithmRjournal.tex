@@ -19,62 +19,85 @@ often difficult to locate on large geographic maps.
 \subsection{Introduction}\label{introduction}}
 
 Spatial distributions have utilised alternative representations of
-geography for many years. In modern times interactivity and animation
+geography for many years. In modern times, interactivity and animation
 have begun to play a larger role, as alternative representations have
-been popularised by online news sites, with a focus on public
-consumption. Applications are increasingly widespread, especially in the
-areas of disease mapping, and election results.
+been popularised by online news sites, and atlas websites with a focus
+on public consumption. Applications are increasingly widespread,
+especially in the areas of disease mapping, and election results.
 
-\hypertarget{motivation}{%
-\subsection{Motivation}\label{motivation}}
+Choropleths are the current best practice approach for presenting
+geographical data as maps highlight the geographic patterns in
+geospatially related statistics {[}@SAMGIS{]}. The land on the map space
+is divided to separate each area, these boundaries are usually
+administrative. The areas are filled with colour to represent the value
+of the statistic for the area {[}@EI{]}.
 
-Spatial distributions of people and human related statistics can be
-misrepresented in geographic maps. Populations congregate around major
-cities and vertical living is increasingly common. Population statistics
-often requires dividing people into smaller, measurable areas.
-Government bodies such as the Australian Bureau of Statistics, or
-intentionally segregated organisations, like the Australian Electoral
-Commission hold the responsibility of the division. Australia is an
-example of strong urbanisation, the rural areas are often sparsely
-populated in comparison to the urban centres. To divide the population
-equally, the square meters of the geographic areas differ dramatically
-in size.
+In Australia, government bodies such as the Australian Bureau of
+Statistics, or the Australian Electoral Commission hold the
+responsibility for the division of areas. These boundaries are often
+adjusted as the population in areas increase. Australian people are
+increasingly congregating around major cities, the rural areas are often
+sparsely populated in comparison to the urban centres. The division of
+the population into equal population areas results in dramatically
+different square meterage of the geographic areas. This results in an
+unequal presentation of the statistic in each area, this can
+misrepresent the spatial distributions of the human related statistics
+in geographic maps.
 
-Alternative mapping methods allow increased understanding of the spatial
-distribution of a variable across the population. Alternative maps allow
-the focus to be placed on the distribution of the statistics between the
-groups of areas.
+Beginning with the geography, cartograms apply a transformation to place
+importance on the statistic of interest. They result in a distortion of
+the map space to represent differences in the statistic. These displays
+rely on the statistic of interest to determine the layout, however for
+Australia, many cartograms fail to preserve a recognisable display.
+Contiguous cartograms change the shape of an area, preserving
+neighbouring relationships. Non-contiguous cartograms maintain the shape
+of each area, but lose the connection to neighbours.
 
-Extremely small geographic areas are lost on large geographic maps,
-small inner areas of Sydney or Melbourne are not easily compared at a
-high level. Cartograms place importance on the statistic of interest,
-allowing distorted map space on the display to represent differences in
-the statistic. These maps rely on the statistic of interest to determine
-the layout, and for Australia, often fail to preserve a recognisable
-view. Tilegrams allow preservation of spatial relationships as they
-decrease the emphasis on the amount of geographic area considered to be
-interesting. These maps focus on the relationship between neighbours, in
-considering aggregated statistics of heterogeneous regions.
+Alternative maps shift the focus from land area, to the value of the
+statistics in a group of areas. Alternative mapping methods allow
+increased understanding of the spatial distribution of a variable across
+the population, by fairly representing each administrative area.
 
-Our case is an extension of these concepts. Extending the tilegram to
-Australian applications required preserving the spatial relationships.
-It emphasises the capital cities as population hubs, and recognises the
+Tilegrams are an extension of Dorling cartograms, using one simple shape
+to represnt each area. This allows preservation of spatial relationships
+and decreases the emphasis from the amount of geographic area. These
+maps focus on the relationship between neighbours attempting to preserve
+connections, and disregard the unique shapes of the administrative
+boundaries.
+
+The sugarbag package provides a new method to implement hexagon
+tilegrams. Extending the tilegram to Australian applications required
+preserving the spatial relationships. It emphasises the capital cities
+as population hubs, and recognises the distances between locations of
 populations distributed across the large rural areas.
 
 \hypertarget{algorithm}{%
 \section{Algorithm}\label{algorithm}}
 
-Our solution operates on a set of polygons. There are parameters used in
-the process that may be provided, or will be automatically derived. All
-necessary functions are exported, with a main function
-\texttt{create\_hexmap} used to step through these automatically.
+This solution operates on a set of \texttt{sf} {[}@sf{]} polygons.
+
+There are four necessary tasks to create a hexagon tilegram. These steps
+can be executed by the main function, \texttt{create\_hexmap}, or can be
+applied separately for more flexibility.
+
+They perform the following tasks: - Create the set of centroids to
+allocate - Create the set of hexagons to use - Allocate each centroid to
+an available hexagon - Transform the data for plotting
+
+There are parameters used in the process that may be provided, or will
+be automatically derived.
+
+\hypertarget{use-the-sugarbag-package}{%
+\subsubsection{Use the sugarbag
+package}\label{use-the-sugarbag-package}}
 
 \hypertarget{parameters}{%
-\subsection{Parameters}\label{parameters}}
+\subsubsection{Parameters}\label{parameters}}
 
 The \texttt{create\_hexmap} function requires several parameters, if
 they are not provided, the information will be derived from the polygon
-set used.
+set used. If users already have a grid and set of centroids they may
+choose to only use the \texttt{allocate} function.
 
 \textbf{The following must be provided to \texttt{create\_hexmap}:}
 
@@ -84,26 +107,26 @@ set used.
 \hline
 parameter & description\\
 \hline
-shp & an Rdata object containing the polygon information\\
+shp & an sf object containing the polygon information\\
 \hline
-shp\_path & character string location of the shape file that contains the polygon information\\
+sf\_id & name of a column that distinguishes unique areas\\
 \hline
-sf\_id & name of a unique column that distinguishes areas\\
-\hline
-capital\_cities & a data frame of reference locations used to allocate hexagons\\
+focal\_points & a data frame of reference locations used to allocate hexagons\\
 \hline
 \end{tabular}
 
 \end{Schunk}
 
-The polygon set of Local Government Areas in Tasmania in 2016 is stored
-in the sugarbag package data as \texttt{tas\_lga}. A single column of
-the data set must be used as a unique identifier of areas. In this case,
-the unique LGA codes associated with each LGA have been used, their
-names could have also been used.
+\hypertarget{example-data}{%
+\subsubsection{Example data}\label{example-data}}
 
-The centre of the population hubs are used to distribute areas around
-the closest capital city.
+The polygon set of Local Government Areas of Tasmania in 2016 is
+provided with the sugarbag package as \texttt{tas\_lga}. A single column
+of the data set must be used as a unique identifier of areas. In this
+case, the unique LGA codes associated with each LGA have been used.
+
+The longitude and latitude centre of the capital cities of Australia are
+used to allocate areas around the closest capital city.
 
 \textbf{The following parameters will be determined within
 \texttt{create\_hexmap} if not provided. They are created throughout the
@@ -115,7 +138,7 @@ following example:}
 \hline
 parameter & description\\
 \hline
-buffer\_dist & a float value for distance in degrees to extend beyond the - geometry provided\\
+buffer\_dist & a float value for distance in degrees to extend beyond the geometry provided\\
 \hline
 hex\_size & a float value in degrees for the diameter of the hexagons\\
 \hline
@@ -127,85 +150,85 @@ width & the angle used to filter the grid points around a centroid\\
 
 \end{Schunk}
 
+\hypertarget{create-the-set-of-centroid-points}{%
+\subsection{Create the set of centroid
+points}\label{create-the-set-of-centroid-points}}
+
 When utilising individual \texttt{sugarbag} functions, we recommend the
-following approach:
+following approach: Begin with a set of polygons. The set should be
+provided as an \texttt{sf} object, this is a data frame containing a
+\texttt{geometry} column. \footnote{The \texttt{read\_shape} function
+  can assist in creating this object.} We will use the Local Government
+Areas of Tasmania, downloaded from the Australian Bureau of Statistics.
 
-\hypertarget{polygon-information}{%
-\subsection{Polygon Information}\label{polygon-information}}
-
-Begin with a set of polygons. The set should be provided as an
-\texttt{sf} object, this is a data frame containing a \texttt{geometry}
-column. The \texttt{read\_shape} function can assist in creating this
-object. We will use the Local Government Areas of Tasmania, sourced from
-the Australian Bureau of Statistics.
+The centroids can be derived from the set of polygons:
 
 \begin{Schunk}
 \begin{figure}
-\includegraphics{algorithmRjournal_files/figure-latex/unnamed-chunk-3-1} \caption[lga Local Government Areas and derived centroids]{lga Local Government Areas and derived centroids.}\label{fig:unnamed-chunk-3}
+\includegraphics{algorithmRjournal_files/figure-latex/end_cents-1} \caption[Local Government Areas and derived centroids]{Local Government Areas and derived centroids.}\label{fig:end_cents}
 \end{figure}
 \end{Schunk}
 
 \hypertarget{hexagon-grid}{%
 \subsection{Hexagon grid}\label{hexagon-grid}}
 
-Each new hexagon will need to tessellate, a grid is created to ensure a
-close point is found, that will allow all areas to tessellate, this is
-inspired by tilegrams. The grid of possible hexagon centroids can be
-made using the \texttt{create\_grid} function. The grid creation takes
-several steps. It requires the centroids, the hexagon size and the
-buffer distance.
+A tilegram allows areas to be allocated to a tellesated set of tiles.
+The grid is created to ensure a close point is found, that ensures
+tessellation with other previously allocated points.
+
+The grid of possible hexagon centroids can be made using the
+\texttt{create\_grid} function. The grid creation requires several
+steps. It uses the centroids, the hexagon size and the buffer distance.
 
 \hypertarget{step-1-expand-the-grid}{%
 \subsubsection{Step 1: Expand the grid}\label{step-1-expand-the-grid}}
 
-One sequence is created for longitude columns, and another for latitude
+A sequence is created for longitude columns, and another for latitude
 rows.
 
-The sequences begin at the minimum longitude or latitude, minus the
+The sequences begin at the minimum longitude (latitude), minus the
 buffer distance. Equally spaced intervals the size of the hexagons are
-created up to the maximum longitude or latitude, plus the buffer
+created up to the maximum longitude (latitude), plus the buffer
 distance.
 
 An individual point is created from all intersections of the longitude
 columns and latitude row sequences.
 
-\begin{Schunk}
-
-\includegraphics{algorithmRjournal_files/figure-latex/plot_grid-1} \end{Schunk}
-
 A square grid will not facilitate tessellated hexagons. Every second
 latitude row of points will be shifted right by half of the hexagon
 size.
 
-\begin{Schunk}
-
-\includegraphics{algorithmRjournal_files/figure-latex/plot_shift-1} \end{Schunk}
-
 Each point is now given an ID.
+
+\begin{Schunk}
+\begin{figure}
+\includegraphics{algorithmRjournal_files/figure-latex/unnamed-chunk-3-1} \caption[Grid points to create a tilegram]{Grid points to create a tilegram.}\label{fig:unnamed-chunk-3}
+\end{figure}
+\end{Schunk}
 
 \hypertarget{step-2-rolling-windows}{%
 \subsubsection{Step 2: Rolling windows}\label{step-2-rolling-windows}}
 
-Not all of the grid points will be used, especially if islands impact
-the overall space covered. To filter the grid for appropriate points for
+Not all of the grid points will be used, especially if islands result in
+a large grid space. To filter the grid for appropriate points for
 allocation, the \texttt{create\_buffer} function is called from
-\texttt{create\_grid}. It finds the amount of columns and rows needed to
-best capture the set of centroids.
+\texttt{create\_grid}. It finds the grid points needed to best capture
+the set of centroids.
 
 The rows and columns are divided into 20 groups. The amount of rows in
 each latitude group and the amount of columns in each longitude group
-are then used as the width of manual rolling windows. This will tailor
-the available points to the areas most likely to be used. It helps
-reduce amount of time taken.
+are then used as the width of rolling windows. This will tailor the
+available grid points to the most likely to be used point. It also helps
+reduce amount of time taken, as it decreases the amount of points
+considered.
 
-The specific rows and columns in the rolling windows are defined.The
-first rolling window function finds the minimum and maximum centroid
+The first rolling window function finds the minimum and maximum centroid
 values for the sliding groups of longitude columns and the groups of
 latitude rows.
 
 The second rolling window function finds the average of the rolling
-minimum and rolling maximum centroid values, for the longitude columns
-and latitude rows.
+centroid values minimum and maximum, for the longitude columns and
+latitude rows.
 
 \hypertarget{step-3-filtering-the-grid}{%
 \subsubsection{Step 3: Filtering the
@@ -276,7 +299,7 @@ unnecessary points from over the ocean.
 
 \begin{Schunk}
 
-\includegraphics{algorithmRjournal_files/figure-latex/unnamed-chunk-12-1} \end{Schunk}
+\includegraphics{algorithmRjournal_files/figure-latex/unnamed-chunk-10-1} \end{Schunk}
 
 The algorithm removes the outer corners of the square, creating a circle
 of points, by only keeping points within a certain radius around the
@@ -284,7 +307,7 @@ original centroid location.
 
 \begin{Schunk}
 
-\includegraphics{algorithmRjournal_files/figure-latex/unnamed-chunk-14-1} \end{Schunk}
+\includegraphics{algorithmRjournal_files/figure-latex/unnamed-chunk-12-1} \end{Schunk}
 
 The width parameter is now used. Of the remaining points, a slice is
 taken. This uses the angle from the closest capital city, to the current
@@ -304,7 +327,7 @@ polygon.
 
 \begin{Schunk}
 
-\includegraphics{algorithmRjournal_files/figure-latex/unnamed-chunk-16-1} \end{Schunk}
+\includegraphics{algorithmRjournal_files/figure-latex/unnamed-chunk-14-1} \end{Schunk}
 
 This area was the very closest to the Hobart central point ( coloured
 pink) provided in the capital cities data set, it gets a hexagon point
@@ -312,7 +335,7 @@ pink) provided in the capital cities data set, it gets a hexagon point
 
 \begin{Schunk}
 
-\includegraphics{algorithmRjournal_files/figure-latex/unnamed-chunk-19-1} \end{Schunk}
+\includegraphics{algorithmRjournal_files/figure-latex/unnamed-chunk-17-1} \end{Schunk}
 
 The following code creates a map for all the Local Government Areas in
 Tasmania:
@@ -323,7 +346,7 @@ Tasmania:
 centroids <- create_centroids(tas_lga, "LGA_CODE16")
 # Create hexagon location grid
 grid <- create_grid(centroids = centroids,
-    hex_size = 0.25,
+    hex_size = 0.3,
     buffer_dist = 1.2)
 # Allocate polygon centroids to hexagon grid points
 hex_allocated <- allocate(
@@ -331,11 +354,11 @@ hex_allocated <- allocate(
   hex_grid = grid,
   sf_id = "LGA_CODE16",
   # same column used in create_centroids
-  hex_size = 0.25,
+  hex_size = 0.3,
   # same size used in create_grid
   hex_filter = 10,
   focal_points = capital_cities %>% filter(points == "Hobart"),
-  width = 30,
+  width = 35,
   verbose = FALSE
 )
 \end{Sinput}
@@ -343,7 +366,7 @@ hex_allocated <- allocate(
 
 \begin{Schunk}
 
-\includegraphics{algorithmRjournal_files/figure-latex/unnamed-chunk-20-1} \end{Schunk}
+\includegraphics{algorithmRjournal_files/figure-latex/unnamed-chunk-18-1} \end{Schunk}
 
 \hypertarget{summary}{%
 \subsection{Summary}\label{summary}}
@@ -363,7 +386,7 @@ available on github: \url{https://github.com/srkobakian/sugarbag}
 
 \address{%
 Stephanie Kobakian\\
-Queensland Univeristy of Technology\\
+Queensland University of Technology\\
 \\
 }
 \href{mailto:stephanie.kobakian@monash.edu}{\nolinkurl{stephanie.kobakian@monash.edu}}
