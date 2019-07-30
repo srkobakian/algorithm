@@ -58,7 +58,7 @@ Alternative mapping methods allow increased understanding of the spatial distrib
 
 Tilegrams are an extension of Dorling cartograms, using one simple shape to represnt each area. This allows preservation of spatial relationships and decreases the emphasis from the amount of geographic area. These maps focus on the relationship between neighbours attempting to preserve connections, and disregard the unique shapes of the administrative boundaries.
 
-The sugarbag package provides a new method to implement hexagon tilegrams. 
+The \CRANpkg{sugarbag} package provides a new method to implement hexagon tilegrams. 
 Extending the tilegram to Australian applications required preserving the spatial relationships. It emphasises the capital cities as population hubs, and recognises the distances between locations of populations distributed across the large rural areas. 
 
 
@@ -66,34 +66,18 @@ Extending the tilegram to Australian applications required preserving the spatia
 
 This solution operates on a set of \CRANpkg{sf} [@sf] polygons.
 
-There are four necessary tasks to create a hexagon tilegram.
+There are four tasks to create a hexagon tilegram.
 These steps can be executed by the main function, `create_hexmap`, or can be applied separately for more flexibility.
 
-They perform the following tasks:
- - Create the set of centroids to allocate
- - Create the set of hexagons to use
- - Allocate each centroid to an available hexagon
- - Transform the data for plotting
-
-```{r tasks, eval = FALSE}
-tibble::tibble(
-  Step = c("1", "2", "3", "4"),
-  Task = c("Create the set of centroids to allocate",
-    "Create the set of hexagons to use", 
-    "Allocate each centroid to an available hexagon",
-    "Transform the data for plotting"),
-  #Function = c("create_centroids", "create_grid", "allocate", "fortify_hexagon"),
-  Input = 
-    c("1", "2", "3",
-    "Allocated hexagons, identifying column, size of hexagons"),
-  Output = c("1", "2", "3", "Fortified data frame")
-  )
-```
+ 1. Create the set of centroids to allocate
+ 2. Create the set of hexagons to use
+ 3. Allocate each centroid to an available hexagon
+ 4. Transform the data for plotting
 
 
-There are parameters used in the process that may be provided, or will be automatically derived.
+There are parameters used in the process that can be provided, if they are not, they will be automatically derived.
 
-### Use the sugarbag package
+### Install sugarbag package
 
 ```{r libraries}
 # To install sugarbag:
@@ -120,19 +104,20 @@ knitr::kable(tibble::tibble(parameter = c('shp',
 ```
 
 
-### Example data
+### Tasmania example
 
-The polygon set of Local Government Areas of Tasmania in 2016 is provided with the \CRANpkg{sugarbag} package as `tas_lga`. 
-A single column of the data set must be used as a unique identifier of areas. In this case, the unique LGA codes associated with each LGA have been used.
+The polygon set of Local Government Areas (LGA) of Tasmania in 2016 is provided with the \CRANpkg{sugarbag} package as `tas_lga`. 
+A single column of the data set must be used to identify the unique areas. 
+In this case, the unique LGA codes associated with each LGA have been used.
 
-The longitude and latitude centre of the capital cities of Australia are used to  allocate areas around the closest capital city.
+The longitude and latitude centre of the capital cities of Australia are used to  allocate areas around the closest capital city, as this example uses only the areas in the state of Tasmania, Hobart will be the common focal point.
 
 ```{r capital_cities}
 data(capital_cities)
 ```
 
 
-**The following parameters will be determined within `create_hexmap` if not provided. They are created throughout the following example:**
+**The following parameters will be determined within `create_hexmap` if they are not provided. They are created throughout the following example:**
 
 ```{r parameters}
 knitr::kable(tibble(parameter = c('buffer_dist', 'hex_size',  'hex_filter', 'width'),
@@ -140,7 +125,6 @@ knitr::kable(tibble(parameter = c('buffer_dist', 'hex_size',  'hex_filter', 'wid
     'a float value in degrees for the diameter of the hexagons', 'amount of hexagons around centroid to consider for allocation',
     'the angle used to filter the grid points around a centroid')), format = "latex")
 ```
-
 
 
 
@@ -173,7 +157,7 @@ gridExtra::grid.arrange(polys, cents, nrow = 1)
 ```
 
 
-## Hexagon grid
+## Create the hexagon grid points
 
 A tilegram allows areas to be allocated to a tellesated set of tiles.
 The grid is created to ensure a close point is found, that ensures tessellation with other previously allocated points.
@@ -399,7 +383,7 @@ For each polygon centroid in the set, the distance to each of the focal points p
 
 The distance between the polygon centroid and it's closest focal point data set is used to order the data set for allocation. The points are arranged in ascending order, from the centroid closest to any of the focal points, to the furthest.
 
-## Allocation of centroids
+## Allocate each centroids to a hexagon grid point
 
 The distance around a centroid to consider for possible hexagon locations is determined by the hex_filter. It multiplies the amount given by hex_filter, by the size of the hexagons to find the distance. 
 

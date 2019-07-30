@@ -65,11 +65,11 @@ maps focus on the relationship between neighbours attempting to preserve
 connections, and disregard the unique shapes of the administrative
 boundaries.
 
-The sugarbag package provides a new method to implement hexagon
-tilegrams. Extending the tilegram to Australian applications required
-preserving the spatial relationships. It emphasises the capital cities
-as population hubs, and recognises the distances between locations of
-populations distributed across the large rural areas.
+The \CRANpkg{sugarbag} package provides a new method to implement
+hexagon tilegrams. Extending the tilegram to Australian applications
+required preserving the spatial relationships. It emphasises the capital
+cities as population hubs, and recognises the distances between
+locations of populations distributed across the large rural areas.
 
 \hypertarget{algorithm}{%
 \section{Algorithm}\label{algorithm}}
@@ -77,37 +77,29 @@ populations distributed across the large rural areas.
 This solution operates on a set of \CRANpkg{sf} (Pebesma
 \protect\hyperlink{ref-sf}{2019}) polygons.
 
-There are four necessary tasks to create a hexagon tilegram. These steps
-can be executed by the main function, \texttt{create\_hexmap}, or can be
+There are four tasks to create a hexagon tilegram. These steps can be
+executed by the main function, \texttt{create\_hexmap}, or can be
 applied separately for more flexibility.
 
-They perform the following tasks: - Create the set of centroids to
-allocate - Create the set of hexagons to use - Allocate each centroid to
-an available hexagon - Transform the data for plotting
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Create the set of centroids to allocate
+\item
+  Create the set of hexagons to use
+\item
+  Allocate each centroid to an available hexagon
+\item
+  Transform the data for plotting
+\end{enumerate}
 
-\begin{Schunk}
-\begin{Sinput}
-tibble::tibble(
-  Step = c("1", "2", "3", "4"),
-  Task = c("Create the set of centroids to allocate",
-    "Create the set of hexagons to use", 
-    "Allocate each centroid to an available hexagon",
-    "Transform the data for plotting"),
-  #Function = c("create_centroids", "create_grid", "allocate", "fortify_hexagon"),
-  Input = 
-    c("1", "2", "3",
-    "Allocated hexagons, identifying column, size of hexagons"),
-  Output = c("1", "2", "3", "Fortified data frame")
-  )
-\end{Sinput}
-\end{Schunk}
+There are parameters used in the process that can be provided, if they
+are not, they will be automatically derived.
 
-There are parameters used in the process that may be provided, or will
-be automatically derived.
-
-\hypertarget{use-the-sugarbag-package}{%
-\subsubsection{Use the sugarbag
-package}\label{use-the-sugarbag-package}}
+\hypertarget{install-sugarbag-package}{%
+\subsubsection{Install sugarbag
+package}\label{install-sugarbag-package}}
 
 \begin{Schunk}
 \begin{Sinput}
@@ -181,17 +173,19 @@ focal\_points & a data frame of reference locations used to allocate hexagons\\
 
 \end{Schunk}
 
-\hypertarget{example-data}{%
-\subsubsection{Example data}\label{example-data}}
+\hypertarget{tasmania-example}{%
+\subsubsection{Tasmania example}\label{tasmania-example}}
 
-The polygon set of Local Government Areas of Tasmania in 2016 is
+The polygon set of Local Government Areas (LGA) of Tasmania in 2016 is
 provided with the \CRANpkg{sugarbag} package as \texttt{tas\_lga}. A
-single column of the data set must be used as a unique identifier of
-areas. In this case, the unique LGA codes associated with each LGA have
-been used.
+single column of the data set must be used to identify the unique areas.
+In this case, the unique LGA codes associated with each LGA have been
+used.
 
 The longitude and latitude centre of the capital cities of Australia are
-used to allocate areas around the closest capital city.
+used to allocate areas around the closest capital city, as this example
+uses only the areas in the state of Tasmania, Hobart will be the common
+focal point.
 
 \begin{Schunk}
 \begin{Sinput}
