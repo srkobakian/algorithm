@@ -148,16 +148,6 @@ choose to only use the \texttt{allocate} function.
 \textbf{The following must be provided to \texttt{create\_hexmap}:}
 
 \begin{Schunk}
-\begin{Sinput}
-knitr::kable(tibble::tibble(parameter = c('shp', 
-  'sf_id',
-  'focal_points'),
-  description = c(
-    'an sf object containing the polygon information', 
-    'name of a column that distinguishes unique areas',
-    'a data frame of reference locations used to allocate hexagons'
-    )), format = "latex")
-\end{Sinput}
 
 \begin{tabular}{l|l}
 \hline
@@ -194,16 +184,10 @@ data(capital_cities)
 \end{Schunk}
 
 \textbf{The following parameters will be determined within
-\texttt{create\_hexmap} if not provided. They are created throughout the
-following example:}
+\texttt{create\_hexmap} if they are not provided. They are created
+throughout the following example:}
 
 \begin{Schunk}
-\begin{Sinput}
-knitr::kable(tibble(parameter = c('buffer_dist', 'hex_size',  'hex_filter', 'width'),
-  description = c('a float value for distance in degrees to extend beyond the geometry provided',
-    'a float value in degrees for the diameter of the hexagons', 'amount of hexagons around centroid to consider for allocation',
-    'the angle used to filter the grid points around a centroid')), format = "latex")
-\end{Sinput}
 
 \begin{tabular}{l|l}
 \hline
@@ -271,8 +255,9 @@ gridExtra::grid.arrange(polys, cents, nrow = 1)
 \end{figure}
 \end{Schunk}
 
-\hypertarget{hexagon-grid}{%
-\subsection{Hexagon grid}\label{hexagon-grid}}
+\hypertarget{create-the-hexagon-grid-points}{%
+\subsection{Create the hexagon grid
+points}\label{create-the-hexagon-grid-points}}
 
 A tilegram allows areas to be allocated to a tellesated set of tiles.
 The grid is created to ensure a close point is found, that ensures
@@ -450,8 +435,9 @@ data set is used to order the data set for allocation. The points are
 arranged in ascending order, from the centroid closest to any of the
 focal points, to the furthest.
 
-\hypertarget{allocation-of-centroids}{%
-\subsection{Allocation of centroids}\label{allocation-of-centroids}}
+\hypertarget{allocate-each-centroids-to-a-hexagon-grid-point}{%
+\subsection{Allocate each centroids to a hexagon grid
+point}\label{allocate-each-centroids-to-a-hexagon-grid-point}}
 
 The distance around a centroid to consider for possible hexagon
 locations is determined by the hex\_filter. It multiplies the amount

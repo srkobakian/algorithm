@@ -92,7 +92,7 @@ library(tidyverse)
 The `create_hexmap` function requires several parameters, if they are not provided, the information will be derived from the polygon set used. If users already have a grid and set of centroids they may choose to only use the `allocate` function.
 
 **The following must be provided to `create_hexmap`:**
-```{r table_necessary}
+```{r table_necessary, echo = FALSE}
 knitr::kable(tibble::tibble(parameter = c('shp', 
   'sf_id',
   'focal_points'),
@@ -119,7 +119,7 @@ data(capital_cities)
 
 **The following parameters will be determined within `create_hexmap` if they are not provided. They are created throughout the following example:**
 
-```{r parameters}
+```{r parameters, echo = FALSE}
 knitr::kable(tibble(parameter = c('buffer_dist', 'hex_size',  'hex_filter', 'width'),
   description = c('a float value for distance in degrees to extend beyond the geometry provided',
     'a float value in degrees for the diameter of the hexagons', 'amount of hexagons around centroid to consider for allocation',
