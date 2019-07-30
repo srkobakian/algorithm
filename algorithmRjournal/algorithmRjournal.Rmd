@@ -19,7 +19,7 @@ output:
 ---
 
 
-```{r cache=TRUE, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+```{r cache=TRUE, echo=FALSE, message=FALSE, warning=FALSE, comment = FALSE}
 library(knitcitations)
 library(RefManageR)
 knitr::opts_chunk$set(echo=FALSE, 
@@ -28,7 +28,7 @@ knitr::opts_chunk$set(echo=FALSE,
                       kfigr.link=TRUE, 
                       kfigr.prefix=TRUE, 
                       cache=TRUE, 
-                      fig.cap=TRUE)
+                      fig.cap=TRUE, comment = FALSE)
  
 options("citation_format" = "pandoc")
 BibOptions(check.entries = FALSE, style = "markdown", bib.style = "alphabetic", cite.style = 'alphabetic')
