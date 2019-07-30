@@ -67,7 +67,7 @@ Extending the tilegram to Australian applications required preserving the spatia
 This solution operates on a set of \CRANpkg{sf} [@sf] polygons.
 
 There are four tasks to create a hexagon tilegram.
-These steps can be executed by the main function, `create_hexmap`, or can be applied separately for more flexibility.
+These steps can be executed by the main function, `create_hexmap`, or can be implemented separately for more flexibility.
 
  1. Create the set of centroids to allocate
  2. Create the set of hexagons to use
@@ -79,19 +79,18 @@ There are parameters used in the process that can be provided, if they are not, 
 
 ### Install sugarbag package
 
-```{r libraries}
+```{r libraries, message=FALSE, warning=FALSE, comment = FALSE}
 # To install sugarbag:
 # devtools::install_github("srkobakian/sugarbag")
 library(sugarbag)
-
 library(tidyverse)
 ```
 
 ### Parameters
 
-The `create_hexmap` function requires several parameters, if they are not provided, the information will be derived from the polygon set used. If users already have a grid and set of centroids they may choose to only use the `allocate` function.
+The `create_hexmap` function requires several parameters, if they are not provided, the information will be derived from the \CRANpkg{sf} set of shapes used. If users already have a grid and set of centroids they may choose to only use the `allocate` function.
 
-**The following must be provided to `create_hexmap`:**
+*The following must be provided to `create_hexmap`:*
 ```{r table_necessary, echo = FALSE}
 knitr::kable(tibble::tibble(parameter = c('shp', 
   'sf_id',
@@ -135,17 +134,17 @@ Begin with a set of polygons. The set should be provided as an `sf` object, this
 
 
 The centroids can be derived from the set of polygons:
-
-```{r derive_centroids}
-## Use the create_centroids function to find polygon centroids:
+```{r cents, message=FALSE, warning=FALSE, comment = FALSE}
 centroids <- create_centroids(shp_sf = tas_lga, sf_id = "LGA_CODE16")
+```
+```{r derive_centroids, echo = FALSE}
+## Use the create_centroids function to find polygon centroids:
 ## Join to data for each area
 centroids <- left_join(centroids,
   sf::st_drop_geometry(tas_lga), by = "LGA_CODE16")
 ```
 
-
-```{r end_cents, fig.cap="Local Government Areas and derived centroids.", fig.height=2.5, fig.width = 5}
+```{r end_cents, fig.cap="Local Government Areas and derived centroids.", fig.height=2.5, fig.width = 5, echo = FALSE}
 fort_lga <- fortify_sfc(tas_lga)
 polys <- ggplot() + 
   geom_polygon(aes(x = long, y = lat, group = interaction(LGA_NAME16, polygon)), data = fort_lga, fill = "grey", size = 0.3, colour = "lightgrey") +theme_void() + coord_equal()
@@ -156,7 +155,6 @@ cents <- ggplot() +
 gridExtra::grid.arrange(polys, cents, nrow = 1)
 ```
 
-
 ## Create the hexagon grid points
 
 A tilegram allows areas to be allocated to a tellesated set of tiles.
@@ -166,7 +164,11 @@ The grid of possible hexagon centroids can be made using the `create_grid` funct
 The grid creation requires several steps.
 It uses the centroids, the hexagon size and the buffer distance.
 
-```{r bbox}
+```{r}
+grid <- create_grid(centroids = centroids, hex_size = 0.2, buffer_dist = 1.2)
+```
+
+```{r bbox, echo = FALSE}
 ## create the bounding box from the set of polygon centroids:
 bbox <- tibble::tibble(min = c(min(centroids$longitude, na.rm = TRUE), min(centroids$latitude, na.rm = TRUE)),
         max = c(max(centroids$longitude, na.rm = TRUE), max(centroids$latitude, na.rm = TRUE)))
@@ -183,13 +185,10 @@ buffer_dist <- max((bbox$max[1] - bbox$min[1]), (bbox$max[2] - bbox$min[2]))*0.3
 ### Step 1: Expand the grid
 
 A sequence is created for longitude columns, and another for latitude rows.
-
 The sequences begin at the minimum longitude (latitude), minus the buffer distance.
 Equally spaced intervals the size of the hexagons are created up to the maximum longitude (latitude), plus the buffer distance.
-
 An individual point is created from all intersections of the longitude columns and latitude row sequences.
-
-```{r grid}
+```{r grid, echo = FALSE}
 grid <- tibble::as_tibble(
   expand.grid(
     hex_long = seq(bbox$min[1] - buffer_dist, # minimum
@@ -198,16 +197,12 @@ grid <- tibble::as_tibble(
     hex_lat = seq(bbox$min[2] - buffer_dist, # minimum
       bbox$max[2] + buffer_dist, # maximum
       hex_size))) # distance between hexagons
-```
 
-```{r plot_grid}
 grid1 <- ggplot() + geom_polygon(aes(x = long, y = lat, group = interaction(LGA_NAME16, polygon)), data = fort_lga, fill = "grey", size = 0.3, colour = "lightgrey") + geom_point(aes(x=longitude, y = latitude), data= centroids, colour = "#b2df8a") + theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = grid, size = 0.75) 
 ```
-
 A square grid will not facilitate tessellated hexagons. Every second latitude row of points will be shifted right by half of the hexagon size.
-
-```{r shift}
+```{r shift, echo = FALSE}
 # Find every second latitude
 shift_lat <- grid %>% dplyr::select(hex_lat) %>%
     dplyr::distinct() %>%
@@ -219,25 +214,18 @@ grid <- grid %>%
         hex_long + (hex_size / 2))) %>%
     dplyr::mutate(id=1:NROW(.)) %>%
     dplyr::mutate(assigned=FALSE)
-```
 
-```{r plot_shift}
 grid2 <- ggplot() + geom_polygon(aes(x = long, y = lat, group = interaction(LGA_NAME16, polygon)), data = fort_lga, fill = "grey", size = 0.3, colour = "lightgrey") + geom_point(aes(x=longitude, y = latitude), data = centroids, colour = "#b2df8a") + theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = grid, size = 0.75) 
-```
 
-Each point is now given an ID.
-
-```{r grid_id}
 full_grid <- grid <- grid %>%
     mutate(hex_long_int = dense_rank(hex_long)-1,
         hex_lat_int = dense_rank(hex_lat)-1)
 ```
 
-```{r, fig.cap="Grid points to create a tilegram.", fig.height=2.5, fig.width = 5}
+```{r, fig.cap="Grid points to create a tilegram.", fig.height=2.5, fig.width = 5, echo = FALSE}
 gridExtra::grid.arrange(grid1, grid2, nrow = 1)
 ```
-
 
 ### Step 2: Rolling windows
 
@@ -246,7 +234,7 @@ To filter the grid for appropriate points for allocation,
 the `create_buffer` function is called from `create_grid`.
 It finds the grid points needed to best capture the set of centroids.
 
-```{r windows}
+```{r windows, echo = FALSE}
 nlong <- length(unique(grid$hex_long))
 nlat <- length(unique(grid$hex_lat))
 
@@ -266,7 +254,6 @@ long_size = round(nlong/20,0)
 ```
 
 The first rolling window function finds the minimum and maximum centroid values for the sliding groups of longitude columns and the groups of latitude rows.
-
 
 ```{r rolling_windows, echo = FALSE}
  # make a list of groups, manual sliding windows
@@ -316,8 +303,6 @@ The first rolling window function finds the minimum and maximum centroid values 
     )
 ```
 
-
-
 The second rolling window function finds the average of the rolling centroid values minimum and maximum, for the longitude columns and latitude rows.
 
 ```{r rolling_ave, echo = FALSE}
@@ -337,16 +322,14 @@ The second rolling window function finds the average of the rolling centroid val
         bind_cols(long_id = c(seq(1:nlong) + long_size + round(long_size/2)), .)
 
 ```
-
 <!--
 Figure of rolling window construction
 -->
-
 ### Step 3: Filtering the grid
 
 Only the grid points between the rolling average of the minimum and maximum centroid values are kept, for each row and column of the grid.
 
-```{r filter_grid, echo = FALSE}
+```{r filter_grid, echo = FALSE, fig.height = 2.5, fig.width = 2.5}
     # APPLY A BUFFER
     # change buffer to amount of hexagons (ints) either side
     hex_buffer <- floor(buffer_dist/hex_size)
@@ -370,7 +353,7 @@ ggplot() + geom_polygon(aes(x = long, y = lat, group = interaction(LGA_NAME16, p
 
 ## Centroid to focal point distance 
 
-```{r split_centroids}
+```{r split_centroids, echo = FALSE}
 # Split the centroid data set
 centroids <- centroids %>% 
   nest(longitude, latitude) %>% 
@@ -383,12 +366,12 @@ For each polygon centroid in the set, the distance to each of the focal points p
 
 The distance between the polygon centroid and it's closest focal point data set is used to order the data set for allocation. The points are arranged in ascending order, from the centroid closest to any of the focal points, to the furthest.
 
-## Allocate each centroids to a hexagon grid point
+## Allocate each centroid to a hexagon grid point
 
 The distance around a centroid to consider for possible hexagon locations is determined by the hex_filter. It multiplies the amount given by hex_filter, by the size of the hexagons to find the distance. 
 
 
-```{r centroids, eval = FALSE}
+```{r centroids, eval = FALSE, fig.height = 2.5, fig.width = 2.5}
 hexmap_allocation <- allocate(
   centroids = centroids,
   sf_id = "LGA_CODE16",
@@ -407,7 +390,7 @@ For each polygon centroid, only the hexagon grid points that have not yet been u
 Allocate each centroid, beginning with the closest centroid to a focal point.
 This will preserve spatial relationship with the capital, as the inner areas will be allowed closest to the capital, and the areas that are further will be accommodated after.
 
-```{r arrange}
+```{r arrange, echo = FALSE}
 s_centroids <- centroids %>% arrange(focal_distance)
 
 s_centroids <- split(s_centroids, s_centroids[["focal_distance"]])
@@ -418,7 +401,7 @@ centroid_allocation <- NULL
 
 The filter parameter is used to subset possible grid points to only those surrounding the polygon centroid within the filter distance, smaller distance will increase speed, but can decrease accuracy.
 
-```{r orig_dist}
+```{r orig_dist, echo = FALSE}
 hex_filter = 10
 width = 35
 # keep value to reset expanded distances
@@ -432,7 +415,7 @@ These steps are repeated for each polygon.
 
 Keep only the available hexagon points, this will prevent multiple areas being allocated to the same hexagon.
 
-```{r available_points}
+```{r available_points, echo = FALSE}
 # filter for only the available hex grid points
 hex_grid <- grid %>% filter(!assigned)
 ```
@@ -441,7 +424,7 @@ hex_grid <- grid %>% filter(!assigned)
 
 This will allow only the closest points, that are not assigned, to be considered.
 
-```{r close_points}
+```{r close_points, echo = FALSE}
 filter_dist <- hex_filter*hex_size
 
 # filter grid for avaiable points
@@ -467,7 +450,7 @@ buff1 <- ggplot() + geom_polygon(aes(x = long, y = lat, group = interaction(LGA_
 
 The algorithm removes the outer corners of the square, creating a circle of points, by only keeping points within a certain radius around the original centroid location.
 
-```{r buffer_circle}
+```{r buffer_circle, echo = FALSE}
     hex_grid <- hex_grid %>%
         rowwise %>%
         mutate(
@@ -504,7 +487,7 @@ buff2 <- ggplot() + geom_polygon(aes(x = long, y = lat, group = interaction(LGA_
 ```
 
 
-```{r buffers, fig.height=2.5, fig.width = 5}
+```{r buffers, echo = FALSE, fig.height=2.5, fig.width = 5}
 gridExtra::grid.arrange(buff1, buff2, nrow=1)
 ```
 
@@ -515,7 +498,7 @@ If no available hexagon grid point is found within the original filter distance 
 
 The allocation is returned and combined with the data relating to each polygon.
 
-```{r buffer_slice}
+```{r buffer_slice, echo = FALSE}
 # Filter for angle within circle
 
         if (hex_grid$angle_minus[1] < hex_grid$angle_plus[1]) {
@@ -527,14 +510,8 @@ The allocation is returned and combined with the data relating to each polygon.
                 # create slice of 60 degrees from centroid
                 filter(hex_angle < angle_plus | angle_minus > hex_angle)
         }
-```
 
-
-
-
-
-```{r plot_slice}
-ggplot() + geom_polygon(aes(x = long, y = lat, group = interaction(LGA_NAME16, polygon)), data = fort_lga, fill = "grey", size = 0.3, colour = "lightgrey") + theme_void() + coord_equal() +
+buff3 <- ggplot() + geom_polygon(aes(x = long, y = lat, group = interaction(LGA_NAME16, polygon)), data = fort_lga, fill = "grey", size = 0.3, colour = "lightgrey") + theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#a6cee3", data = grid, size = 0.25) +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = hex_grid, size = 0.75) + 
   geom_point(aes(x=longitude, y = latitude), data = centroid1, colour = "#b2df8a", size = 0.8) 
@@ -543,7 +520,7 @@ ggplot() + geom_polygon(aes(x = long, y = lat, group = interaction(LGA_NAME16, p
 This area was the very closest to the Hobart central point ( coloured pink) provided in the capital cities data set, it gets a hexagon point (coloured blue) extremely close to it's centroid (coloured green).
 
 
-```{r choose_point}
+```{r choose_point, echo = FALSE}
 # Choose first available point
 cent <- centroid1 %>% dplyr::rename(focal_point = points, focal_dist = focal_distance, focal_angle = angle)
 
@@ -562,14 +539,12 @@ centroid_allocation <- bind_rows(centroid_allocation, dplyr::bind_cols(cent, hex
 ```
 
 
-```{r allocated}
+```{r allocated, echo = FALSE}
 hex_points_df <- centroid_allocation %>% 
   fortify_hexagon(hex_size = hex_size,
   sf_id = "LGA_CODE16")
-```
 
-```{r plot_allocated}
-ggplot() + 
+buff4 <- ggplot() + 
   geom_polygon(aes(x = long, y = lat, group = interaction(LGA_NAME16, polygon)), data = fort_lga %>% filter(LGA_CODE16=="62810"), fill = "grey", size = 0.3, colour = "lightgrey") +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = hex_grid, size = 0.75) + 
   geom_point(aes(x=longitude1, y = latitude1), data = centroid1, colour = "#fb9a99", size = 1) + 
@@ -578,9 +553,13 @@ ggplot() +
   coord_equal()
 ```
 
+```{r buffs, fig.height = 2.5, fig.width = 5, echo = FALSE}
+gridExtra::grid.arrange(buff3, buff4 , nrow=1)
+```
+
 The following code creates a map for all the Local Government Areas in Tasmania:
 
-```{r full_hexmapcode, echo = TRUE}
+```{r full_hexmapcode, echo = TRUE, warning = FALSE}
 # Create centroids set
 centroids <- create_centroids(tas_lga, "LGA_CODE16")
 # Create hexagon location grid
@@ -602,13 +581,18 @@ hex_allocated <- allocate(
 )
 ```
 
+# Transform the data for plotting
 
-```{r plot_final, fig.height=2.5, fig.width = 5}
+To plot polygons using \CRANpkg{ggplot} the \CRANpkg{sf} object can be transformed to a set of indidivual points that can be joined as a polygon.
+
+```{r create_plot_final, fig.height=2.5, fig.width = 5, message = FALSE, warning = FALSE}
 h1 <- hex_allocated %>%
   fortify_hexagon(hex_size = 0.3, 
   sf_id = "LGA_CODE16") %>% 
   left_join(., tas_lga)
+```
 
+```{r plot_final, echo = FALSE, fig.height=2.5, fig.width = 5, message = FALSE, warning = FALSE}
 p1 <- fortify_sfc(tas_lga)
 end_hex <- ggplot() +
   geom_polygon(data = p1, aes(x=long, lat, group = interaction(LGA_NAME16, polygon)), fill = "grey", size = 0.3, colour = "lightgrey") +

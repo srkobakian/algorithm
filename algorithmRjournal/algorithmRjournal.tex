@@ -79,7 +79,7 @@ This solution operates on a set of \CRANpkg{sf} (Pebesma
 
 There are four tasks to create a hexagon tilegram. These steps can be
 executed by the main function, \texttt{create\_hexmap}, or can be
-applied separately for more flexibility.
+implemented separately for more flexibility.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -106,46 +106,19 @@ package}\label{install-sugarbag-package}}
 # To install sugarbag:
 # devtools::install_github("srkobakian/sugarbag")
 library(sugarbag)
-
 library(tidyverse)
 \end{Sinput}
-\begin{Soutput}
-#> Registered S3 methods overwritten by 'ggplot2':
-#>   method         from 
-#>   [.quosures     rlang
-#>   c.quosures     rlang
-#>   print.quosures rlang
-\end{Soutput}
-\begin{Soutput}
-#> Registered S3 method overwritten by 'rvest':
-#>   method            from
-#>   read_xml.response xml2
-\end{Soutput}
-\begin{Soutput}
-#> -- Attaching packages --------------------------------------------------- tidyverse 1.2.1 --
-\end{Soutput}
-\begin{Soutput}
-#> v ggplot2 3.1.1       v purrr   0.3.2  
-#> v tibble  2.1.1       v dplyr   0.8.0.1
-#> v tidyr   0.8.3       v stringr 1.4.0  
-#> v readr   1.3.1       v forcats 0.4.0
-\end{Soutput}
-\begin{Soutput}
-#> -- Conflicts ------------------------------------------------------ tidyverse_conflicts() --
-#> x dplyr::filter() masks stats::filter()
-#> x dplyr::lag()    masks stats::lag()
-\end{Soutput}
 \end{Schunk}
 
 \hypertarget{parameters}{%
 \subsubsection{Parameters}\label{parameters}}
 
 The \texttt{create\_hexmap} function requires several parameters, if
-they are not provided, the information will be derived from the polygon
-set used. If users already have a grid and set of centroids they may
-choose to only use the \texttt{allocate} function.
+they are not provided, the information will be derived from the
+\CRANpkg{sf} set of shapes used. If users already have a grid and set of
+centroids they may choose to only use the \texttt{allocate} function.
 
-\textbf{The following must be provided to \texttt{create\_hexmap}:}
+\emph{The following must be provided to \texttt{create\_hexmap}:}
 
 \begin{Schunk}
 
@@ -220,36 +193,11 @@ The centroids can be derived from the set of polygons:
 
 \begin{Schunk}
 \begin{Sinput}
-## Use the create_centroids function to find polygon centroids:
 centroids <- create_centroids(shp_sf = tas_lga, sf_id = "LGA_CODE16")
-\end{Sinput}
-\begin{Soutput}
-#> Warning in st_centroid.sf(.): st_centroid assumes attributes are constant
-#> over geometries of x
-\end{Soutput}
-\begin{Soutput}
-#> Warning in st_centroid.sfc(st_geometry(x), of_largest_polygon =
-#> of_largest_polygon): st_centroid does not give correct centroids for
-#> longitude/latitude data
-\end{Soutput}
-\begin{Sinput}
-## Join to data for each area
-centroids <- left_join(centroids,
-  sf::st_drop_geometry(tas_lga), by = "LGA_CODE16")
 \end{Sinput}
 \end{Schunk}
 
 \begin{Schunk}
-\begin{Sinput}
-fort_lga <- fortify_sfc(tas_lga)
-polys <- ggplot() + 
-  geom_polygon(aes(x = long, y = lat, group = interaction(LGA_NAME16, polygon)), data = fort_lga, fill = "grey", size = 0.3, colour = "lightgrey") +theme_void() + coord_equal()
-
-cents <- ggplot() + 
-  geom_polygon(aes(x = long, y = lat, group = interaction(LGA_NAME16, polygon)), data = fort_lga, fill = "grey", size = 0.3, colour = "lightgrey") + geom_point(aes(x=longitude, y = latitude), data = centroids) + theme_void() + coord_equal()
-
-gridExtra::grid.arrange(polys, cents, nrow = 1)
-\end{Sinput}
 \begin{figure}
 \includegraphics{algorithmRjournal_files/figure-latex/end_cents-1} \caption[Local Government Areas and derived centroids]{Local Government Areas and derived centroids.}\label{fig:end_cents}
 \end{figure}
@@ -269,16 +217,7 @@ steps. It uses the centroids, the hexagon size and the buffer distance.
 
 \begin{Schunk}
 \begin{Sinput}
-## create the bounding box from the set of polygon centroids:
-bbox <- tibble::tibble(min = c(min(centroids$longitude, na.rm = TRUE), min(centroids$latitude, na.rm = TRUE)),
-        max = c(max(centroids$longitude, na.rm = TRUE), max(centroids$latitude, na.rm = TRUE)))
-
-hex_size = 0.3
- 
-# default size calculation:
-#(bbox$max[1] - bbox$min[1])/(bbox$max[2] - bbox$min[2]) / 5
-  
-buffer_dist <- max((bbox$max[1] - bbox$min[1]), (bbox$max[2] - bbox$min[2]))*0.3
+grid <- create_grid(centroids = centroids, hex_size = 0.2, buffer_dist = 1.2)
 \end{Sinput}
 \end{Schunk}
 
@@ -286,79 +225,19 @@ buffer_dist <- max((bbox$max[1] - bbox$min[1]), (bbox$max[2] - bbox$min[2]))*0.3
 \subsubsection{Step 1: Expand the grid}\label{step-1-expand-the-grid}}
 
 A sequence is created for longitude columns, and another for latitude
-rows.
-
-The sequences begin at the minimum longitude (latitude), minus the
+rows. The sequences begin at the minimum longitude (latitude), minus the
 buffer distance. Equally spaced intervals the size of the hexagons are
 created up to the maximum longitude (latitude), plus the buffer
-distance.
-
-An individual point is created from all intersections of the longitude
-columns and latitude row sequences.
-
-\begin{Schunk}
-\begin{Sinput}
-grid <- tibble::as_tibble(
-  expand.grid(
-    hex_long = seq(bbox$min[1] - buffer_dist, # minimum
-      bbox$max[1] + buffer_dist, # maximum
-      hex_size), # distance between hexagons
-    hex_lat = seq(bbox$min[2] - buffer_dist, # minimum
-      bbox$max[2] + buffer_dist, # maximum
-      hex_size))) # distance between hexagons
-\end{Sinput}
-\end{Schunk}
-
-\begin{Schunk}
-\begin{Sinput}
-grid1 <- ggplot() + geom_polygon(aes(x = long, y = lat, group = interaction(LGA_NAME16, polygon)), data = fort_lga, fill = "grey", size = 0.3, colour = "lightgrey") + geom_point(aes(x=longitude, y = latitude), data= centroids, colour = "#b2df8a") + theme_void() + coord_equal() +
-  geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = grid, size = 0.75) 
-\end{Sinput}
-\end{Schunk}
+distance. An individual point is created from all intersections of the
+longitude columns and latitude row sequences.
 
 A square grid will not facilitate tessellated hexagons. Every second
 latitude row of points will be shifted right by half of the hexagon
 size.
 
 \begin{Schunk}
-\begin{Sinput}
-# Find every second latitude
-shift_lat <- grid %>% dplyr::select(hex_lat) %>%
-    dplyr::distinct() %>%
-    dplyr::filter(dplyr::row_number() %% 2 == 1) %>% unlist()
-
-# Shift the longitude of every second latitude to the right to make hex structure
-grid <- grid %>%
-    dplyr::mutate(hex_long = ifelse(hex_lat %in% shift_lat, hex_long,
-        hex_long + (hex_size / 2))) %>%
-    dplyr::mutate(id=1:NROW(.)) %>%
-    dplyr::mutate(assigned=FALSE)
-\end{Sinput}
-\end{Schunk}
-
-\begin{Schunk}
-\begin{Sinput}
-grid2 <- ggplot() + geom_polygon(aes(x = long, y = lat, group = interaction(LGA_NAME16, polygon)), data = fort_lga, fill = "grey", size = 0.3, colour = "lightgrey") + geom_point(aes(x=longitude, y = latitude), data = centroids, colour = "#b2df8a") + theme_void() + coord_equal() +
-  geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = grid, size = 0.75) 
-\end{Sinput}
-\end{Schunk}
-
-Each point is now given an ID.
-
-\begin{Schunk}
-\begin{Sinput}
-full_grid <- grid <- grid %>%
-    mutate(hex_long_int = dense_rank(hex_long)-1,
-        hex_lat_int = dense_rank(hex_lat)-1)
-\end{Sinput}
-\end{Schunk}
-
-\begin{Schunk}
-\begin{Sinput}
-gridExtra::grid.arrange(grid1, grid2, nrow = 1)
-\end{Sinput}
 \begin{figure}
-\includegraphics{algorithmRjournal_files/figure-latex/unnamed-chunk-2-1} \caption[Grid points to create a tilegram]{Grid points to create a tilegram.}\label{fig:unnamed-chunk-2}
+\includegraphics{algorithmRjournal_files/figure-latex/unnamed-chunk-3-1} \caption[Grid points to create a tilegram]{Grid points to create a tilegram.}\label{fig:unnamed-chunk-3}
 \end{figure}
 \end{Schunk}
 
@@ -370,17 +249,6 @@ a large grid space. To filter the grid for appropriate points for
 allocation, the \texttt{create\_buffer} function is called from
 \texttt{create\_grid}. It finds the grid points needed to best capture
 the set of centroids.
-
-\begin{Schunk}
-\begin{Sinput}
-nlong <- length(unique(grid$hex_long))
-nlat <- length(unique(grid$hex_lat))
-
-centroids <- centroids %>%
-  mutate(long_int = round((longitude-min(grid$hex_long))/(max(grid$hex_long)-min(grid$hex_long))*nlong, 0),
-          lat_int = round((latitude-min(grid$hex_lat))/(max(grid$hex_lat)-min(grid$hex_lat))*nlat, 0))
-\end{Sinput}
-\end{Schunk}
 
 The rows and columns are divided into 20 groups. The amount of rows in
 each latitude group and the amount of columns in each longitude group
@@ -412,17 +280,6 @@ maximum centroid values are kept, for each row and column of the grid.
 \subsection{Centroid to focal point
 distance}\label{centroid-to-focal-point-distance}}
 
-\begin{Schunk}
-\begin{Sinput}
-# Split the centroid data set
-centroids <- centroids %>% 
-  nest(longitude, latitude) %>% 
-  mutate(closest = map(data, closest_focal_point, focal_points = capital_cities %>% filter(points == "Hobart"))) %>% 
-  unnest(data, closest) %>% 
-  arrange(focal_distance)
-\end{Sinput}
-\end{Schunk}
-
 For each polygon centroid in the set, the distance to each of the focal
 points provided is recorded. The closest focal point name, the distance
 to the polygon centroid, and the angle from focal point to polygon
@@ -435,9 +292,9 @@ data set is used to order the data set for allocation. The points are
 arranged in ascending order, from the centroid closest to any of the
 focal points, to the furthest.
 
-\hypertarget{allocate-each-centroids-to-a-hexagon-grid-point}{%
-\subsection{Allocate each centroids to a hexagon grid
-point}\label{allocate-each-centroids-to-a-hexagon-grid-point}}
+\hypertarget{allocate-each-centroid-to-a-hexagon-grid-point}{%
+\subsection{Allocate each centroid to a hexagon grid
+point}\label{allocate-each-centroid-to-a-hexagon-grid-point}}
 
 The distance around a centroid to consider for possible hexagon
 locations is determined by the hex\_filter. It multiplies the amount
@@ -466,29 +323,9 @@ point. This will preserve spatial relationship with the capital, as the
 inner areas will be allowed closest to the capital, and the areas that
 are further will be accommodated after.
 
-\begin{Schunk}
-\begin{Sinput}
-s_centroids <- centroids %>% arrange(focal_distance)
-
-s_centroids <- split(s_centroids, s_centroids[["focal_distance"]])
-        
-# Set up allocation data frame
-centroid_allocation <- NULL
-\end{Sinput}
-\end{Schunk}
-
 The filter parameter is used to subset possible grid points to only
 those surrounding the polygon centroid within the filter distance,
 smaller distance will increase speed, but can decrease accuracy.
-
-\begin{Schunk}
-\begin{Sinput}
-hex_filter = 10
-width = 35
-# keep value to reset expanded distances
-expand_dist <- hex_filter
-\end{Sinput}
-\end{Schunk}
 
 The following example considers one of the Local Government Areas. These
 steps are repeated for each polygon.
@@ -500,35 +337,12 @@ points}\label{step-1-filter-the-grid-for-unassigned-hexagon-points}}
 Keep only the available hexagon points, this will prevent multiple areas
 being allocated to the same hexagon.
 
-\begin{Schunk}
-\begin{Sinput}
-# filter for only the available hex grid points
-hex_grid <- grid %>% filter(!assigned)
-\end{Sinput}
-\end{Schunk}
-
 \hypertarget{step-2-filter-the-grid-points-for-those-closest-to-the-centroid}{%
 \subsubsection{Step 2: Filter the grid points for those closest to the
 centroid}\label{step-2-filter-the-grid-points-for-those-closest-to-the-centroid}}
 
 This will allow only the closest points, that are not assigned, to be
 considered.
-
-\begin{Schunk}
-\begin{Sinput}
-filter_dist <- hex_filter*hex_size
-
-# filter grid for avaiable points
-centroid1 <- centroids %>% head(1)
-
-flong <- centroid1$longitude
-flat <- centroid1$latitude
-
-hex_grid <- hex_grid %>% ungroup() %>%
-        filter(flat - filter_dist < hex_lat & hex_lat < flat + filter_dist) %>%
-        filter(flong - filter_dist < hex_long & hex_long < flong + filter_dist)
-\end{Sinput}
-\end{Schunk}
 
 Create a box of possible hexagon locations around the centroid. The
 bottom of the box will not be square as the buffer has already removed
@@ -539,39 +353,6 @@ of points, by only keeping points within a certain radius around the
 original centroid location.
 
 \begin{Schunk}
-\begin{Sinput}
-    hex_grid <- hex_grid %>%
-        rowwise %>%
-        mutate(
-        hex_lat_c = hex_lat - flat,
-        hex_long_c = hex_long - flong) %>%
-        mutate(hyp = ((hex_lat_c^2) + (hex_long_c^2))^(1/2))
-
-
-        f_angle <- centroid1 %>%
-            mutate(atan = atan2(latitude-latitude1,longitude-longitude1),
-                angle = (atan*180/pi),
-                pangle = ifelse(angle<0, angle +360, angle)) %>% pull()
-
-
-        hex_grid <- hex_grid %>%
-            # create circle of radius: hex_filter
-            filter(hyp < filter_dist) %>%
-            mutate(
-                # geosphere takes a long time
-                angle = f_angle,
-                angle_plus = (angle + width)%%360,
-                angle_minus = (angle - width)%%360,
-                atan = atan2(hex_lat_c, hex_long_c),
-                hex_angle = (atan*180/pi),
-                hex_angle = ifelse(hex_angle<0, hex_angle +360, hex_angle))
-\end{Sinput}
-\end{Schunk}
-
-\begin{Schunk}
-\begin{Sinput}
-gridExtra::grid.arrange(buff1, buff2, nrow=1)
-\end{Sinput}
 
 \includegraphics{algorithmRjournal_files/figure-latex/buffers-1} \end{Schunk}
 
@@ -591,75 +372,13 @@ grid points.
 The allocation is returned and combined with the data relating to each
 polygon.
 
-\begin{Schunk}
-\begin{Sinput}
-# Filter for angle within circle
-
-        if (hex_grid$angle_minus[1] < hex_grid$angle_plus[1]) {
-            hex_grid <- hex_grid %>%
-                # create slice of 60 degrees from centroid
-                filter(angle_minus < hex_angle & hex_angle < angle_plus)
-        } else {
-            hex_grid <- hex_grid %>%
-                # create slice of 60 degrees from centroid
-                filter(hex_angle < angle_plus | angle_minus > hex_angle)
-        }
-\end{Sinput}
-\end{Schunk}
-
-\begin{Schunk}
-\begin{Sinput}
-ggplot() + geom_polygon(aes(x = long, y = lat, group = interaction(LGA_NAME16, polygon)), data = fort_lga, fill = "grey", size = 0.3, colour = "lightgrey") + theme_void() + coord_equal() +
-  geom_point(aes(x = hex_long, y = hex_lat), colour = "#a6cee3", data = grid, size = 0.25) +
-  geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = hex_grid, size = 0.75) + 
-  geom_point(aes(x=longitude, y = latitude), data = centroid1, colour = "#b2df8a", size = 0.8) 
-\end{Sinput}
-
-\includegraphics{algorithmRjournal_files/figure-latex/plot_slice-1} \end{Schunk}
-
 This area was the very closest to the Hobart central point ( coloured
 pink) provided in the capital cities data set, it gets a hexagon point
 (coloured blue) extremely close to it's centroid (coloured green).
 
 \begin{Schunk}
-\begin{Sinput}
-# Choose first available point
-cent <- centroid1 %>% dplyr::rename(focal_point = points, focal_dist = focal_distance, focal_angle = angle)
 
-# Filter should give one hex point
-hex <- hex_grid %>% 
-  ungroup %>% 
-  filter(hyp == min(hyp)) %>%
-  select(hex_long, hex_lat, hex_id = id)
-
-# Update grid to show this centroid as assigned
-hex_grid[which(hex_grid$id == hex$hex_id),]$assigned <- TRUE
-
-# Add to table of allocated centroids
-centroid_allocation <- bind_rows(centroid_allocation, dplyr::bind_cols(cent, hex)) %>% as_tibble()
-\end{Sinput}
-\end{Schunk}
-
-\begin{Schunk}
-\begin{Sinput}
-hex_points_df <- centroid_allocation %>% 
-  fortify_hexagon(hex_size = hex_size,
-  sf_id = "LGA_CODE16")
-\end{Sinput}
-\end{Schunk}
-
-\begin{Schunk}
-\begin{Sinput}
-ggplot() + 
-  geom_polygon(aes(x = long, y = lat, group = interaction(LGA_NAME16, polygon)), data = fort_lga %>% filter(LGA_CODE16=="62810"), fill = "grey", size = 0.3, colour = "lightgrey") +
-  geom_point(aes(x = hex_long, y = hex_lat), colour = "#1f78b4", data = hex_grid, size = 0.75) + 
-  geom_point(aes(x=longitude1, y = latitude1), data = centroid1, colour = "#fb9a99", size = 1) + 
-  geom_point(aes(x=longitude, y = latitude), data = centroid1, colour = "#b2df8a", size = 0.8) + 
-  theme_void() +
-  coord_equal()
-\end{Sinput}
-
-\includegraphics{algorithmRjournal_files/figure-latex/plot_allocated-1} \end{Schunk}
+\includegraphics{algorithmRjournal_files/figure-latex/buffs-1} \end{Schunk}
 
 The following code creates a map for all the Local Government Areas in
 Tasmania:
@@ -668,17 +387,6 @@ Tasmania:
 \begin{Sinput}
 # Create centroids set
 centroids <- create_centroids(tas_lga, "LGA_CODE16")
-\end{Sinput}
-\begin{Soutput}
-#> Warning in st_centroid.sf(.): st_centroid assumes attributes are constant
-#> over geometries of x
-\end{Soutput}
-\begin{Soutput}
-#> Warning in st_centroid.sfc(st_geometry(x), of_largest_polygon =
-#> of_largest_polygon): st_centroid does not give correct centroids for
-#> longitude/latitude data
-\end{Soutput}
-\begin{Sinput}
 # Create hexagon location grid
 grid <- create_grid(centroids = centroids,
     hex_size = 0.3,
@@ -702,6 +410,14 @@ hex_allocated <- allocate(
 \end{Soutput}
 \end{Schunk}
 
+\hypertarget{transform-the-data-for-plotting}{%
+\section{Transform the data for
+plotting}\label{transform-the-data-for-plotting}}
+
+To plot polygons using \CRANpkg{ggplot} the \CRANpkg{sf} object can be
+transformed to a set of indidivual points that can be joined as a
+polygon.
+
 \begin{Schunk}
 \begin{Sinput}
 h1 <- hex_allocated %>%
@@ -709,21 +425,9 @@ h1 <- hex_allocated %>%
   sf_id = "LGA_CODE16") %>% 
   left_join(., tas_lga)
 \end{Sinput}
-\begin{Soutput}
-#> Joining, by = "LGA_CODE16"
-\end{Soutput}
-\begin{Soutput}
-#> Warning: Column `LGA_CODE16` joining character vector and factor, coercing
-#> into character vector
-\end{Soutput}
-\begin{Sinput}
-p1 <- fortify_sfc(tas_lga)
-end_hex <- ggplot() +
-  geom_polygon(data = p1, aes(x=long, lat, group = interaction(LGA_NAME16, polygon)), fill = "grey", size = 0.3, colour = "lightgrey") +
-  geom_polygon(data = h1, aes(x=long, lat, group = LGA_CODE16)) + theme_void() + coord_equal()
+\end{Schunk}
 
-gridExtra::grid.arrange(cents, end_hex, nrow = 1)
-\end{Sinput}
+\begin{Schunk}
 
 \includegraphics{algorithmRjournal_files/figure-latex/plot_final-1} \end{Schunk}
 
