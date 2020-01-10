@@ -1,51 +1,7 @@
-This is BibTeX, Version 0.99d (TeX Live 2019/W32TeX)
-Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
-The top-level auxiliary file: kobakian_sugarbag_jss.aux
+This is BibTeX, Version 0.99dThe top-level auxiliary file: kobakian_sugarbag_jss.aux
 The style file: jss.bst
 Database file #1: sugarbag.bib
 Warning--entry type for "abs2016" isn't style-file defined
---line 243 of file sugarbag.bib
-Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+--line 122 of file sugarbag.bib
 Warning--missing publisher in ACTUC
-You've used 10 entries,
-            3215 wiz_defined-function locations,
-            722 strings with 7103 characters,
-and the built_in function-call counts, 8632 in all, are:
-= -- 854
-> -- 161
-< -- 10
-+ -- 61
-- -- 52
-* -- 606
-:= -- 1065
-add.period$ -- 47
-call.type$ -- 10
-change.case$ -- 59
-chr.to.int$ -- 11
-cite$ -- 11
-duplicate$ -- 883
-empty$ -- 715
-format.name$ -- 77
-if$ -- 1772
-int.to.chr$ -- 1
-int.to.str$ -- 1
-missing$ -- 97
-newline$ -- 73
-num.names$ -- 40
-pop$ -- 400
-preamble$ -- 1
-purify$ -- 57
-quote$ -- 0
-skip$ -- 184
-stack$ -- 0
-substring$ -- 834
-swap$ -- 242
-text.length$ -- 2
-text.prefix$ -- 0
-top$ -- 0
-type$ -- 84
-warning$ -- 1
-while$ -- 55
-width$ -- 0
-write$ -- 166
 (There were 2 warnings)

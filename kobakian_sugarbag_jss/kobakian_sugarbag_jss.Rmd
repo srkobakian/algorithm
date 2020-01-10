@@ -4,11 +4,16 @@ author:
   - name: Stephanie Kobakian
     affiliation: Queensland University of Technology
     address: >
-      School of Mthematical Sciences,
+      School of Mathematical Sciences,
       Science and Engineering Faculty,
       Brisbane, QLD, Australia
     email: \email{stephanie.kobakian@qut.edu.au}
-    url: http://rstudio.com
+  - name: Dianne Cook
+    affiliation: Monash University
+    address: >
+      Department of Econometrics and Business Statistics,
+      Melbourne, VIC, Australia
+    email: \email{dicook@monash.edu}
 title:
   plain: An Algorithm For Spatial Mapping Using a Hexagon Tilegram, With Application to Australian Maps   
 abstract: >
@@ -95,7 +100,7 @@ knitr::kable(tibble::tibble(parameter = c('shp',
 ```
 
 
-## Tasmania
+## Polygon set
 
 The polygon set of Statistical Areas at Level 2 (SA2) \citep{abs2016} of Tasmania in 2016 is provided with the \pkg{sugarbag} package as \code{tas_sa2}. 
 A single column of the data set must be used to identify the unique areas. 
