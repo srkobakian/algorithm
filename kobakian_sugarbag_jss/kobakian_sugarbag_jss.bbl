@@ -1,0 +1,84 @@
+\begin{thebibliography}{10}
+\newcommand{\enquote}[1]{``#1''}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+\providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem[{{Australian Bureau of Statistics}(2018)}]{abs2016}
+{Australian Bureau of Statistics} (2018).
+\newblock
+  \urlprefix\url{https://www.abs.gov.au/websitedbs/D3310114.nsf/home/Australian+Statistical+Geography+Standard+(ASGS)}.
+
+\bibitem[{Berry \emph{et~al.}(1964)Berry, Morrill, and Tobler}]{GOINO}
+Berry BJL, Morrill RL, Tobler WR (1964).
+\newblock \enquote{Geographic Ordering of Information: New Opportunities.}
+\newblock \emph{The Professional Geographer}, \textbf{16}, 39--44.
+\newblock \doi{10.1111/j.0033-0124.1964.039_q.x}.
+
+\bibitem[{Dorling(2011)}]{ACTUC}
+Dorling D (2011).
+\newblock \emph{Area Cartograms: Their Use and Creation}, volume~59, pp. 252 --
+  260.
+\newblock ISBN 9780470979587.
+\newblock \doi{10.1002/9780470979587.ch33}.
+
+\bibitem[{Dougenik \emph{et~al.}(1985)Dougenik, Chrisman, and Niemeyer}]{ACCAC}
+Dougenik JA, Chrisman NR, Niemeyer DR (1985).
+\newblock \enquote{AN ALGORITHM TO CONSTRUCT CONTINUOUS AREA CARTOGRAMS.}
+\newblock \emph{The Professional Geographer}, \textbf{37}(1), 75--81.
+\newblock \doi{10.1111/j.0033-0124.1985.00075.x}.
+\newblock \eprint{https://doi.org/10.1111/j.0033-0124.1985.00075.x},
+  \urlprefix\url{https://doi.org/10.1111/j.0033-0124.1985.00075.x}.
+
+\bibitem[{Kobakian and Cook(2019)}]{sugarbag}
+Kobakian S, Cook D (2019).
+\newblock \emph{sugarbag: Create Tessellated Hexagon Maps}.
+\newblock Https://srkobakian.github.io/sugarbag/,
+  https://github.com/srkobakian/sugarbag.
+
+\bibitem[{Moore and Carpenter(1999)}]{SAMGIS}
+Moore DA, Carpenter TE (1999).
+\newblock \enquote{{Spatial Analytical Methods and Geographic Information
+  Systems: Use in Health Research and Epidemiology}.}
+\newblock \emph{Epidemiologic Reviews}, \textbf{21}(2), 143--161.
+\newblock ISSN 1478-6729.
+\newblock \doi{10.1093/oxfordjournals.epirev.a017993}.
+\newblock
+  \eprint{http://oup.prod.sis.lan/epirev/article-pdf/21/2/143/6727658/21-2-143.pdf},
+  \urlprefix\url{https://doi.org/10.1093/oxfordjournals.epirev.a017993}.
+
+\bibitem[{Pebesma(2018)}]{sf}
+Pebesma E (2018).
+\newblock \enquote{{Simple Features for R: Standardized Support for Spatial
+  Vector Data}.}
+\newblock \emph{{The R Journal}}, \textbf{10}(1), 439--446.
+\newblock \doi{10.32614/RJ-2018-009}.
+\newblock \urlprefix\url{https://doi.org/10.32614/RJ-2018-009}.
+
+\bibitem[{{R Core Team}(2012)}]{R}
+{R Core Team} (2012).
+\newblock \emph{R: A Language and Environment for Statistical Computing}.
+\newblock R Foundation for Statistical Computing, Vienna, Austria.
+\newblock {ISBN} 3-900051-07-0, \urlprefix\url{http://www.R-project.org/}.
+
+\bibitem[{Tufte(1990)}]{EI}
+Tufte ER (1990).
+\newblock \emph{Envisioning Information}.
+\newblock Graphics Press.
+
+\bibitem[{van Kreveld and Speckmann(2007)}]{ORC}
+van Kreveld M, Speckmann B (2007).
+\newblock \enquote{On rectangular cartograms.}
+\newblock \emph{{Computational Geometry}}, \textbf{37}(3), 175 -- 187.
+\newblock ISSN 0925-7721.
+\newblock \doi{10.1016/j.comgeo.2006.06.002}.
+\newblock Special Issue on the 20th European Workshop on Computational
+  Geometry,
+  \urlprefix\url{http://www.sciencedirect.com/science/article/pii/S0925772106000770}.
+
+\end{thebibliography}
