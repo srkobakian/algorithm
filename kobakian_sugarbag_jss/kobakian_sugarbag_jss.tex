@@ -54,7 +54,6 @@ especially in the areas of disease mapping, and election results.
   
   }
 
-
 % Pandoc header
 
 \usepackage{amsmath}
@@ -64,7 +63,7 @@ especially in the areas of disease mapping, and election results.
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
 
-The current practice for presenting geogspatial data involves a
+The current practice for presenting geospatial data involves a
 choropleth map display. These maps highlight the geographic patterns in
 geospatially related statistics \citep{SAMGIS}. The land on the map
 space is divided into geographic units, these boundaries are usually
@@ -167,8 +166,8 @@ focal\_points & a data frame of reference locations used to allocate hexagons\\
 
 \end{CodeChunk}
 
-\hypertarget{tasmania}{%
-\subsection{Tasmania}\label{tasmania}}
+\hypertarget{polygon-set}{%
+\subsection{Polygon set}\label{polygon-set}}
 
 The polygon set of Statistical Areas at Level 2 (SA2) \citep{abs2016} of
 Tasmania in 2016 is provided with the \pkg{sugarbag} package as
@@ -422,42 +421,6 @@ polygon.
 
 \end{CodeChunk}
 
-The following code creates a map for all the Statistical Areas at Level
-2 in Tasmania:
-
-\hypertarget{using-sugarbag}{%
-\section{Using sugarbag}\label{using-sugarbag}}
-
-\begin{CodeChunk}
-
-\begin{CodeInput}
-R> # install.packages("sugarbag")
-R> library(sugarbag)
-R> 
-R> # Create centroids set
-R> centroids <- create_centroids(tas_sa2, "SA2_NAME16")
-R> 
-R> # Create hexagon location grid
-R> grid <- create_grid(centroids = centroids,
-R+     hex_size = 0.2,
-R+     buffer_dist = 1.2)
-R> 
-R> # Allocate polygon centroids to hexagon grid points
-R> hex_allocated <- allocate(
-R+   centroids = centroids,
-R+   hex_grid = grid,
-R+   sf_id = "SA2_NAME16",
-R+   # same column used in create_centroids
-R+   hex_size = 0.2,
-R+   # same size used in create_grid
-R+   hex_filter = 10,
-R+   use_neighbours = tas_sa2,
-R+   focal_points = capital_cities %>% filter(points == "Hobart"),
-R+   width = 35,
-R+   verbose = FALSE)
-\end{CodeInput}
-\end{CodeChunk}
-
 \hypertarget{neighbour-relationships}{%
 \subsection{Neighbour relationships}\label{neighbour-relationships}}
 
@@ -477,8 +440,94 @@ are prioritised. For multiple neighbours, the neighbouring hexagon grid
 points are aggregated and considered in order of distance from the
 original centroid.
 
+\hypertarget{using-sugarbag}{%
+\section{Using sugarbag}\label{using-sugarbag}}
+
+\hypertarget{installation}{%
+\subsection{Installation}\label{installation}}
+
+The package can be installed from CRAN:
+
+\begin{CodeChunk}
+
+\begin{CodeInput}
+R> install.packages("sugarbag")
+\end{CodeInput}
+\end{CodeChunk}
+
+and the development version can be install from the GitHub repository:
+
+\begin{CodeChunk}
+
+\begin{CodeInput}
+R> devtools::install_github("srkobakian","sugarbag")
+\end{CodeInput}
+\end{CodeChunk}
+
+Load the library into your R session with:
+
+\begin{CodeChunk}
+
+\begin{CodeInput}
+R> library(sugarbag)
+\end{CodeInput}
+\end{CodeChunk}
+
+\hypertarget{creating-a-hexagon-tile-map}{%
+\subsection{Creating a hexagon tile
+map}\label{creating-a-hexagon-tile-map}}
+
+The following code creates the hexagon tile map for all the Statistical
+Areas at Level 2 in Tasmania.
+
+\begin{CodeChunk}
+
+\begin{CodeInput}
+R> # Load data
+R> data(tas_sa2)
+R> 
+R> # Create centroids set
+R> centroids <- create_centroids(tas_sa2, "SA2_NAME16")
+R> 
+R> # Create hexagon grid
+R> grid <- create_grid(centroids = centroids,
+R>     hex_size = 0.2,
+R>     buffer_dist = 1.2)
+R> 
+R> # Allocate polygon centroids to hexagon grid points
+R> hex_allocated <- allocate(
+R>   centroids = centroids,
+R>   hex_grid = grid,
+R>   sf_id = "SA2_NAME16",
+R>   # same column used in create_centroids
+R>   hex_size = 0.2,
+R>   # same size used in create_grid
+R>   hex_filter = 10,
+R>   use_neighbours = tas_sa2,
+R>   focal_points = capital_cities %>% filter(points == "Hobart"),
+R>   width = 35,
+R>   verbose = FALSE)
+R> 
+R> # Prepare to plot
+R> fort_hex <- fortify_hexagon(data = hex_allocated, sf_id = "SA2_NAME16", hex_size = 0.2)
+R> 
+R> # Make a plot
+R> library(ggplot2)
+R> ggplot(fort_hex) + 
+R>   geom_polygon(aes(x=long, y=lat, group=hex_id, fill = lat)) +
+R>   scale_fill_distiller("", palette="PRGn")
+\end{CodeInput}
+\end{CodeChunk}
+
+\hypertarget{applications}{%
+\section{Applications}\label{applications}}
+
 \hypertarget{australian-cancer-atlas}{%
-\section{Australian Cancer Atlas}\label{australian-cancer-atlas}}
+\subsection{Australian Cancer Atlas}\label{australian-cancer-atlas}}
+
+XXX Show whole Australia male liver cancer with choropleth and hexagon
+tile map, and discuss the pros/cons of the result, for understanding the
+incidence.
 
 The hexagon tile map visualisation method can be applied to the
 Australian Cancer Atlas data. A small example of Lung Cancer
@@ -491,6 +540,9 @@ hexagon tile maps. The hexagon tile map shows less yellow, this no
 longer overwhelms the map space with the information regarding the more
 rural areas.
 
+XXX Move this image (ref: sir) to the end of the algorithm section to
+illustrate the final result for Tassie
+
 \begin{CodeChunk}
 \begin{figure}
 
@@ -502,8 +554,22 @@ rural areas.
 \end{figure}
 \end{CodeChunk}
 
+\hypertarget{election-results}{%
+\subsection{Election results}\label{election-results}}
+
+XXX Code from web site, and a couple of paragraphs of explanation
+
+\hypertarget{animation}{%
+\section{Animation}\label{animation}}
+
+XXX show how to make an animation, and make a link to a web page where
+the animation can be viewed
+
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}
+
+Structure of conclusions: (1) summarise paper, discuss limitations,
+suggest future directions
 
 It is possible to use alternative maps to communicate spatial
 distributions.While a choropleth map display is the current practice
@@ -525,6 +591,19 @@ package creates tesselated hexagon tilegrams. The Australian application
 preserves the spatial relationships, emphasising capital cities. The
 hexagon tile map is a visualisation solution that highlights spatial
 distributions.
+
+\hypertarget{acknowledgements}{%
+\section{Acknowledgements}\label{acknowledgements}}
+
+The authors would like to thank the Australian Cancer Atlas team for
+discussions regarding alternative spatial visualizations. They would
+also like to thank Professor Kerrie Mengersen and Dr Earl Duncan for
+suggestions and comments. Mitch O'Hara-Wild provided assistance with
+some parts of the algorithm and code. Sayani Gupta provided helpful
+advice on parts of this paper.
+
+The code for sugarbag can be found at XXX, along with details on
+installation and usage.
 
 \bibliography{sugarbag.bib}
 

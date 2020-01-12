@@ -47,7 +47,7 @@ BibOptions(check.entries = FALSE, style = "markdown", bib.style = "alphabetic", 
 
 <!-- Motivation to map -->
 
-The current practice for presenting geogspatial data involves a choropleth map display. These maps highlight the geographic patterns in geospatially related statistics \citep{SAMGIS}.
+The current practice for presenting geospatial data involves a choropleth map display. These maps highlight the geographic patterns in geospatially related statistics \citep{SAMGIS}.
 The land on the map space is divided into geographic units, these boundaries are usually administrative, such as states or counties. The units are filled with colour to represent the value of the statistic \citep{EI}.
 
 <!-- urbanisation -->
@@ -243,19 +243,49 @@ The allocation is returned and combined with the data relating to each polygon.
 knitr::include_graphics(path = "figures/6allocate.png")
 ```
 
-The following code creates a map for all the Statistical Areas at Level 2 in Tasmania:
+## Neighbour relationships
+
+It is possible to encourage the use of neighbourhood relationshipd, for stronger preservation of neighbour relations.
+
+An additional step may be included to allow the neighbours that have alredy been allocated to influence the placement of the current centroid. 
+This requires respecifying the \code{sf} object as the argument for the \code{use_neighbours} parameter. This calculates neighbours using intersections of their polygons. This occurs for all areas before any allocations begin.
+
+For the current centroid, the list of neighbours is consulted. If any neighbour was already allocated, the surrounding hexagons on the grid are prioritised. For multiple neighbours, the neighbouring hexagon grid points are aggregated and considered in order of distance from the original centroid.
 
 # Using sugarbag
 
-```{r full_hexmapcode, echo = TRUE, warning = FALSE, message = FALSE}
+## Installation
 
-# install.packages("sugarbag")
+The package can be installed from CRAN:
+
+```{r eval=FALSE}
+install.packages("sugarbag")
+```
+
+and the development version can be install from the GitHub repository:
+
+```{r eval=FALSE}
+devtools::install_github("srkobakian","sugarbag")
+```
+
+Load the library into your R session with:
+
+```{r eval=FALSE}
 library(sugarbag)
+```
+
+## Creating a hexagon tile map
+
+The following code creates the hexagon tile map for all the Statistical Areas at Level 2 in Tasmania.
+
+```{r full_hexmapcode, echo = TRUE, warning = FALSE, message = FALSE, eval=FALSE}
+# Load data
+data(tas_sa2)
 
 # Create centroids set
 centroids <- create_centroids(tas_sa2, "SA2_NAME16")
 
-# Create hexagon location grid
+# Create hexagon grid
 grid <- create_grid(centroids = centroids,
     hex_size = 0.2,
     buffer_dist = 1.2)
@@ -273,31 +303,54 @@ hex_allocated <- allocate(
   focal_points = capital_cities %>% filter(points == "Hobart"),
   width = 35,
   verbose = FALSE)
+
+# Prepare to plot
+fort_hex <- fortify_hexagon(data = hex_allocated, sf_id = "SA2_NAME16", hex_size = 0.2)
+
+# Make a plot
+library(ggplot2)
+ggplot(fort_hex) + 
+  geom_polygon(aes(x=long, y=lat, group=hex_id, fill = lat)) +
+  scale_fill_distiller("", palette="PRGn")
 ```
 
 
-## Neighbour relationships
 
-It is possible to encourage the use of neighbourhood relationshipd, for stronger preservation of neighbour relations.
+# Applications
 
-An additional step may be included to allow the neighbours that have alredy been allocated to influence the placement of the current centroid. 
-This requires respecifying the \code{sf} object as the argument for the \code{use_neighbours} parameter. This calculates neighbours using intersections of their polygons. This occurs for all areas before any allocations begin.
+## Australian Cancer Atlas
 
-For the current centroid, the list of neighbours is consulted. If any neighbour was already allocated, the surrounding hexagons on the grid are prioritised. For multiple neighbours, the neighbouring hexagon grid points are aggregated and considered in order of distance from the original centroid.
-
-# Australian Cancer Atlas
+XXX Show whole Australia male liver cancer with choropleth and hexagon tile map, and discuss the pros/cons of the result, for understanding the incidence.
 
 The hexagon tile map visualisation method can be applied to the Australian Cancer Atlas data. A small example of Lung Cancer Standardised Incidence Rates (SIRs) allows two views of the same data produced by the Australian Cancer Atlas. This small example in Figure  \ref{fig:sir} shows the group of blue areas in the Hobart CBD more prominently in the hexagon tile map (b).
 The small red areas visible in the choropleth map (a) along the north coast are much larger in the hexagon tile maps. The hexagon tile map shows less yellow, this no longer overwhelms the map space with the information regarding the more rural areas. 
+
+XXX Move this image (ref: sir) to the end of the algorithm section to illustrate the final result for Tassie
 
 ```{r sir, out.width = "100%", echo = FALSE, fig.cap = "The Australian Cancer Atlas data has determined the colour of each Statistical Area of Australian at Level 2. A choropleth map (a) of Standardised Incidence Rates (SIRs) is paired with a hexagon tile map (b) to contrast the colours that are made obvious when every SA2 is equally represented."}
 knitr::include_graphics(path = "figures/7SIR.png")
 ```
 
+## Election results
+
+XXX Code from web site, and a couple of paragraphs of explanation
+
+# Animation 
+
+
+XXX show how to make an animation, and make a link to a web page where the animation can be viewed
 
 # Conclusion
+
+Structure of conclusions: (1) summarise paper, discuss limitations, suggest future directions
 
 It is possible to use alternative maps to communicate spatial distributions.While a choropleth map display is the current practice spatial visualisation of geographical data. Current methods do not always work for Australia due to the large gaps between densely populated capital cities. The administrative boundaries may distract from the statistics, communicated using colour.
 
 Alternative maps highlight the value of the statistics across the geographic units. Alternative mapping methods allow increased understanding of the spatial distribution of a variable across the population, by fairly representing each administrative area. This acknowledges that the amount of residents can be different but recognises that each population area is equally important. The solution to this visualisation problem has equally sized areas, with neighbourhood boundary connections. This map algorithm is implemented in the @sugarbag package written for @R.
 The \pkg{sugarbag} package creates tesselated hexagon tilegrams. The Australian application preserves the spatial relationships, emphasising capital cities. The hexagon tile map is a visualisation solution that highlights spatial distributions.
+
+# Acknowledgements
+
+The authors would like to thank the Australian Cancer Atlas team for discussions regarding alternative spatial visualizations. They would also like to thank Professor Kerrie Mengersen and Dr Earl Duncan for suggestions and comments. Mitch O'Hara-Wild provided assistance with some parts of the algorithm and code. Sayani Gupta provided helpful advice on parts of this paper. 
+
+The code for sugarbag can be found at XXX, along with details on installation and usage. 
