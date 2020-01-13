@@ -9,10 +9,11 @@
 \author{
 Stephanie Kobakian\\Queensland University of Technology \And Dianne Cook\\Monash University
 }
-\title{}
+\title{An Algorithm For Spatial Mapping Using a Hexagon Tile Map, With
+Application to Australian Maps}
 
 \Plainauthor{Stephanie Kobakian, Dianne Cook}
-\Plaintitle{An Algorithm For Spatial Mapping Using a Hexagon Tilegram, With
+\Plaintitle{An Algorithm For Spatial Mapping Using a Hexagon Tile Map, With
 Application to Australian Maps}
 
 \Abstract{
@@ -53,6 +54,7 @@ especially in the areas of disease mapping, and election results.
   E-mail: \email{dicook@monash.edu}\\
   
   }
+
 
 % Pandoc header
 
@@ -421,6 +423,29 @@ polygon.
 
 \end{CodeChunk}
 
+A complete hexagon tile map of Tasmania is created by applying the
+algorithm steps to each centroid. The hexagon tile map visualisation is
+used below to visualise the Australian Cancer Atlas data. Two views of
+the same data are produced by filling according to the Lung Cancer
+Standardised Incidence Rates (SIRs) downloaded from the Australian
+Cancer Atlas site. This small example in Figure \ref{fig:sir} shows the
+group of blue areas in the Hobart CBD more prominently in the hexagon
+tile map (b). The small red areas visible in the choropleth map (a)
+along the north coast are much larger in the hexagon tile maps. The
+hexagon tile map shows less yellow, this no longer overwhelms the map
+space with the information regarding the more rural areas.
+
+\begin{CodeChunk}
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{figures/7SIR} 
+
+}
+
+\caption[The Australian Cancer Atlas data has determined the colour of each Statistical Area of Australian at Level 2]{The Australian Cancer Atlas data has determined the colour of each Statistical Area of Australian at Level 2. A choropleth map (a) of Standardised Incidence Rates (SIRs) is paired with a hexagon tile map (b) to contrast the colours that are made obvious when every SA2 is equally represented.}\label{fig:sir}
+\end{figure}
+\end{CodeChunk}
+
 \hypertarget{neighbour-relationships}{%
 \subsection{Neighbour relationships}\label{neighbour-relationships}}
 
@@ -529,29 +554,26 @@ XXX Show whole Australia male liver cancer with choropleth and hexagon
 tile map, and discuss the pros/cons of the result, for understanding the
 incidence.
 
-The hexagon tile map visualisation method can be applied to the
-Australian Cancer Atlas data. A small example of Lung Cancer
-Standardised Incidence Rates (SIRs) allows two views of the same data
-produced by the Australian Cancer Atlas. This small example in Figure
-\ref{fig:sir} shows the group of blue areas in the Hobart CBD more
-prominently in the hexagon tile map (b). The small red areas visible in
-the choropleth map (a) along the north coast are much larger in the
-hexagon tile maps. The hexagon tile map shows less yellow, this no
-longer overwhelms the map space with the information regarding the more
-rural areas.
+\begin{CodeChunk}
 
-XXX Move this image (ref: sir) to the end of the algorithm section to
-illustrate the final result for Tassie
+\begin{CodeInput}
+R> knitr::include_graphics("figures/aus_liver_m.png")
+\end{CodeInput}
+
+
+\begin{center}\includegraphics[width=41.67in]{figures/aus_liver_m} \end{center}
+
+\end{CodeChunk}
 
 \begin{CodeChunk}
-\begin{figure}
 
-{\centering \includegraphics[width=1\linewidth]{figures/7SIR} 
+\begin{CodeInput}
+R> knitr::include_graphics("figures/aus_liver_m_hex.png")
+\end{CodeInput}
 
-}
 
-\caption[The Australian Cancer Atlas data has determined the colour of each Statistical Area of Australian at Level 2]{The Australian Cancer Atlas data has determined the colour of each Statistical Area of Australian at Level 2. A choropleth map (a) of Standardised Incidence Rates (SIRs) is paired with a hexagon tile map (b) to contrast the colours that are made obvious when every SA2 is equally represented.}\label{fig:sir}
-\end{figure}
+\begin{center}\includegraphics[width=41.67in]{figures/aus_liver_m_hex} \end{center}
+
 \end{CodeChunk}
 
 \hypertarget{election-results}{%
@@ -602,8 +624,9 @@ suggestions and comments. Mitch O'Hara-Wild provided assistance with
 some parts of the algorithm and code. Sayani Gupta provided helpful
 advice on parts of this paper.
 
-The code for sugarbag can be found at XXX, along with details on
-installation and usage.
+The code for sugarbag \citep{sugarbag} can be found on
+\href{https://cran.r-project.org/web/packages/sugarbag/index.html}{CRAN},
+along with vignettes on installation and usage.
 
 \bibliography{sugarbag.bib}
 

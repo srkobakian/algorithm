@@ -14,8 +14,9 @@ author:
       Department of Econometrics and Business Statistics,
       Melbourne, VIC, Australia
     email: \email{dicook@monash.edu}
-title:
-  plain: An Algorithm For Spatial Mapping Using a Hexagon Tilegram, With Application to Australian Maps   
+title: 
+  formatted: "An Algorithm For Spatial Mapping Using a Hexagon Tile Map, With Application to Australian Maps"
+  plain: "An Algorithm For Spatial Mapping Using a Hexagon Tile Map,\nWith Application to Australian Maps"  
 abstract: >
   This algorithm creates a tesselated hexagon display to represent each of the spatial polygons. It allocates these hexagon in a manner that preserves the spatial relationship of the geographic units. It showcases spatial distributions, by emphasising the small geographical regions that are often difficult to locate on geographic maps. Spatial distributions have been presented on alternative representations of geography for many years. In modern times, interactivity and animation have begun to play a larger role, as alternative representations have been popularised by online news sites, and atlas websites with a focus on public consumption. Applications are increasingly widespread, especially in the areas of disease mapping, and election results.
 keywords:
@@ -243,6 +244,16 @@ The allocation is returned and combined with the data relating to each polygon.
 knitr::include_graphics(path = "figures/6allocate.png")
 ```
 
+A complete hexagon tile map of Tasmania is created by applying the algorithm steps to each centroid.
+The hexagon tile map visualisation is used below to visualise the Australian Cancer Atlas data. Two views of the same data are produced by filling according to the Lung Cancer Standardised Incidence Rates (SIRs) downloaded from the Australian Cancer Atlas site. This small example in Figure  \ref{fig:sir} shows the group of blue areas in the Hobart CBD more prominently in the hexagon tile map (b).
+The small red areas visible in the choropleth map (a) along the north coast are much larger in the hexagon tile maps. The hexagon tile map shows less yellow, this no longer overwhelms the map space with the information regarding the more rural areas. 
+
+
+```{r sir, out.width = "100%", echo = FALSE, fig.cap = "The Australian Cancer Atlas data has determined the colour of each Statistical Area of Australian at Level 2. A choropleth map (a) of Standardised Incidence Rates (SIRs) is paired with a hexagon tile map (b) to contrast the colours that are made obvious when every SA2 is equally represented."}
+knitr::include_graphics(path = "figures/7SIR.png")
+```
+
+
 ## Neighbour relationships
 
 It is possible to encourage the use of neighbourhood relationshipd, for stronger preservation of neighbour relations.
@@ -322,14 +333,15 @@ ggplot(fort_hex) +
 
 XXX Show whole Australia male liver cancer with choropleth and hexagon tile map, and discuss the pros/cons of the result, for understanding the incidence.
 
-The hexagon tile map visualisation method can be applied to the Australian Cancer Atlas data. A small example of Lung Cancer Standardised Incidence Rates (SIRs) allows two views of the same data produced by the Australian Cancer Atlas. This small example in Figure  \ref{fig:sir} shows the group of blue areas in the Hobart CBD more prominently in the hexagon tile map (b).
-The small red areas visible in the choropleth map (a) along the north coast are much larger in the hexagon tile maps. The hexagon tile map shows less yellow, this no longer overwhelms the map space with the information regarding the more rural areas. 
-
-XXX Move this image (ref: sir) to the end of the algorithm section to illustrate the final result for Tassie
-
-```{r sir, out.width = "100%", echo = FALSE, fig.cap = "The Australian Cancer Atlas data has determined the colour of each Statistical Area of Australian at Level 2. A choropleth map (a) of Standardised Incidence Rates (SIRs) is paired with a hexagon tile map (b) to contrast the colours that are made obvious when every SA2 is equally represented."}
-knitr::include_graphics(path = "figures/7SIR.png")
+```{r liver-geo}
+knitr::include_graphics("figures/aus_liver_m.png")
 ```
+
+
+```{r liver-hex}
+knitr::include_graphics("figures/aus_liver_m_hex.png")
+```
+
 
 ## Election results
 
@@ -353,4 +365,4 @@ The \pkg{sugarbag} package creates tesselated hexagon tilegrams. The Australian 
 
 The authors would like to thank the Australian Cancer Atlas team for discussions regarding alternative spatial visualizations. They would also like to thank Professor Kerrie Mengersen and Dr Earl Duncan for suggestions and comments. Mitch O'Hara-Wild provided assistance with some parts of the algorithm and code. Sayani Gupta provided helpful advice on parts of this paper. 
 
-The code for sugarbag can be found at XXX, along with details on installation and usage. 
+The code for sugarbag [@sugarbag] can be found on [CRAN](https://cran.r-project.org/web/packages/sugarbag/index.html), along with vignettes on installation and usage. 
