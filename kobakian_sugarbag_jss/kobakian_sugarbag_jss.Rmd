@@ -331,7 +331,14 @@ ggplot(fort_hex) +
 
 ## Australian Cancer Atlas
 
-XXX Show whole Australia male liver cancer with choropleth and hexagon tile map, and discuss the pros/cons of the result, for understanding the incidence.
+Estimates derived from the models of Standardised Incidence Rates and excess deaths can be downloaded from Australian Cancer Atlas [@atlas]. 
+The estimates are communicated as a selection of points on the posterior probability curve for each Statistical Area at Level 2 (SA2).
+Figure \ref{fig:liver-geo} is a choropleth map that uses colour to display the median (0.5) of the posterior probabilities of the estimated Standardised Incidence Rate for each SA2.
+
+The Australian choropleth map display draws attention to the expanse of light blue areas  across the rural communities in all states. The SA2s in the north of the country stand out as more orange and red.
+Comparatively, hexagon tile map display in Figure \ref{fig:liver-geo} draws attention to the capital cities of Sydney and Melbourne. In both of these capital cities, the hexagons that represent the SA2 areas in the outer regions of Melbourne have average or lower than average Incidence Rates, but the inner-city areas have groups of orange SA2 areas that have above average rates.
+
+With careful consideratin of the choropleth map these very small areas may have been noticed by viewers, but the hexagon tile map display emphasises them. The communities in northern Queensland and the Northern territory do not draw attention because of their size, but their colour is still noticably above average when contrasted with the heaxgons further south.
 
 ```{r liver-geo}
 knitr::include_graphics("figures/aus_liver_m.png")
@@ -344,6 +351,11 @@ knitr::include_graphics("figures/aus_liver_m_hex.png")
 
 
 ## Election results
+
+The concept of tile mapping with both hexagons and squares is not unfamiliar in practice. In fact there are many prominent news sites that utilise these techniques, these include [@NPR], [@FiveThirtyEight], [@WSJ], [@WP]. 
+A common applicate of the hexagon tile map is election mapping for United States of America. 
+
+
 
 XXX Code from web site, and a couple of paragraphs of explanation
 
