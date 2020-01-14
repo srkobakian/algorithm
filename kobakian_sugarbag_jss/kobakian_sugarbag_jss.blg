@@ -4,9 +4,5 @@ Database file #1: sugarbag.bib
 Warning--entry type for "abs2016" isn't style-file defined
 --line 122 of file sugarbag.bib
 Warning--I didn't find a database entry for "atlas"
-Warning--I didn't find a database entry for "NPR"
-Warning--I didn't find a database entry for "FiveThirtyEight"
-Warning--I didn't find a database entry for "WSJ"
-Warning--I didn't find a database entry for "WP"
 Warning--missing publisher in ACTUC
-(There were 7 warnings)
+(There were 3 warnings)

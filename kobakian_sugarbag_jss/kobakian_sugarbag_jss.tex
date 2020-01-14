@@ -575,27 +575,23 @@ territory do not draw attention because of their size, but their colour
 is still noticably above average when contrasted with the heaxgons
 further south.
 
-\begin{CodeChunk}
+\begin{figure}
 
-\begin{CodeInput}
-R> knitr::include_graphics("figures/aus_liver_m.png")
-\end{CodeInput}
+{\centering \includegraphics[width=0.6\linewidth]{figures/aus_liver_m} 
 
+}
 
-\begin{center}\includegraphics[width=41.67in]{figures/aus_liver_m} \end{center}
+\caption[A choropleth map of the Statistical Areas of Australia at Level 2]{A choropleth map of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated Standardised Incidence Rate, they range from much lower than average (blue) to much higher than average (red)}\label{fig:liver-geo}
+\end{figure}
 
-\end{CodeChunk}
+\begin{figure}
 
-\begin{CodeChunk}
+{\centering \includegraphics[width=0.6\linewidth]{figures/aus_liver_m_hex} 
 
-\begin{CodeInput}
-R> knitr::include_graphics("figures/aus_liver_m_hex.png")
-\end{CodeInput}
+}
 
-
-\begin{center}\includegraphics[width=41.67in]{figures/aus_liver_m_hex} \end{center}
-
-\end{CodeChunk}
+\caption[A hexagon tile map of the Statistical Areas of Australia at Level 2]{A hexagon tile map of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated Standardised Incidence Rate, they range from much lower than average (blue) to much higher than average (red)}\label{fig:liver-hex}
+\end{figure}
 
 \hypertarget{election-results}{%
 \subsection{Election results}\label{election-results}}
@@ -635,11 +631,11 @@ acknowledges that the amount of residents can be different but
 recognises that each population area is equally important. The solution
 to this visualisation problem has equally sized areas, with
 neighbourhood boundary connections. This map algorithm is implemented in
-the \citet{sugarbag} package written for \citet{R}. The \pkg{sugarbag}
-package creates tesselated hexagon tilegrams. The Australian application
-preserves the spatial relationships, emphasising capital cities. The
-hexagon tile map is a visualisation solution that highlights spatial
-distributions.
+the \pkg{sugarbag} \citet{sugarbag} package written for \code{R}
+\citet{R}. The \pkg{sugarbag} package creates tesselated hexagon
+tilegrams. The Australian application preserves the spatial
+relationships, emphasising capital cities. The hexagon tile map is a
+visualisation solution that highlights spatial distributions.
 
 \hypertarget{acknowledgements}{%
 \section{Acknowledgements}\label{acknowledgements}}
@@ -651,7 +647,7 @@ suggestions and comments. Mitch O'Hara-Wild provided assistance with
 some parts of the algorithm and code. Sayani Gupta provided helpful
 advice on parts of this paper.
 
-The code for sugarbag \citep{sugarbag} can be found on
+The code for \pkg{sugarbag} \citep{sugarbag} can be found on
 \href{https://cran.r-project.org/web/packages/sugarbag/index.html}{CRAN},
 along with vignettes on installation and usage.
 
