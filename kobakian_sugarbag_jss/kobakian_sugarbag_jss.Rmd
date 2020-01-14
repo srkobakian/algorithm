@@ -331,151 +331,36 @@ ggplot(fort_hex) +
 
 ## Australian Cancer Atlas
 
-Estimates derived from the models of Standardised Incidence Rates and excess deaths can be downloaded from Australian Cancer Atlas [@atlas]. 
-The estimates are communicated as a selection of points on the posterior probability curve for each Statistical Area at Level 2 (SA2).
-Figure \ref{fig:liver-geo} is a choropleth map that uses colour to display the median (0.5) of the posterior probabilities of the estimated Standardised Incidence Rate for each SA2.
+The Australian Cancer Atlas [@atlas] allows estimates derived from the models of Standardised Incidence Rates and excess deaths to be downloaded. 
+Figure \ref{fig:melanoma-geo} is a choropleth map that uses colour to display the estimated Standardised Incidence Rate of melanoma cancer for all persons for each SA2. The Australian choropleth map display draws attention to the expanse of light blue areas across the rural communities in all states. The SA2s around Brisbane stand out as more orange and red.
+Comparatively, the hexagon tile map display in Figure \ref{fig:melanoma-hex} draws attention to contrast of the blue areas in Sydney and Melbourne and the capital city of Brisbane. In both Sydney and Melbourne, the hexagons that represent the SA2 areas in the inner-city areas have lower than average Incidence Rates.
 
-The Australian choropleth map display draws attention to the expanse of light blue areas  across the rural communities in all states. The SA2s in the north of the country stand out as more orange and red.
-Comparatively, hexagon tile map display in Figure \ref{fig:liver-geo} draws attention to the capital cities of Sydney and Melbourne. In both of these capital cities, the hexagons that represent the SA2 areas in the outer regions of Melbourne have average or lower than average Incidence Rates, but the inner-city areas have groups of orange SA2 areas that have above average rates.
+With careful consideration of the choropleth map, the small geographic inner city areas may have been noticed by viewers, but the hexagon tile map display emphasises them. The communities in northern Queensland and the Northern territory do not draw attention because of their size as in the choropleth, but their colour is still noticably below average when contrasted with the heaxgons further south.
+ 
+To create this choropleth map the SA2 polygons for 2011 from the Australian Bureau of Statistics. The Standardised Incidence Ratios for each geographic unit are joined to the appropriate polygons.
 
-With careful consideratin of the choropleth map these very small areas may have been noticed by viewers, but the hexagon tile map display emphasises them. The communities in northern Queensland and the Northern territory do not draw attention because of their size, but their colour is still noticably above average when contrasted with the heaxgons further south.
 
-```{r liver-geo, fig.cap = "A choropleth map of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated Standardised Incidence Rate, they range from much lower than average (blue) to much higher than average (red)", results = "asis", echo = FALSE, out.width = "60%"                             }
-knitr::include_graphics("figures/aus_liver_m.png")
+```{r melanoma-geo, fig.cap = "A choropleth map of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated Standardised Incidence Rate of Melanoma for all persons, they range from much lower than average (blue) to much higher than average (red)", results = "asis", echo = FALSE, out.width = "60%"                             }
+knitr::include_graphics("figures/aus_melanoma_p.png")
 ```
 
+To create the hexagon tile map display, the same steps are followed as outlined above:
 
-```{r liver-hex, fig.cap = "A hexagon tile map of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated Standardised Incidence Rate, they range from much lower than average (blue) to much higher than average (red)", results = "asis", echo = FALSE, out.width = "60%"}
-knitr::include_graphics("figures/aus_liver_m_hex.png")
+ - Create the set of centroid points
+ - Create the hexagon grid points
+ - Allocate each centroid to a hexagon grid point
+
+```{r melanoma-hex, fig.cap = "A hexagon tile map of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated Standardised Incidence Rate, they range from much lower than average (blue) to much higher than average (red)", results = "asis", echo = FALSE, out.width = "60%"}
+knitr::include_graphics("figures/aus_melanoma_p_hex.png")
 ```
-
-
-## Election results
-
-The concept of tile mapping with both hexagons and squares is not unfamiliar in practice.
-A common application of the hexagon tile map is election mapping for United States of America, there are many prominent news sites that utilise these techniques [@NPR], [@FiveThirtyEight], [@WSJ], [@WP]. 
-To apply hexagon tile mapping to election mapping Australia using \code{R}, the \pkg{sugarbag} package provides Australian election data and the Australian Electoral Commission provides electoral boundaries for 2019 [@AEC19].
-
-
-```{r aec-packages}
-library(sugarbag)
-library(eechidna)
-
-# First Preference votes in 2019
-data(sugarbag::fp19)
-# Electoral Boundaries
-nat_data19 <- nat_data_download(2019)
-```
-
-The centroids are derived from the National Electoral data for 2019 provided in the \{eechidna} package.
-
-```{r aec-centroids}
-centroids <- nat_data19 %>%
-  select(Elect_div = elect_div, longitude = long_c, latitude = lat_c)
-```
-
-The hexagon grid for allocation is created using the set of electorate centroids.
-
-```{r aec-grid}
-# Create a grid of hexagons to allocate centroids
-grid <- create_grid(centroids = centroids, hex_size = 0.9, buffer_dist = 10)
-```
-
-The centroids and the grid can be passed to the \code{allocate} function.
-
-```{r allocate}
-# Allocate the centroids to the hexagon grid
-# We have the same amount of rows, as individual regions
-hex_allocated <- allocate(centroids = centroids,
-  sf_id = "Elect_div",
-  hex_grid = grid,
-  hex_size = 0.9, # same size used in create_grid
-  hex_filter = 10,
-  use_neighbours = ELB,
-  focal_points = capital_cities,
-  width = 30, verbose = TRUE) # same column used in create_centroids
-```
-
-
-To display hexagons on a map, \code{fortify_hexagon} takes the center of the hexagon and finds the 6 points needed to create a hexagon shape.
-
-For animations to move between geography and hexagons the \code{sf_id} must match, there also needs to be an identifier to separate the states to animate between for \code{gganimate}.
-
-```{r data}
-# When plotting, the polygons are needed, rather than single centroid points.
-# We can find 6 points, and then convert them into an sf geometry object
-hex <- hex_allocated %>%
-  fortify_hexagon(hex_size = 0.9, sf_id = "Elect_div") %>%
-  select(Elect_div, long, lat) %>% 
-  sf::st_as_sf(coords = c("long", "lat"), crs = 4283) %>%
-  group_by(Elect_div) %>% 
-  summarise(do_union = FALSE) %>%
-  st_cast("POLYGON") %>%
-  st_cast("MULTIPOLYGON") %>% 
-  left_join(st_drop_geometry(nat_data19), ., by = "Elect_div")
-
-anim_aus <- bind_rows("Hex." = hex, "Choro." = ELB19, .id = "polygon_type") %>% st_as_sf()
-
-# Join election data from 2016
-fp_maps <- fp19 %>% 
-  filter(Elected == "Y") %>% 
-  select(Elect_div = DivisionNm, PartyAb, PartyNm, TotalVotes) %>% 
-  left_join(anim_aus, by = "Elect_div")
-
-```
-
-Here we show the two sets of areas they can be plotted separately using `geom_facet`. 
-
-```{r plot_facet, dpi = 300}
-auscolours <- c(
-  "ALP" = "#DE3533",
-  "LNP" = "#080CAB",
-  "KAP" = "#b50204",
-  "GRN" = "#10C25B",
-  "XEN" = "#ff6300",
-  "LNP" = "#0047AB",
-  "LP" = "#0047AB",
-  "NP" = "#006644",
-  "IND" = "#307560")
-
-ggplot(fp_maps %>% filter(polygon_type == "Hex."), 
-  aes(geometry = geometry, fill = PartyAb)) +
-  scale_fill_manual(values = auscolours) +
-  geom_sf(fill = "white", data = absmapsdata::state2016) +
-  geom_sf() +
-  theme_void()
-
-ggplot(fp_maps %>% filter(polygon_type == "Choro."), 
-  aes(geometry = geometry, fill = PartyAb)) +
-  scale_fill_manual(values = auscolours) +
-  geom_sf(fill = "white", data = absmapsdata::state2016) +
-  geom_sf() +
-  theme_void()
-```
-
-We can move between the two plots using the \code{transition_states} function from the \code{gganimate} package. 
-
 
 
 # Animation 
 
+The \pkg{gganimate} package can be used to make an animation.
+It requires connecting the two displays, which can be done using the \code{sf_id} such as the SA2 name.
+The animation^[This animation can be viewed at: ] connecting these two displays will highlight the rapid growth of the inner-city areas, and will decrease the large rural areas. 
 
-XXX show how to make an animation, and make a link to a web page where the animation can be viewed
-
-
-```{r}
-anim <- anim_aus %>% 
-  ggplot(aes(x=long, y=lat, group = interaction(elect_div))) +
-  geom_polygon(aes(x=long, y=lat, group = group),fill = "grey", alpha = 0.3, data= nat_map16) +
-  geom_polygon(aes(fill = PartyAb)) + 
-  coord_equal() + 
-  theme_void() +
-  scale_fill_manual(values = auscolours) +
-  guides(fill = guide_legend(title = NULL)) + 
-  theme(legend.position = "bottom") +
-  transition_states(poly_type)
-animate(anim, duration = 6, nframes = 60)
-```
 
 # Conclusion
 
@@ -485,6 +370,8 @@ It is possible to use alternative maps to communicate spatial distributions.Whil
 
 Alternative maps highlight the value of the statistics across the geographic units. Alternative mapping methods allow increased understanding of the spatial distribution of a variable across the population, by fairly representing each administrative area. This acknowledges that the amount of residents can be different but recognises that each population area is equally important. The solution to this visualisation problem has equally sized areas, with neighbourhood boundary connections. This map algorithm is implemented in the \pkg{sugarbag} @sugarbag package written for \code{R} @R.
 The \pkg{sugarbag} package creates tesselated hexagon tilegrams. The Australian application preserves the spatial relationships, emphasising capital cities. The hexagon tile map is a visualisation solution that highlights spatial distributions.
+
+These hexagons equally represent each area. However, the tesselation does not allow the size of the hexagons to represent another variable.
 
 # Acknowledgements
 

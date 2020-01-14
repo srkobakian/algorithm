@@ -1,4 +1,4 @@
-\begin{thebibliography}{10}
+\begin{thebibliography}{14}
 \newcommand{\enquote}[1]{``#1''}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
@@ -35,11 +35,30 @@ Dougenik JA, Chrisman NR, Niemeyer DR (1985).
 \newblock \eprint{https://doi.org/10.1111/j.0033-0124.1985.00075.x},
   \urlprefix\url{https://doi.org/10.1111/j.0033-0124.1985.00075.x}.
 
+\bibitem[{Gamio and D.(2016)}]{WP}
+Gamio L, D C (2016).
+\newblock \enquote{{Poll: Redrawing the electoral map}.}
+\newblock
+  \urlprefix\url{https://www.washingtonpost.com/graphics/politics/2016-election/50-state-poll/}.
+
+\bibitem[{Kanjana and Mehta(2016)}]{FiveThirtyEight}
+Kanjana J, Mehta D (2016).
+\newblock \enquote{{Who will win the presidency?}}
+\newblock
+  \urlprefix\url{https://projects.fivethirtyeight.com/2016-election-forecast/}.
+
 \bibitem[{Kobakian and Cook(2019)}]{sugarbag}
 Kobakian S, Cook D (2019).
 \newblock \emph{sugarbag: Create Tessellated Hexagon Maps}.
 \newblock Https://srkobakian.github.io/sugarbag/,
   https://github.com/srkobakian/sugarbag.
+
+\bibitem[{Montanaro(2016)}]{NPR}
+Montanaro D (2016).
+\newblock \enquote{{NPR Battleground Map: Hillary Clinton Is Winning — And
+  It's Not Close}.}
+\newblock
+  \urlprefix\url{https://www.npr.org/2016/10/18/498406765/npr-battleground-map-hillary-clinton-is-winning-and-its-not-close}.
 
 \bibitem[{Moore and Carpenter(1999)}]{SAMGIS}
 Moore DA, Carpenter TE (1999).
@@ -80,5 +99,11 @@ van Kreveld M, Speckmann B (2007).
 \newblock Special Issue on the 20th European Workshop on Computational
   Geometry,
   \urlprefix\url{http://www.sciencedirect.com/science/article/pii/S0925772106000770}.
+
+\bibitem[{Zitner \emph{et~al.}(2016)Zitner, Yeip, and Wolfe}]{WSJ}
+Zitner A, Yeip R, Wolfe J (2016).
+\newblock \enquote{{Draw the 2016 Electoral College Map}.}
+\newblock
+  \urlprefix\url{(http://graphics.wsj.com/elections/2016/2016-electoral-college-map-predictions/)}.
 
 \end{thebibliography}
