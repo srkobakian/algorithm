@@ -331,7 +331,7 @@ ggplot(fort_hex) +
 
 ## Australian Cancer Atlas
 
-The Australian Cancer Atlas [@atlas] allows estimates derived from the models of Standardised Incidence Rates and excess deaths to be downloaded. 
+The Australian Cancer Atlas [@TACA] allows estimates derived from the models of Standardised Incidence Rates and excess deaths to be downloaded. 
 Figure \ref{fig:melanoma-geo} is a choropleth map that uses colour to display the estimated Standardised Incidence Rate of melanoma cancer for all persons for each SA2. The Australian choropleth map display draws attention to the expanse of light blue areas across the rural communities in all states. The SA2s around Brisbane stand out as more orange and red.
 Comparatively, the hexagon tile map display in Figure \ref{fig:melanoma-hex} draws attention to contrast of the blue areas in Sydney and Melbourne and the capital city of Brisbane. In both Sydney and Melbourne, the hexagons that represent the SA2 areas in the inner-city areas have lower than average Incidence Rates.
 
@@ -340,7 +340,7 @@ With careful consideration of the choropleth map, the small geographic inner cit
 To create this choropleth map the SA2 polygons for 2011 from the Australian Bureau of Statistics. The Standardised Incidence Ratios for each geographic unit are joined to the appropriate polygons.
 
 
-```{r melanoma-geo, fig.cap = "A choropleth map of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated Standardised Incidence Rate of Melanoma for all persons, they range from much lower than average (blue) to much higher than average (red)", results = "asis", echo = FALSE, out.width = "60%"                             }
+```{r melanoma-geo, fig.cap = "A choropleth map of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated Standardised Incidence Rate of Melanoma for all persons, they range from much lower than average (blue) to much higher than average (red)", results = "asis", echo = FALSE, out.width = "60%"}
 knitr::include_graphics("figures/aus_melanoma_p.png")
 ```
 
@@ -358,20 +358,27 @@ knitr::include_graphics("figures/aus_melanoma_p_hex.png")
 # Animation 
 
 The \pkg{gganimate} package can be used to make an animation.
-It requires connecting the two displays, which can be done using the \code{sf_id} such as the SA2 name.
-The animation^[This animation can be viewed at: ] connecting these two displays will highlight the rapid growth of the inner-city areas, and will decrease the large rural areas. 
+It requires connecting the polygons for each area in two displays two displays, which can be done using the \code{sf_id} variable, such as the SA2 name.
+The animation^[This animation can be viewed at: https://sugarbagjss.netlify.com/] connecting these two displays will highlight the rapid growth of the inner-city areas, and will decrease the large rural areas. The hexagons that move the furthest will move rapidly in the animation.
 
 
 # Conclusion
 
-Structure of conclusions: (1) summarise paper, discuss limitations, suggest future directions
 
 It is possible to use alternative maps to communicate spatial distributions.While a choropleth map display is the current practice spatial visualisation of geographical data. Current methods do not always work for Australia due to the large gaps between densely populated capital cities. The administrative boundaries may distract from the statistics, communicated using colour.
 
 Alternative maps highlight the value of the statistics across the geographic units. Alternative mapping methods allow increased understanding of the spatial distribution of a variable across the population, by fairly representing each administrative area. This acknowledges that the amount of residents can be different but recognises that each population area is equally important. The solution to this visualisation problem has equally sized areas, with neighbourhood boundary connections. This map algorithm is implemented in the \pkg{sugarbag} @sugarbag package written for \code{R} @R.
 The \pkg{sugarbag} package creates tesselated hexagon tilegrams. The Australian application preserves the spatial relationships, emphasising capital cities. The hexagon tile map is a visualisation solution that highlights spatial distributions.
 
-These hexagons equally represent each area. However, the tesselation does not allow the size of the hexagons to represent another variable.
+These hexagons equally represent each area. However, the tesselation does not allow the size of the hexagons to represent another variable, similar to the choropleth maps.
+The algorithm is heavily dependent on the focal points used, as this determines the order of allocation. It works on the assumption that viewers can use directional assumptions to identify their neighbourhoods, this can be aided by the animation.
+
+<!-- future -->
+Future work will include refining the algorithm. It would be possible to take a logarithmic function rather than a direct angle to help choose a closer hexagon to the original centroid location, before increasing the width of the angle used to filter the hexagons.
+
+This algorithm has only been tested using single countries, and does not consider definite borders of countries. While the buffer allows extention beyond the furthest centroids, there is no mechanism to protect the borders and ensure centroids are placed within the geographic borders of a country.
+
+This algorithm is an effective start to creating hexagon tile maps for many geographic units.
 
 # Acknowledgements
 
