@@ -7,12 +7,12 @@
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
 \author{
-Stephanie Kobakian\\Queensland University of Technology \And Dianne Cook\\Monash University
+Stephanie Kobakian\\Queensland University of Technology \And Dianne Cook\\Monash University \And Earl Duncan\\Queensland University of Technology
 }
 \title{An Algorithm For Spatial Mapping Using a Hexagon Tile Map, With
 Application to Australian Maps}
 
-\Plainauthor{Stephanie Kobakian, Dianne Cook}
+\Plainauthor{Stephanie Kobakian, Dianne Cook, Earl Duncan}
 \Plaintitle{An Algorithm For Spatial Mapping Using a Hexagon Tile Map, With
 Application to Australian Maps}
 
@@ -53,6 +53,12 @@ especially in the areas of disease mapping, and election results.
   Australia\\
   E-mail: \email{dicook@monash.edu}\\
   
+      Earl Duncan\\
+  Queensland University of Technology\\
+  School of Mathematical Sciences, Science and Engineering Faculty,
+  Brisbane, QLD, Australia\\
+  E-mail: \email{earl.duncan@qut.edu.au}\\
+  
   }
 
 
@@ -75,14 +81,14 @@ colour to represent the value of the statistic \citep{EI}.
 Australian residents are increasingly congregating around major cities,
 the vast rural areas are often sparsely populated in comparison to the
 urban centres. In Australia, government bodies such as the Australian
-Bureau of Statistics, and the Australian Electoral Commission hold the
-responsibility for the division of geographic units. These boundaries
-are adjusted as the population increases. The division of the population
-into approximately equal population areas results in dramatically
-different square meterage of the geographic areas. This results in an
-unequal attention given to the statistic of each area, this can allow
-misrepresentation of the spatial distributions of human related
-statistics in geographic maps.
+Bureau of Statistics (ABS), and the Australian Electoral Commission
+(AEC) hold the responsibility for the division of geographic units. If
+it absolutely necessary, the AEC may adjust as the population increases.
+The division of the population into approximately equal population areas
+results in dramatically different square meterage of the geographic
+areas. This results in an unequal attention given to the statistic of
+each area, this can allow misrepresentation of the spatial distributions
+of human related statistics in geographic maps.
 
 The solution to this visualisation problem begins with the geography.
 Cartograms apply a transformation to the geographic boundaries based on
@@ -107,9 +113,9 @@ recognises that each area, or person is equally important.
 Tilegrams, Rectangular cartograms \citep{ORC} and Dorling cartograms
 \citep{ACTUC}, all use one simple shape to represent each area. This
 allows preservation of spatial relationships and decreases the emphasis
-from the amount of geographic area. These maps focus on the relationship
-between neighbours attempting to preserve connections, and disregard the
-unique shapes of the administrative boundaries.
+from the size of the geographic areas. These maps focus on the
+relationship between neighbours attempting to preserve connections, and
+disregard the unique shapes of the administrative boundaries.
 
 The \pkg{sugarbag} package provides a new method to create tesselated
 hexagon tilegrams. Extending the tilegram to Australian applications
@@ -120,7 +126,8 @@ of large, rural geographic units.
 \hypertarget{algorithm}{%
 \section{Algorithm}\label{algorithm}}
 
-This solution operates on a set of \pkg{sf} \citep{sf} polygons.
+This solution operates on a set of simple feature geometry objects, also
+known as \pkg{sf} \citep{sf} polygons.
 
 There are four steps to create a tesselated hexagon tilegram. These
 steps can be executed by the main function, \code{create_hexmap}, or can
@@ -291,10 +298,11 @@ For each centroid location, the closest latitude row and longitude
 column are found. Then rows and columns of centroids are divided into 20
 groups. The amount of rows in each latitude group and the amount of
 columns in each longitude group are used as the width of rolling
-windows. The rolling windows can be seen on the This will tailor the
-available grid points to those most likely to be used. It also helps
-reduce the amount of time taken, as it decreases the amount of points
-considered for each centroid allocation.
+windows. The rolling windows can be seen on the bottom and right of Fig.
+\ref{fig:filter_grid}. This will tailor the available grid points to
+those most likely to be used. It also helps reduce the amount of time
+taken, as it decreases the amount of points considered for each centroid
+allocation.
 
 The first rolling window function finds the minimum and maximum centroid
 values for the sliding window groups of longitude columns and the groups
@@ -411,8 +419,12 @@ If no available hexagon grid point is found within the original filter
 distance and angle, the distance is expanded, only when a maximum
 distance is reached will the angle expand to accommodate more possible
 grid points.\\
-The angle begins at 30 degrees by default, and will increase if no
-points can be found within the \code{hex_filter} distance. The
+By default the angle filter to hexagon grid points that fall within the
+bounds of the angle from the focal point to the geographic centroid,
+plus and minus 30 degrees. This will increase if no points can be found
+within the \code{hex_filter} distance. The angle of 30 was chosen to
+allow the algorithm to choose hexagons that best maintained the spatial
+relationship between the focal point and geographic centroid. The
 allocation is returned and combined with the data relating to each
 polygon.
 
@@ -449,10 +461,10 @@ space with the information regarding the more rural areas.
 \hypertarget{neighbour-relationships}{%
 \subsection{Neighbour relationships}\label{neighbour-relationships}}
 
-It is possible to encourage the use of neighbourhood relationshipd, for
-stronger preservation of neighbour relations.
+It is possible to incorporate the neighbouring areas for each SA2, for
+stronger preservation of the spatial distribution.
 
-An additional step may be included to allow the neighbours that have
+An additional step can be included to allow the neighbours that have
 alredy been allocated to influence the placement of the current
 centroid. This requires respecifying the \code{sf} object as the
 argument for the \code{use_neighbours} parameter. This calculates
@@ -570,9 +582,9 @@ the Northern territory do not draw attention because of their size as in
 the choropleth, but their colour is still noticably below average when
 contrasted with the heaxgons further south.
 
-To create this choropleth map the SA2 polygons for 2011 from the
-Australian Bureau of Statistics. The Standardised Incidence Ratios for
-each geographic unit are joined to the appropriate polygons.
+To create this choropleth map the SA2 polygons for 2011 from the ABS.
+The Standardised Incidence Ratios for each geographic unit are joined to
+the appropriate polygons.
 
 \begin{figure}
 
@@ -667,10 +679,10 @@ many geographic units.
 
 The authors would like to thank the Australian Cancer Atlas team for
 discussions regarding alternative spatial visualizations. They would
-also like to thank Professor Kerrie Mengersen and Dr Earl Duncan for
-suggestions and comments. Mitch O'Hara-Wild provided assistance with
-some parts of the algorithm and code. Sayani Gupta provided helpful
-advice on parts of this paper.
+also like to thank Professor Kerrie Mengersen for suggestions and
+comments. Mitch O'Hara-Wild provided assistance with some parts of the
+algorithm and code. Sayani Gupta provided helpful advice on parts of
+this paper.
 
 The code for \pkg{sugarbag} \citep{sugarbag} can be found on
 \href{https://cran.r-project.org/web/packages/sugarbag/index.html}{CRAN},
