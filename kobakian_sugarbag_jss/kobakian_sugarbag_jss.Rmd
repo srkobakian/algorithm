@@ -45,6 +45,7 @@ link-citations: true
 library(knitcitations)
 library(RefManageR)
 library(sf)
+library(sugarbag)
  
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 options("citation_format" = "pandoc")
@@ -92,22 +93,12 @@ These steps can be executed by the main function, \code{create_hexmap}, or can b
 
 The \code{create_hexmap} function requires several parameters, if they are not provided, the information will be derived from the simple features (\pkg{sf}) set of shapes used. Users may choose to only use the \code{allocate} function when they wish to use a set of centroids, rather than \pkg{sf} polygons.
 
-The following must be provided to \code{create_hexmap}:
-```{r table_necessary, echo = FALSE, fig.cap = "This table details the parameters that must be provided to create a hexagon tile map using sugarbag."}
-library(sugarbag)
-library(tidyverse)
+The following parameters must be provided to \code{create_hexmap}:
 
-knitr::kable(tibble::tibble(parameter = c('shp', 
-  'sf_id',
-  'focal_points'),
-  description = c(
-    'an sf object containing the polygon information', 
-    'name of a column that distinguishes unique areas',
-    'a data frame of reference locations used to allocate hexagons'
-    )), format = "latex")
-```
-
-
+ - *shp:* an sf object containing the polygon information
+ - *sf_id:* name of a column that distinguishes unique areas
+ - *focal_points:* a data frame of reference locations used to allocate hexagons
+ 
 ## Polygon set
 
 The polygon set of Statistical Areas at Level 2 (SA2) \citep{abs2016} of Tasmania in 2016 is provided with the \pkg{sugarbag} package as \code{tas_sa2}. 
@@ -123,13 +114,11 @@ data(capital_cities)
 
 The following parameters will be determined within \code{create_hexmap} if they are not provided. They are created throughout the following example:
 
-```{r parameters, echo = FALSE, fig.cap = "This table details the additional parameters that are used to create a hexagon tile map using sugarbag."}
-knitr::kable(tibble(parameter = c('buffer_dist', 'hex_size',  'hex_filter', 'width'),
-  description = c('a float value for distance in degrees to extend beyond the geometry provided',
-    'a float value in degrees for the diameter of the hexagons', 'amount of hexagons around centroid to consider for allocation',
-    'the angle used to filter the grid points around a centroid')), format = "latex")
-```
-
+ - *buffer_dist:* a float value for distance in degrees to extend beyond the geometry provided
+ - *hex_size:* a float value in degrees for the diameter of the hexagons
+ - *hex_filter:* amount of hexagons around centroid to consider for allocation
+ - *width:* the angle used to filter the grid points around a centroid
+ 
 ## Create the set of centroid points
 
 Individual \pkg{sugarbag} functions can be used outside of the main function.
@@ -140,7 +129,7 @@ The centroids can be derived from the set of polygons using the \code{create_cen
 centroids <- create_centroids(shp_sf = tas_sa2, sf_id = "SA2_NAME16")
 ```
 
-```{r centroids_plot, out.width = "100%", echo = FALSE, eval = FALSE, fig.cap="The geographic shapes of the Statistical Areas of Tasmania at Level 2. The points show the locations of the centroids of the SA2 areas."}
+```{r centroids_plot, out.width = "100%", echo = FALSE, eval = FALSE, fig.cap = "The geographic shapes of the Statistical Areas of Tasmania at Level 2. The points show the locations of the centroids of the SA2 areas."}
 knitr::include_graphics(path = "figures/1centroids.png")
 ```
 
@@ -165,7 +154,7 @@ An individual hexagon location is created from all intersections of the longitud
 
 A square grid could be used for sqaure tiles, but it will not facilitate tessellated hexagons. Figure \ref{fig:grid2} allows for hexagons, as every second latitude row on the grid is shifted right, by half of the hexagon size.
 
-```{r grid2, fig.cap="Grid points to create a tilegram.", out.width = "100%", echo = FALSE}
+```{r grid2, fig.cap = "Grid points to create a tilegram.", out.width = "100%", echo = FALSE}
 knitr::include_graphics(path = "figures/2grid.png")
 ```
 
@@ -237,7 +226,7 @@ A box of possible hexagon locations around the centroid. The corners of the box 
 The algorithm then removes the outer corners of the square, creating a circle of points, by only keeping points within a certain radial distance around the original centroid location.
 
 
-```{r buffers, echo = FALSE, out.width = "100%"}
+```{r buffers, fig.cap = "Filter for grid points within a square, then circular, distance for those closest to the centroid.", echo = FALSE, out.width = "100%"}
 knitr::include_graphics(path = "figures/4grid.png")
 ```
 
@@ -248,7 +237,7 @@ By default the angle filter to hexagon grid points that fall within the bounds o
 The allocation is returned and combined with the data relating to each polygon.
 
 
-```{r buffs, out.width = "100%", echo = FALSE}
+```{r buffs, fig.cap = "A complete hexagon tile map of Tasmania.", out.width = "100%", echo = FALSE}
 knitr::include_graphics(path = "figures/6allocate.png")
 ```
 
@@ -289,7 +278,7 @@ devtools::install_github("srkobakian","sugarbag")
 
 Load the library into your R session with:
 
-```{r eval=FALSE}
+```{r}
 library(sugarbag)
 ```
 

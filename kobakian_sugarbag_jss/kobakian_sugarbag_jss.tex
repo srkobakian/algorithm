@@ -157,23 +157,18 @@ features (\pkg{sf}) set of shapes used. Users may choose to only use the
 \code{allocate} function when they wish to use a set of centroids,
 rather than \pkg{sf} polygons.
 
-The following must be provided to \code{create_hexmap}:
+The following parameters must be provided to \code{create_hexmap}:
 
-\begin{CodeChunk}
-
-\begin{tabular}{l|l}
-\hline
-parameter & description\\
-\hline
-shp & an sf object containing the polygon information\\
-\hline
-sf\_id & name of a column that distinguishes unique areas\\
-\hline
-focal\_points & a data frame of reference locations used to allocate hexagons\\
-\hline
-\end{tabular}
-
-\end{CodeChunk}
+\begin{itemize}
+\tightlist
+\item
+  \emph{shp:} an sf object containing the polygon information
+\item
+  \emph{sf\_id:} name of a column that distinguishes unique areas
+\item
+  \emph{focal\_points:} a data frame of reference locations used to
+  allocate hexagons
+\end{itemize}
 
 \hypertarget{polygon-set}{%
 \subsection{Polygon set}\label{polygon-set}}
@@ -200,23 +195,21 @@ The following parameters will be determined within \code{create_hexmap}
 if they are not provided. They are created throughout the following
 example:
 
-\begin{CodeChunk}
-
-\begin{tabular}{l|l}
-\hline
-parameter & description\\
-\hline
-buffer\_dist & a float value for distance in degrees to extend beyond the geometry provided\\
-\hline
-hex\_size & a float value in degrees for the diameter of the hexagons\\
-\hline
-hex\_filter & amount of hexagons around centroid to consider for allocation\\
-\hline
-width & the angle used to filter the grid points around a centroid\\
-\hline
-\end{tabular}
-
-\end{CodeChunk}
+\begin{itemize}
+\tightlist
+\item
+  \emph{buffer\_dist:} a float value for distance in degrees to extend
+  beyond the geometry provided
+\item
+  \emph{hex\_size:} a float value in degrees for the diameter of the
+  hexagons
+\item
+  \emph{hex\_filter:} amount of hexagons around centroid to consider for
+  allocation
+\item
+  \emph{width:} the angle used to filter the grid points around a
+  centroid
+\end{itemize}
 
 \hypertarget{create-the-set-of-centroid-points}{%
 \subsection{Create the set of centroid
@@ -403,10 +396,14 @@ circle of points, by only keeping points within a certain radial
 distance around the original centroid location.
 
 \begin{CodeChunk}
+\begin{figure}
 
+{\centering \includegraphics[width=1\linewidth]{figures/4grid} 
 
-\begin{center}\includegraphics[width=1\linewidth]{figures/4grid} \end{center}
+}
 
+\caption[Filter for grid points within a square, then circular, distance for those closest to the centroid]{Filter for grid points within a square, then circular, distance for those closest to the centroid.}\label{fig:buffers}
+\end{figure}
 \end{CodeChunk}
 
 The \code{width} parameter is used to take a slice of the remaining
@@ -429,10 +426,14 @@ allocation is returned and combined with the data relating to each
 polygon.
 
 \begin{CodeChunk}
+\begin{figure}
 
+{\centering \includegraphics[width=1\linewidth]{figures/6allocate} 
 
-\begin{center}\includegraphics[width=1\linewidth]{figures/6allocate} \end{center}
+}
 
+\caption[A complete hexagon tile map of Tasmania]{A complete hexagon tile map of Tasmania.}\label{fig:buffs}
+\end{figure}
 \end{CodeChunk}
 
 A complete hexagon tile map of Tasmania is created by applying the
