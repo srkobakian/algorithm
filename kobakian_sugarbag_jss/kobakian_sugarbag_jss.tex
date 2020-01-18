@@ -74,69 +74,72 @@ especially in the areas of disease mapping, and election results.
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
 
-The current practice for presenting geospatial data involves a
-choropleth map display. These maps highlight the geographic patterns in
-geospatially related statistics \citep{SAMGIS}. The land on the map
-space is divided into geographic units, these boundaries are usually
-administrative, such as states or counties. The units are filled with
-colour to represent the value of the statistic \citep{EI}.
+The current practice for presenting geospatial data is a choropleth map
+display. These maps highlight the geographic patterns in geospatially
+related statistics \citep{SAMGIS}. The land on the map space is divided
+into geographic units, these boundaries are usually administrative, such
+as states or counties. The units are filled with colour to represent the
+value of the statistic \citep{EI}.
 
 Australian residents are increasingly congregating around major cities,
 the vast rural areas are often sparsely populated in comparison to the
 urban centres. In Australia, government bodies such as the Australian
 Bureau of Statistics (ABS), and the Australian Electoral Commission
-(AEC) hold the responsibility for the division of geographic units. If
-it absolutely necessary, the AEC may adjust as the population increases.
-The division of the population into approximately equal population areas
-results in dramatically different square meterage of the geographic
-areas. This results in an unequal attention given to the statistic of
-each area, this can allow misrepresentation of the spatial distributions
-of human related statistics in geographic maps.
+(AEC) hold the responsibility for the division of the population into
+geographic units. If it necessary, the AEC may adjust the boundaries of
+the areas as the population increases. The division of the population
+into approximately equal population areas results in dramatically
+different square meterage of the geographic areas. This can give unequal
+attention to the statistic of each area, this can cause
+misrepresentation of the spatial distributions of human related
+statistics in geographic maps.
 
-The solution to this visualisation problem begins with the geography.
+The solutions to this visualisation problem begin with the geography.
 Cartograms apply a transformation to the geographic boundaries based on
 the value of the statistic of interest. These displays result in a
 distortion of the map space to represent differences in the statistic
 across the areas \citep{ACCAC}. The statistic of interest is used to
-determine the layout. When using the Australian population, the result
-is a population cartogram that fails to preserve a recognisable display
-due to the difference in size of metropolitan and rural areas
-\citep{ACTUC}, \citep{GOINO}. Contiguous cartograms change the shape of
-an area, preserving boundary relationships of neighbours. Non-contiguous
-cartograms maintain the geographic shape of each area, but lose the
-connection to neighbours as each areas shrinks or grows.
+determine the cartogram layout. When the Australian population is the
+statistic of interest, the result is a population cartogram. They fail
+to preserve a recognisable display due to the difference in size of
+metropolitan and rural areas \citep{ACTUC}, \citep{GOINO}. Contiguous
+cartograms change the shape of areas, while preserving boundary
+relationships of neighbours. Non-contiguous cartograms maintain the
+geographic shape of each geographic area, but will lose the connection
+to neighbours as the polygon for each geographic area shrinks or grows.
 
 Alternative maps shift the focus from land area and shape, to the value
 of the statistics in a group of areas. Alternative mapping methods allow
 increased understanding of the spatial distribution of a variable across
 the population, by fairly representing each administrative area. This
 acknowledges that the amount of residents can be different but
-recognises that each area, or person is equally important.
+recognises that each area, or person within it is equally important.
 
-Tilegrams, Rectangular cartograms \citep{ORC} and Dorling cartograms
-\citep{ACTUC}, all use one simple shape to represent each area. This
-allows preservation of spatial relationships and decreases the emphasis
-from the size of the geographic areas. These maps focus on the
-relationship between neighbours attempting to preserve connections, and
-disregard the unique shapes of the administrative boundaries.
+tile maps, Rectangular cartograms \citep{ORC} and Dorling cartograms
+\citep{ACTUC}, all use one simple shape to represent each area. They
+place various importance on the preservation of spatial relationships,
+but all decrease the emphasis on the size of the geographic areas. These
+alternative map displays focus on the relationship between neighbours,
+attempting to preserve connections, and disregard the unique shapes of
+the administrative boundaries.
 
-The \pkg{sugarbag} package provides a new method to create tesselated
-hexagon tilegrams. Extending the tilegram to Australian applications
-required preserving the spatial relationships. It emphasises the capital
-cities as population hubs, and emphasises the distances rather than size
-of large, rural geographic units.
+The \pkg{sugarbag} package provides a new algorithm to create tesselated
+hexagon tile maps. It emphasises the capital cities as population hubs,
+and emphasises the distances rather than size of large, rural geographic
+units.
 
 \hypertarget{algorithm}{%
 \section{Algorithm}\label{algorithm}}
 
-This solution operates on a set of simple feature geometry objects, also
-known as \pkg{sf} \citep{sf} polygons.
+The algorithm presented in \pkg{sugarbag} package operates on a set of
+simple feature geometry objects, also known as \pkg{sf} \citep{sf}
+polygons.
 
-There are four steps to create a tesselated hexagon tilegram. These
-steps can be executed by the main function, \code{create_hexmap}, or can
-be implemented separately for more flexibility. There are parameters
-used in the process that can be provided, if they are not, they will be
-automatically derived.
+There are four steps performed to create a tesselated hexagon tile map.
+These steps can be executed by the main function, \code{create_hexmap},
+or can be implemented separately for more flexibility. There are
+parameters used in the process that can be provided by users, if they
+are not, they will be automatically derived.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -178,14 +181,14 @@ The following parameters must be provided to \code{create_hexmap}:
 
 The polygon set of Statistical Areas at Level 2 (SA2) \citep{abs2016} of
 Tasmania in 2016 is provided with the \pkg{sugarbag} package as
-\code{tas_sa2}. A single column of the data set must be used to identify
-the unique areas. In this case, the unique SA2 names for each SA2 have
-been used.
+\code{tas_sa2}. A single column of the data set is used to identify the
+unique areas. In this case, the unique SA2 names for each SA2 have been
+used.
 
 The longitude and latitude centre of the capital cities of Australia are
-used to allocate areas around the closest capital city. Hobart will be
-the common focal point, as this example uses only the areas in the state
-of Tasmania.
+used as focal points to allocate each geographic area around the closest
+capital city. Hobart will be the common focal point, as this example
+uses only the areas in the state of Tasmania.
 
 \begin{CodeChunk}
 
@@ -195,8 +198,8 @@ R> data(capital_cities)
 \end{CodeChunk}
 
 The following parameters will be determined within \code{create_hexmap}
-if they are not provided. They are created throughout the following
-example:
+if they are not provided. They are created as they are needed throughout
+the following example:
 
 \begin{itemize}
 \tightlist
@@ -218,10 +221,10 @@ example:
 \subsection{Create the set of centroid
 points}\label{create-the-set-of-centroid-points}}
 
-Individual \pkg{sugarbag} functions can be used outside of the main
-function. The set of polygons should be provided as an \pkg{sf} object,
-this is a data frame containing a \code{geometry} column. The
-\code{read_shape} function can assist in creating this object.
+A set of centroids may be used directly. The set of polygons should be
+provided as an \pkg{sf} object, this is a data frame containing a
+\code{geometry} column. The \code{read_shape} function can assist in
+creating this object for use in \texttt{R}.
 
 The centroids can be derived from the set of polygons using the
 \code{create_centroids} function:
@@ -237,12 +240,12 @@ R> centroids <- create_centroids(shp_sf = tas_sa2, sf_id = "SA2_NAME16")
 \subsection{Create the hexagon grid
 points}\label{create-the-hexagon-grid-points}}
 
-A tilegram presents areas on a tellesated set of tiles. The grid is
-created to ensure tessellation between the hexagons.
+A grid is created to ensure tessellation between the hexagons that
+represent the geographic units on a hexagon tile map.
 
-The grid of possible hexagon centroids is made using the
-\code{create_grid} function. The grid creation requires several steps.
-It uses the centroids, the hexagon size and the buffer distance.
+The grid of possible hexagon locations is made using the
+\code{create_grid} function. It uses the centroids, the hexagon size and
+the buffer distance.
 
 \begin{CodeChunk}
 
@@ -257,18 +260,15 @@ grid}\label{step-1-creating-a-tesselated-grid}}
 
 A set of longitude columns, and latitude rows are created to define the
 locations of the hexagons. The distance between each row and column is
-defined by the size specified as \code{hex_size}. The minimum and
-maximum, longitude and latitude values of the centroid locations are
-found. Equally spaced columns are created from the minimum longitude
-minus the buffer distance, up to the maximum longitude plus the buffer
-distance. The rows are then created from the latitude values and the
-buffer distance. An individual hexagon location is created from all
-intersections of the longitude columns and latitude rows.
-
-A square grid could be used for sqaure tiles, but it will not facilitate
-tessellated hexagons. Figure \ref{fig:grid2} allows for hexagons, as
-every second latitude row on the grid is shifted right, by half of the
-hexagon size.
+the size specified by \code{hex_size}. Equally spaced columns are
+created from the minimum longitude minus the buffer distance, up to the
+maximum longitude plus the buffer distance. Similarly, the rows are
+created from the latitude values and the buffer distance. A unique
+hexagon location is created from all intersections of the longitude
+columns and latitude rows. Figure \ref{fig:grid2} shows the original
+grid on the left, to allow for tessellating hexagons, every second
+latitude row on the grid is shifted right, by half of the hexagon size.
+The grid for tessellation is shown on the right.
 
 \begin{CodeChunk}
 \begin{figure}
@@ -277,7 +277,7 @@ hexagon size.
 
 }
 
-\caption[Grid points to create a tilegram]{Grid points to create a tilegram.}\label{fig:grid2}
+\caption[Grid points to create a tile map]{Grid points to create a tile map.}\label{fig:grid2}
 \end{figure}
 \end{CodeChunk}
 
@@ -285,20 +285,20 @@ hexagon size.
 \subsubsection{Step 2: Rolling windows}\label{step-2-rolling-windows}}
 
 Not all of the grid points will be used, especially if islands result in
-a large grid space. To filter the grid for appropriate points for
-allocation, the \code{create_buffer} function is called within
+a large grid space. To filter the grid for appropriate hexagon locations
+for allocation, the \code{create_buffer} function is used by
 \code{create_grid}. It finds the grid points needed to best capture the
 set of centroids on a hexagon tile map.
 
-For each centroid location, the closest latitude row and longitude
-column are found. Then rows and columns of centroids are divided into 20
-groups. The amount of rows in each latitude group and the amount of
+The closest latitude row and longitude column are found for each
+centroid location. Then rows and columns of centroids are divided into
+20 groups. The amount of rows in each latitude group and the amount of
 columns in each longitude group are used as the width of rolling
-windows. The rolling windows can be seen on the bottom and right of Fig.
-\ref{fig:filter_grid}. This will tailor the available grid points to
-those most likely to be used. It also helps reduce the amount of time
-taken, as it decreases the amount of points considered for each centroid
-allocation.
+windows. The rolling windows can be seen on the bottom and right of the
+gris shown in Fig. \ref{fig:filter_grid}. This will tailor the available
+grid points to those most likely to be used. It also helps reduce the
+amount of time taken, as it decreases the amount of points considered
+for each centroid allocation.
 
 The first rolling window function finds the minimum and maximum centroid
 values for the sliding window groups of longitude columns and the groups
@@ -312,8 +312,12 @@ latitude rows.
 \subsubsection{Step 3: Filtering the
 grid}\label{step-3-filtering-the-grid}}
 
-Only the grid points between the rolling average of the minimum and
-maximum centroid values are kept, for each row and column of the grid.
+The grid points are kept only if they fall between the rolling average
+of the minimum and maximum centroid values after accounting for the
+buffer distance, for each row and column of the grid. The sparsely
+populated South-West region of National Park has much fewer points
+available compared to the South-East region containing the city of
+Hobart.
 
 \begin{CodeChunk}
 \begin{figure}
@@ -322,7 +326,7 @@ maximum centroid values are kept, for each row and column of the grid.
 
 }
 
-\caption[All possible hexagon locations from the initial grid are shown with blue outlines]{All possible hexagon locations from the initial grid are shown with blue outlines. The blue dots shown the grid points left as to choose from after the buffer step. The rolling windows to the right show the rows used to filter the hexagon locations.}\label{fig:filter_grid}
+\caption[All possible hexagon locations from the initial grid are shown with blue outlines]{All possible hexagon locations from the initial grid are shown with blue outlines. The blue dots show the grid points left to choose from after the buffer step. The rolling windows show the collections of rows and columns used to filter the hexagon locations.}\label{fig:filter_grid}
 \end{figure}
 \end{CodeChunk}
 
@@ -333,11 +337,11 @@ distance}\label{centroid-to-focal-point-distance}}
 The distance between each centroid in the set, and each of the focal
 points provided is calculated. The name of the closest focal point, and
 the distance and angle from focal point to polygon centroid is joined to
-polygon data set. To minimise time taken for this step, only Tasmania's
-capital city Hobart is provided. The order for allocation is determined
-by the distance between the polygon centroid and it's closest focal
-point. The points are arranged from the centroid closest to the focal
-points, to the furthest.
+polygon data set. To minimise time taken for this step only one option
+is provided, Tasmania's capital city Hobart. The order for allocation is
+determined by the distance between the polygon centroid and it's closest
+focal point. The points are arranged from the centroid closest to the
+focal point(s), to the furthest.
 
 \hypertarget{allocate-each-centroid-to-a-hexagon-grid-point}{%
 \subsection{Allocate each centroid to a hexagon grid
@@ -348,15 +352,16 @@ centroids and the hexagon map grid. Centroid allocation begins with the
 closest centroid to a focal point. This will preserve spatial
 relationships with the focal point, as the inner city areas are
 allocated first, they will be placed closest to the capital, and the
-areas that are further will then be accommodated. Only the hexagon grid
-points that have not yet been allocated are considered.
+areas that are further will then be accommodated. The possible hexagon
+grid points reduces by one after each allocation, then only those that
+have not yet been allocated are considered.
 
-The possible hexagon locations consider for a centroid location are
-determined by the \code{hex_filter}. This is the maximum amount of
-hexagons between the centroid and the furthest considered hexagon. It is
-used to subset possible grid points to only those surrounding the
-polygon centroid within an appropriate range. A smaller distance will
-increase speed, but can decrease accuracy if the angle width increases.
+The possible hexagon locations to consider for a centroid are determined
+by the \code{hex_filter}. This is the maximum amount of hexagons between
+the centroid and the furthest considered hexagon. It is used to subset
+possible grid points to only those surrounding the polygon centroid
+within an appropriate range. A smaller distance will increase speed, but
+can decrease accuracy when width of the angle increases.
 
 \begin{CodeChunk}
 
@@ -373,25 +378,24 @@ R>   verbose = TRUE)
 \end{CodeInput}
 \end{CodeChunk}
 
-The following example considers one of the Statistical Areas at Level 2.
-Within the algorithm, these steps are repeated for each polygon.
+The following example considers the first of the Statistical Areas at
+Level 2. Within the algorithm, these steps are repeated for each
+polygon.
 
 \hypertarget{step-1-filter-the-grid-for-unassigned-hexagon-points}{%
 \subsubsection{Step 1: Filter the grid for unassigned hexagon
 points}\label{step-1-filter-the-grid-for-unassigned-hexagon-points}}
 
-Keep only the available hexagon points, this will prevent multiple areas
-being allocated to the same hexagon.
+Keeping only the available hexagon points prevents multiple geographic
+units from being allocated to the same hexagon.
 
 \hypertarget{step-2-filter-the-grid-points-for-those-closest-to-the-centroid}{%
 \subsubsection{Step 2: Filter the grid points for those closest to the
 centroid}\label{step-2-filter-the-grid-points-for-those-closest-to-the-centroid}}
 
-This will allow only the closest points that are not yet assigned, to be
-considered.
-
-A box of possible hexagon locations around the centroid. The corners of
-the box may not look square as the buffer has already removed
+A box of possible hexagon locations around the centroid allows only the
+closest points that are not yet assigned to be considered. The corners
+of the box may not appear square if the buffer step has already removed
 unnecessary points from over the ocean.
 
 The algorithm then removes the outer corners of the square, creating a
@@ -410,10 +414,23 @@ distance around the original centroid location.
 \end{CodeChunk}
 
 The \code{width} parameter is used to take a slice of the remaining
-points. This uses the angle from the closest capital city, to the
-current centroid. This allows the spatial relationship to be preserved,
+points. The width is the amount of degrees used on either side of the
+angle from the focal point to centroid location. This uses the angle
+from the closest capital city, to the current centroid as seen in Figure
+\ref{fig:angles} . This allows the spatial relationship to be preserved,
 even when it is allocated to a hexagon that is further from the focal
 point then the original centroid location.
+
+\begin{CodeChunk}
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{figures/5allocate} 
+
+}
+
+\caption[Filter for grid points within the angle from the focal point to the centroid]{Filter for grid points within the angle from the focal point to the centroid.}\label{fig:angles}
+\end{figure}
+\end{CodeChunk}
 
 If no available hexagon grid point is found within the original filter
 distance and angle, the distance is expanded, only when a maximum
@@ -422,11 +439,10 @@ grid points.\\
 By default the angle filter to hexagon grid points that fall within the
 bounds of the angle from the focal point to the geographic centroid,
 plus and minus 30 degrees. This will increase if no points can be found
-within the \code{hex_filter} distance. The angle of 30 was chosen to
-allow the algorithm to choose hexagons that best maintained the spatial
-relationship between the focal point and geographic centroid. The
-allocation is returned and combined with the data relating to each
-polygon.
+within the \code{hex_filter} distance. The default angle of 30 was
+chosen to allow the algorithm to choose hexagons that best maintained
+the spatial relationship between the focal point and geographic
+centroid.
 
 \begin{CodeChunk}
 \begin{figure}
@@ -449,7 +465,7 @@ group of blue areas in the Hobart CBD more prominently in the hexagon
 tile map (b). The small red areas visible in the choropleth map (a)
 along the north coast are much larger in the hexagon tile maps. The
 hexagon tile map shows less yellow, this no longer overwhelms the map
-space with the information regarding the more rural areas.
+space with the information regarding the rural areas.
 
 \begin{CodeChunk}
 \begin{figure}
@@ -465,21 +481,21 @@ space with the information regarding the more rural areas.
 \hypertarget{neighbour-relationships}{%
 \subsection{Neighbour relationships}\label{neighbour-relationships}}
 
-It is possible to incorporate the neighbouring areas for each SA2, for
+It is possible to consider the neighbouring areas for each SA2, for
 stronger preservation of the spatial distribution.
 
 An additional step can be included to allow the neighbours that have
 alredy been allocated to influence the placement of the current
-centroid. This requires respecifying the \code{sf} object as the
-argument for the \code{use_neighbours} parameter. This calculates
-neighbours using intersections of their polygons. This occurs for all
-areas before any allocations begin.
+centroid. This requires specifying the \code{sf} object as the argument
+for the \code{use_neighbours} parameter. This calculates neighbours
+using intersections of their polygons. This occurs for all areas before
+any allocations begin.
 
-For the current centroid, the list of neighbours is consulted. If any
-neighbour was already allocated, the surrounding hexagons on the grid
-are prioritised. For multiple neighbours, the neighbouring hexagon grid
-points are aggregated and considered in order of distance from the
-original centroid.
+During the allocation of each centroid, the list of neighbours is
+consulted. If any neighbour was already allocated, the hexagons
+surrounding the neighbours on the grid are prioritised. For multiple
+neighbours, the neighbouring hexagon grid points are aggregated and
+considered in order of distance from the original centroid.
 
 \hypertarget{using-sugarbag}{%
 \section{Using sugarbag}\label{using-sugarbag}}
@@ -625,9 +641,9 @@ outlined above:
 \section{Animation}\label{animation}}
 
 The \pkg{gganimate} package can be used to make an animation. It
-requires connecting the polygons for each area in two displays two
-displays, which can be done using the \code{sf_id} variable, such as the
-SA2 name. The animation\footnote{This animation can be viewed at:
+requires connecting the polygons for each area in two displays, which
+can be done using the \code{sf_id} variable, such as the SA2 name. The
+animation\footnote{This animation can be viewed at:
   \url{https://sugarbagjss.netlify.com/}} connecting these two displays
 will highlight the rapid growth of the inner-city areas, and will
 decrease the large rural areas. The hexagons that move the furthest will
@@ -639,9 +655,9 @@ move rapidly in the animation.
 It is possible to use alternative maps to communicate spatial
 distributions.While a choropleth map display is the current practice
 spatial visualisation of geographical data. Current methods do not
-always work for Australia due to the large gaps between densely
-populated capital cities. The administrative boundaries may distract
-from the statistics, communicated using colour.
+always work for Australia due to the large geographic space between the
+densely populated capital cities. The administrative boundaries may also
+distract from the statistics communicated using colour.
 
 Alternative maps highlight the value of the statistics across the
 geographic units. Alternative mapping methods allow increased
@@ -652,17 +668,17 @@ recognises that each population area is equally important. The solution
 to this visualisation problem has equally sized areas, with
 neighbourhood boundary connections. This map algorithm is implemented in
 the \pkg{sugarbag} \citet{sugarbag} package written for \code{R}
-\citet{R}. The \pkg{sugarbag} package creates tesselated hexagon
-tilegrams. The Australian application preserves the spatial
-relationships, emphasising capital cities. The hexagon tile map is a
-visualisation solution that highlights spatial distributions.
+\citet{R}. The \pkg{sugarbag} package creates tesselated hexagon tile
+maps. The Australian application preserves the spatial relationships,
+emphasising capital cities. The hexagon tile map is a visualisation
+solution that highlights spatial distributions.
 
 These hexagons equally represent each area. However, the tesselation
 does not allow the size of the hexagons to represent another variable,
 similar to the choropleth maps. The algorithm is heavily dependent on
 the focal points used, as this determines the order of allocation. It
-works on the assumption that viewers can use directional assumptions to
-identify their neighbourhoods, this can be aided by the animation.
+works on the assumption that viewers can use directional relationships
+to identify their neighbourhoods but this can be aided by the animation.
 
 Future work will include refining the algorithm. It would be possible to
 take a logarithmic function rather than a direct angle to help choose a
@@ -684,16 +700,13 @@ many geographic units.
 The authors would like to thank the Australian Cancer Atlas team for
 discussions regarding alternative spatial visualizations. They would
 also like to thank Professor Kerrie Mengersen for suggestions and
-comments. Mitch O'Hara-Wild provided assistance with some parts of the
-algorithm and code. Sayani Gupta provided helpful advice on parts of
+comments. Mitchell O'Hara-Wild provided assistance with some parts of
+the algorithm and code. Sayani Gupta provided helpful advice on parts of
 this paper.
 
 The code for \pkg{sugarbag} \citep{sugarbag} can be found on
 \href{https://cran.r-project.org/web/packages/sugarbag/index.html}{CRAN},
 along with vignettes on installation and usage.
-
-Australian Electoral Data can be found in the \pkg{eechidna} package for
-R.
 
 \bibliography{sugarbag.bib}
 
