@@ -22,8 +22,9 @@ author:
       Brisbane, QLD, Australia
     email: \email{earl.duncan@qut.edu.au}
 title: 
-  formatted: "An Algorithm For Spatial Mapping Using a Hexagon Tile Map, With Application to Australian Maps"
-  plain: "An Algorithm For Spatial Mapping Using a Hexagon Tile Map,\nWith Application to Australian Maps"  
+  formatted: "An Algorithm For Spatial Mapping Using a Hexagon Tile Map, \n With Application to Australian Maps"
+  plain: "An Algorithm For Spatial Mapping Using a Hexagon Tile Map, With Application to Australian Maps"
+  short: "An Algorithm For Spatial Mapping Using a Hexagon Tile Map"  
 abstract: >
   This algorithm creates a tesselated hexagon display to represent each of the spatial polygons. It allocates these hexagon in a manner that preserves the spatial relationship of the geographic units. It showcases spatial distributions, by emphasising the small geographical regions that are often difficult to locate on geographic maps. Spatial distributions have been presented on alternative representations of geography for many years. In modern times, interactivity and animation have begun to play a larger role, as alternative representations have been popularised by online news sites, and atlas websites with a focus on public consumption. Applications are increasingly widespread, especially in the areas of disease mapping, and election results.
 keywords:
@@ -39,6 +40,8 @@ output:
 bibliography: sugarbag.bib
 link-citations: true
 ---
+
+\setcounter{page}{65}
 
 
 ```{r setup, echo=FALSE, message=FALSE, warning=FALSE, comment = FALSE}
