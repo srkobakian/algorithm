@@ -28,7 +28,7 @@ title:
 abstract: >
   This algorithm creates a tesselated hexagon display to represent each of the spatial polygons. It allocates these hexagon in a manner that preserves the spatial relationship of the geographic units. It showcases spatial distributions, by emphasising the small geographical regions that are often difficult to locate on geographic maps. Spatial distributions have been presented on alternative representations of geography for many years. In modern times, interactivity and animation have begun to play a larger role, as alternative representations have been popularised by online news sites, and atlas websites with a focus on public consumption. Applications are increasingly widespread, especially in the areas of disease mapping, and election results.
 keywords:
-  # at least one keyword must be supplied
+  ## at least one keyword must be supplied
   formatted: [spatial, statistics, cartogram]
 preamble: >
   \usepackage{amsmath}
@@ -55,7 +55,7 @@ options("citation_format" = "pandoc")
 BibOptions(check.entries = FALSE, style = "markdown", bib.style = "alphabetic", cite.style = 'alphabetic')
 ```
 
-# Introduction
+## Introduction
 
 <!-- Motivation to map -->
 
@@ -80,7 +80,7 @@ tile maps, Rectangular cartograms \citep{ORC} and Dorling cartograms \citep{ACTU
 The \pkg{sugarbag} package provides a new algorithm to create tesselated hexagon tile maps. 
 It emphasises the capital cities as population hubs, and emphasises the distances rather than size of large, rural geographic units.
 
-# Algorithm
+## Algorithm
 
 The algorithm presented in \pkg{sugarbag} package operates on a set of simple feature geometry objects, also known as \pkg{sf} \citep{sf} polygons.
 
@@ -92,7 +92,7 @@ These steps can be executed by the main function, \code{create_hexmap}, or can b
  3. Allocate each centroid to an available hexagon
  4. Transform the data for plotting
 
-## Parameters
+#### Parameters
 
 The \code{create_hexmap} function requires several parameters, if they are not provided, the information will be derived from the simple features (\pkg{sf}) set of shapes used. Users may choose to only use the \code{allocate} function when they wish to use a set of centroids, rather than \pkg{sf} polygons.
 
@@ -102,7 +102,7 @@ The following parameters must be provided to \code{create_hexmap}:
  - *sf_id:* name of a column that distinguishes unique areas
  - *focal_points:* a data frame of reference locations used to allocate hexagons
  
-## Polygon set
+#### Polygon set
 
 The polygon set of Statistical Areas at Level 2 (SA2) \citep{abs2016} of Tasmania in 2016 is provided with the \pkg{sugarbag} package as \code{tas_sa2}. 
 A single column of the data set is used to identify the unique areas. 
@@ -122,7 +122,7 @@ The following parameters will be determined within \code{create_hexmap} if they 
  - *hex_filter:* amount of hexagons around centroid to consider for allocation
  - *width:* the angle used to filter the grid points around a centroid
  
-## Create the set of centroid points
+#### Create the set of centroid points
 
 A set of centroids may be used directly. The set of polygons should be provided as an \pkg{sf} object, this is a data frame containing a \code{geometry} column. The \code{read_shape} function can assist in creating this object for use in `R`.
 
@@ -136,7 +136,7 @@ centroids <- create_centroids(shp_sf = tas_sa2, sf_id = "SA2_NAME16")
 knitr::include_graphics(path = "figures/1centroids.png")
 ```
 
-## Create the hexagon grid points
+#### Create the hexagon grid points
 
 A grid is created to ensure tessellation between the hexagons that represent the geographic units on a hexagon tile map.
 
@@ -147,7 +147,7 @@ It uses the centroids, the hexagon size and the buffer distance.
 grid <- create_grid(centroids = centroids, hex_size = 0.2, buffer_dist = 1.2)
 ```
 
-### Step 1: Creating a tesselated grid
+###### Step 1: Creating a tesselated grid
 
 A set of longitude columns, and latitude rows are created to define the locations of the hexagons. The distance between each row and column is the size specified by \code{hex_size}.
 Equally spaced columns are created from the minimum longitude minus the buffer distance, up to the maximum longitude plus the buffer distance. Similarly, the rows are created from the latitude values and the buffer distance.
@@ -158,7 +158,7 @@ Figure \ref{fig:grid2} shows the original grid on the left, to allow for tessell
 knitr::include_graphics(path = "figures/2grid.png")
 ```
 
-### Step 2: Rolling windows
+###### Step 2: Rolling windows
 
 Not all of the grid points will be used, especially if islands result in a large grid space.
 To filter the grid for appropriate hexagon locations for allocation, the \code{create_buffer} function is used by \code{create_grid}.
@@ -175,7 +175,7 @@ The first rolling window function finds the minimum and maximum centroid values 
 The second rolling window function finds the average of the rolling minimum and maximum centroid values, for the longitude columns and latitude rows.
 
 
-### Step 3: Filtering the grid
+###### Step 3: Filtering the grid
 
 The grid points are kept only if they fall between the rolling average of the minimum and maximum centroid values after accounting for the buffer distance, for each row and column of the grid. The sparsely populated South-West region of National Park has much fewer points available compared to the South-East region containing the city of Hobart.
 
@@ -183,12 +183,12 @@ The grid points are kept only if they fall between the rolling average of the mi
 knitr::include_graphics(path = "figures/3grid.png", dpi = 300)
 ```
 
-## Centroid to focal point distance 
+#### Centroid to focal point distance 
 
 The distance between each centroid in the set, and each of the focal points provided is calculated. The name of the closest focal point, and the distance and angle from focal point to polygon centroid is joined to polygon data set. To minimise time taken for this step only one option is provided, Tasmania's capital city Hobart.
 The order for allocation is determined by the distance between the polygon centroid and it's closest focal point. The points are arranged from the centroid closest to the focal point(s), to the furthest.
 
-## Allocate each centroid to a hexagon grid point
+#### Allocate each centroid to a hexagon grid point
 
 Allocation of all centroids takes place using the set of polygon centroids and the hexagon map grid. 
 Centroid allocation begins with the closest centroid to a focal point.
@@ -202,7 +202,7 @@ hexmap_allocation <- allocate(
   centroids = centroids %>% select(SA2_NAME16, longitude, latitude),
   sf_id = "SA2_NAME16",
   hex_grid = grid,
-  hex_size = 0.2, # same size used in create_grid
+  hex_size = 0.2, ## same size used in create_grid
   hex_filter = 10,
   width = 35,
   focal_points = capital_cities,
@@ -212,11 +212,11 @@ hexmap_allocation <- allocate(
 The following example considers the first of the Statistical Areas at Level 2. 
 Within the algorithm, these steps are repeated for each polygon.
 
-### Step 1: Filter the grid for unassigned hexagon points
+###### Step 1: Filter the grid for unassigned hexagon points
 
 Keeping only the available hexagon points prevents multiple geographic units from being allocated to the same hexagon.
 
-### Step 2: Filter the grid points for those closest to the centroid
+###### Step 2: Filter the grid points for those closest to the centroid
 
 A box of possible hexagon locations around the centroid allows only the closest points that are not yet assigned to be considered. The corners of the box may not appear square if the buffer step has already removed unnecessary points from over the ocean.
 
@@ -253,7 +253,7 @@ knitr::include_graphics(path = "figures/7SIR.png")
 ```
 
 
-## Neighbour relationships
+#### Neighbour relationships
 
 It is possible to consider the neighbouring areas for each SA2, for stronger preservation of the spatial distribution.
 
@@ -262,9 +262,9 @@ This requires specifying the \code{sf} object as the argument for the \code{use_
 
 During the allocation of each centroid, the list of neighbours is consulted. If any neighbour was already allocated, the hexagons surrounding the neighbours on the grid are prioritised. For multiple neighbours, the neighbouring hexagon grid points are aggregated and considered in order of distance from the original centroid.
 
-# Using sugarbag
+## Using sugarbag
 
-## Installation
+#### Installation
 
 The package can be installed from CRAN:
 
@@ -284,40 +284,40 @@ Load the library into your R session with:
 library(sugarbag)
 ```
 
-## Creating a hexagon tile map
+#### Creating a hexagon tile map
 
 The following code creates the hexagon tile map for all the Statistical Areas at Level 2 in Tasmania.
 
 ```{r full_hexmapcode, echo = TRUE, warning = FALSE, message = FALSE, eval=FALSE}
-# Load data
+## Load data
 data(tas_sa2)
 
-# Create centroids set
+## Create centroids set
 centroids <- create_centroids(tas_sa2, "SA2_NAME16")
 
-# Create hexagon grid
+## Create hexagon grid
 grid <- create_grid(centroids = centroids,
     hex_size = 0.2,
     buffer_dist = 1.2)
 
-# Allocate polygon centroids to hexagon grid points
+## Allocate polygon centroids to hexagon grid points
 hex_allocated <- allocate(
   centroids = centroids,
   hex_grid = grid,
   sf_id = "SA2_NAME16",
-  # same column used in create_centroids
+  ## same column used in create_centroids
   hex_size = 0.2,
-  # same size used in create_grid
+  ## same size used in create_grid
   hex_filter = 10,
   use_neighbours = tas_sa2,
   focal_points = capital_cities %>% filter(points == "Hobart"),
   width = 35,
   verbose = FALSE)
 
-# Prepare to plot
+## Prepare to plot
 fort_hex <- fortify_hexagon(data = hex_allocated, sf_id = "SA2_NAME16", hex_size = 0.2)
 
-# Make a plot
+## Make a plot
 library(ggplot2)
 ggplot(fort_hex) + 
   geom_polygon(aes(x=long, y=lat, group=hex_id, fill = lat)) +
@@ -326,9 +326,9 @@ ggplot(fort_hex) +
 
 
 
-# Applications
+## Applications
 
-## Australian Cancer Atlas
+#### Australian Cancer Atlas
 
 The Australian Cancer Atlas [@TACA] allows estimates derived from the models of Standardised Incidence Rates and excess deaths to be downloaded. 
 Figure \ref{fig:melanoma-geo} is a choropleth map that uses colour to display the estimated Standardised Incidence Rate of melanoma cancer for all persons for each SA2. The Australian choropleth map display draws attention to the expanse of light blue areas across the rural communities in all states. The SA2s around Brisbane stand out as more orange and red.
@@ -354,14 +354,14 @@ knitr::include_graphics("figures/aus_melanoma_p_hex.png")
 ```
 
 
-# Animation 
+## Animation 
 
 The \pkg{gganimate} package can be used to make an animation.
 It requires connecting the polygons for each area in two displays, which can be done using the \code{sf_id} variable, such as the SA2 name.
 The animation^[This animation can be viewed at: https://sugarbagjss.netlify.com/] connecting these two displays will highlight the rapid growth of the inner-city areas, and will decrease the large rural areas. The hexagons that move the furthest will move rapidly in the animation.
 
 
-# Conclusion
+## Conclusion
 
 
 It is possible to use alternative maps to communicate spatial distributions.While a choropleth map display is the current practice spatial visualisation of geographical data. Current methods do not always work for Australia due to the large geographic space between the densely populated capital cities. The administrative boundaries may also distract from the statistics communicated using colour.
@@ -379,7 +379,7 @@ This algorithm has only been tested using single countries, and does not conside
 
 This algorithm is an effective start to creating hexagon tile maps for many geographic units.
 
-# Acknowledgements
+## Acknowledgements
 
 The authors would like to thank the Australian Cancer Atlas team for discussions regarding alternative spatial visualizations. They would also like to thank Professor Kerrie Mengersen for suggestions and comments. Mitchell O'Hara-Wild provided assistance with some parts of the algorithm and code. Sayani Gupta provided helpful advice on parts of this paper. 
 
