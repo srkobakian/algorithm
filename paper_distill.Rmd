@@ -19,9 +19,9 @@ author:
       Department of Econometrics and Business Statistics,
       Melbourne, VIC, Australia
     email: \email{dicook@monash.edu}
-title: An Algorithm For Spatial Mapping Using a Hexagon Tile Map, With Application to Australian Maps
+title: "sugarbag: An Algorithm for Transforming Spatial Polygons into a Hexagon Tile Map, Implemented in R"
 description: >
-  This algorithm creates a tesselated hexagon display to represent each of the spatial polygons. It allocates these hexagon in a manner that preserves the spatial relationship of the geographic units. It showcases spatial distributions, by emphasising the small geographical regions that are often difficult to locate on geographic maps. Spatial distributions have been presented on alternative representations of geography for many years. In modern times, interactivity and animation have begun to play a larger role, as alternative representations have been popularised by online news sites, and atlas websites with a focus on public consumption. Applications are increasingly widespread, especially in the areas of disease mapping, and election results.
+  Maps of geographic areas are constructed from a set of spatial polygons. These are commonly used to create a choropleth map, where polygons are colored to indicate the value of some variable of interest. Information on small areas can get lost on the map, and a solution is to tesselate hexagons so that all areas are equal size. This paper describes a new algorithm to automatically construct a spatial layout of tesselated hexagons, where the hexagons don't need to  be contiguous. The result is called a hexagoon tile map, and the implementation is available in the R package, sugarbag. Applications of choropleth and hence HTM: atlases, ..
 keywords:
   ## at least one keyword must be supplied
   formatted: [spatial, statistics, cartogram]
@@ -30,6 +30,7 @@ preamble: >
 bibliography: sugarbag.bib
 ---
 
+<!-- This algorithm creates a hexagon tile map to represent a set of spatial polygons. It allocates these hexagon in a manner that preserves the spatial relationship of the geographic units. It showcases spatial distributions, by emphasising the small geographical regions that are often difficult to locate on geographic maps. Spatial distributions have been presented on alternative representations of geography for many years. In modern times, interactivity and animation have begun to play a larger role, as alternative representations have been popularised by online news sites, and atlas websites with a focus on public consumption. Applications are increasingly widespread, especially in the areas of disease mapping, and election results.-->
 
 ```{r setup, echo=FALSE, message=FALSE, warning=FALSE, comment = FALSE}
 library(knitcitations)
