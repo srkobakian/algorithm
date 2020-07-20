@@ -72,7 +72,7 @@ especially in the areas of disease mapping, and election results.
 \setcounter{page}{65}
 
 \hypertarget{introduction}{%
-\section{Introduction}\label{introduction}}
+\subsection{Introduction}\label{introduction}}
 
 The current practice for presenting geospatial data is a choropleth map
 display. These maps highlight the geographic patterns in geospatially
@@ -129,7 +129,7 @@ and emphasises the distances rather than size of large, rural geographic
 units.
 
 \hypertarget{algorithm}{%
-\section{Algorithm}\label{algorithm}}
+\subsection{Algorithm}\label{algorithm}}
 
 The algorithm presented in \pkg{sugarbag} package operates on a set of
 simple feature geometry objects, also known as \pkg{sf} \citep{sf}
@@ -155,7 +155,7 @@ are not, they will be automatically derived.
 \end{enumerate}
 
 \hypertarget{parameters}{%
-\subsection{Parameters}\label{parameters}}
+\paragraph{Parameters}\label{parameters}}
 
 The \code{create_hexmap} function requires several parameters, if they
 are not provided, the information will be derived from the simple
@@ -177,7 +177,7 @@ The following parameters must be provided to \code{create_hexmap}:
 \end{itemize}
 
 \hypertarget{polygon-set}{%
-\subsection{Polygon set}\label{polygon-set}}
+\paragraph{Polygon set}\label{polygon-set}}
 
 The polygon set of Statistical Areas at Level 2 (SA2) \citep{abs2016} of
 Tasmania in 2016 is provided with the \pkg{sugarbag} package as
@@ -218,7 +218,7 @@ the following example:
 \end{itemize}
 
 \hypertarget{create-the-set-of-centroid-points}{%
-\subsection{Create the set of centroid
+\paragraph{Create the set of centroid
 points}\label{create-the-set-of-centroid-points}}
 
 A set of centroids may be used directly. The set of polygons should be
@@ -237,7 +237,7 @@ R> centroids <- create_centroids(shp_sf = tas_sa2, sf_id = "SA2_NAME16")
 \end{CodeChunk}
 
 \hypertarget{create-the-hexagon-grid-points}{%
-\subsection{Create the hexagon grid
+\paragraph{Create the hexagon grid
 points}\label{create-the-hexagon-grid-points}}
 
 A grid is created to ensure tessellation between the hexagons that
@@ -254,9 +254,7 @@ R> grid <- create_grid(centroids = centroids, hex_size = 0.2, buffer_dist = 1.2)
 \end{CodeInput}
 \end{CodeChunk}
 
-\hypertarget{step-1-creating-a-tesselated-grid}{%
-\subsubsection{Step 1: Creating a tesselated
-grid}\label{step-1-creating-a-tesselated-grid}}
+Step 1: Creating a tesselated grid
 
 A set of longitude columns, and latitude rows are created to define the
 locations of the hexagons. The distance between each row and column is
@@ -281,8 +279,7 @@ The grid for tessellation is shown on the right.
 \end{figure}
 \end{CodeChunk}
 
-\hypertarget{step-2-rolling-windows}{%
-\subsubsection{Step 2: Rolling windows}\label{step-2-rolling-windows}}
+Step 2: Rolling windows
 
 Not all of the grid points will be used, especially if islands result in
 a large grid space. To filter the grid for appropriate hexagon locations
@@ -308,9 +305,7 @@ The second rolling window function finds the average of the rolling
 minimum and maximum centroid values, for the longitude columns and
 latitude rows.
 
-\hypertarget{step-3-filtering-the-grid}{%
-\subsubsection{Step 3: Filtering the
-grid}\label{step-3-filtering-the-grid}}
+Step 3: Filtering the grid
 
 The grid points are kept only if they fall between the rolling average
 of the minimum and maximum centroid values after accounting for the
@@ -331,7 +326,7 @@ Hobart.
 \end{CodeChunk}
 
 \hypertarget{centroid-to-focal-point-distance}{%
-\subsection{Centroid to focal point
+\paragraph{Centroid to focal point
 distance}\label{centroid-to-focal-point-distance}}
 
 The distance between each centroid in the set, and each of the focal
@@ -344,7 +339,7 @@ focal point. The points are arranged from the centroid closest to the
 focal point(s), to the furthest.
 
 \hypertarget{allocate-each-centroid-to-a-hexagon-grid-point}{%
-\subsection{Allocate each centroid to a hexagon grid
+\paragraph{Allocate each centroid to a hexagon grid
 point}\label{allocate-each-centroid-to-a-hexagon-grid-point}}
 
 Allocation of all centroids takes place using the set of polygon
@@ -370,7 +365,7 @@ R> hexmap_allocation <- allocate(
 R>   centroids = centroids %>% select(SA2_NAME16, longitude, latitude),
 R>   sf_id = "SA2_NAME16",
 R>   hex_grid = grid,
-R>   hex_size = 0.2, # same size used in create_grid
+R>   hex_size = 0.2, ## same size used in create_grid
 R>   hex_filter = 10,
 R>   width = 35,
 R>   focal_points = capital_cities,
@@ -382,16 +377,12 @@ The following example considers the first of the Statistical Areas at
 Level 2. Within the algorithm, these steps are repeated for each
 polygon.
 
-\hypertarget{step-1-filter-the-grid-for-unassigned-hexagon-points}{%
-\subsubsection{Step 1: Filter the grid for unassigned hexagon
-points}\label{step-1-filter-the-grid-for-unassigned-hexagon-points}}
+Step 1: Filter the grid for unassigned hexagon points
 
 Keeping only the available hexagon points prevents multiple geographic
 units from being allocated to the same hexagon.
 
-\hypertarget{step-2-filter-the-grid-points-for-those-closest-to-the-centroid}{%
-\subsubsection{Step 2: Filter the grid points for those closest to the
-centroid}\label{step-2-filter-the-grid-points-for-those-closest-to-the-centroid}}
+Step 2: Filter the grid points for those closest to the centroid
 
 A box of possible hexagon locations around the centroid allows only the
 closest points that are not yet assigned to be considered. The corners
@@ -479,7 +470,7 @@ space with the information regarding the rural areas.
 \end{CodeChunk}
 
 \hypertarget{neighbour-relationships}{%
-\subsection{Neighbour relationships}\label{neighbour-relationships}}
+\paragraph{Neighbour relationships}\label{neighbour-relationships}}
 
 It is possible to consider the neighbouring areas for each SA2, for
 stronger preservation of the spatial distribution.
@@ -498,10 +489,10 @@ neighbours, the neighbouring hexagon grid points are aggregated and
 considered in order of distance from the original centroid.
 
 \hypertarget{using-sugarbag}{%
-\section{Using sugarbag}\label{using-sugarbag}}
+\subsection{Using sugarbag}\label{using-sugarbag}}
 
 \hypertarget{installation}{%
-\subsection{Installation}\label{installation}}
+\paragraph{Installation}\label{installation}}
 
 The package can be installed from CRAN:
 
@@ -531,7 +522,7 @@ R> library(sugarbag)
 \end{CodeChunk}
 
 \hypertarget{creating-a-hexagon-tile-map}{%
-\subsection{Creating a hexagon tile
+\paragraph{Creating a hexagon tile
 map}\label{creating-a-hexagon-tile-map}}
 
 The following code creates the hexagon tile map for all the Statistical
@@ -540,35 +531,35 @@ Areas at Level 2 in Tasmania.
 \begin{CodeChunk}
 
 \begin{CodeInput}
-R> # Load data
+R> ## Load data
 R> data(tas_sa2)
 R> 
-R> # Create centroids set
+R> ## Create centroids set
 R> centroids <- create_centroids(tas_sa2, "SA2_NAME16")
 R> 
-R> # Create hexagon grid
+R> ## Create hexagon grid
 R> grid <- create_grid(centroids = centroids,
 R>     hex_size = 0.2,
 R>     buffer_dist = 1.2)
 R> 
-R> # Allocate polygon centroids to hexagon grid points
+R> ## Allocate polygon centroids to hexagon grid points
 R> hex_allocated <- allocate(
 R>   centroids = centroids,
 R>   hex_grid = grid,
 R>   sf_id = "SA2_NAME16",
-R>   # same column used in create_centroids
+R>   ## same column used in create_centroids
 R>   hex_size = 0.2,
-R>   # same size used in create_grid
+R>   ## same size used in create_grid
 R>   hex_filter = 10,
 R>   use_neighbours = tas_sa2,
 R>   focal_points = capital_cities %>% filter(points == "Hobart"),
 R>   width = 35,
 R>   verbose = FALSE)
 R> 
-R> # Prepare to plot
+R> ## Prepare to plot
 R> fort_hex <- fortify_hexagon(data = hex_allocated, sf_id = "SA2_NAME16", hex_size = 0.2)
 R> 
-R> # Make a plot
+R> ## Make a plot
 R> library(ggplot2)
 R> ggplot(fort_hex) + 
 R>   geom_polygon(aes(x=long, y=lat, group=hex_id, fill = lat)) +
@@ -577,10 +568,10 @@ R>   scale_fill_distiller("", palette="PRGn")
 \end{CodeChunk}
 
 \hypertarget{applications}{%
-\section{Applications}\label{applications}}
+\subsection{Applications}\label{applications}}
 
 \hypertarget{australian-cancer-atlas}{%
-\subsection{Australian Cancer Atlas}\label{australian-cancer-atlas}}
+\paragraph{Australian Cancer Atlas}\label{australian-cancer-atlas}}
 
 The Australian Cancer Atlas \citep{TACA} allows estimates derived from
 the models of Standardised Incidence Rates and excess deaths to be
@@ -638,7 +629,7 @@ outlined above:
 \end{figure}
 
 \hypertarget{animation}{%
-\section{Animation}\label{animation}}
+\subsection{Animation}\label{animation}}
 
 The \pkg{gganimate} package can be used to make an animation. It
 requires connecting the polygons for each area in two displays, which
@@ -650,7 +641,7 @@ decrease the large rural areas. The hexagons that move the furthest will
 move rapidly in the animation.
 
 \hypertarget{conclusion}{%
-\section{Conclusion}\label{conclusion}}
+\subsection{Conclusion}\label{conclusion}}
 
 It is possible to use alternative maps to communicate spatial
 distributions.While a choropleth map display is the current practice
@@ -695,7 +686,7 @@ This algorithm is an effective start to creating hexagon tile maps for
 many geographic units.
 
 \hypertarget{acknowledgements}{%
-\section{Acknowledgements}\label{acknowledgements}}
+\subsection{Acknowledgements}\label{acknowledgements}}
 
 The authors would like to thank the Australian Cancer Atlas team for
 discussions regarding alternative spatial visualizations. They would
