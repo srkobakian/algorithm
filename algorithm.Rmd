@@ -1,5 +1,5 @@
 ---
-title: A Hexagon Tile Map Algorithm For Spatial Mapping To Create Alternative Australian Maps
+title: A Hexagon Tile Map Algorithm for Displaying Spatial Data
 author:
   # see ?rjournal_article for more information
   - name: Stephanie Kobakian
@@ -53,7 +53,7 @@ The solutions to this visualisation problem begin with the geography. Alternativ
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=14cm]{figures/aus_melanoma_p.pdf}
+\includegraphics[width=14cm]{figs/aus_melanoma_p.pdf}
 \caption{\label{fig:melanoma-geo}A choropleth map of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated SIR of Melanoma for males, they range from much lower than average (blue) to much higher than average (red)}
 \end{figure}
 
@@ -75,7 +75,7 @@ The unique shapes of boundaries can be helpful for orienting users but may not c
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=14cm]{figures/qld_grid.pdf}
+\includegraphics[width=14cm]{figs/qld_grid.pdf}
 \caption{\label{fig:qld_grid}A collection of alternative maps of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated SIR of Melanoma for males, ranging from much lower than average (blue) to much higher than average (red)}
 \end{figure}
 
@@ -101,7 +101,7 @@ The algorithm is named for the *Trigona carbonaria* bee species. Native to north
 There are three key steps performed to create a tessellated hexagon tile map. First create the set of centroids from the polygons to allocate, then create the grid of hexagons locations. Each centroid can then be allocated to an available hexagon location. To make tessellated plots the points can be converted to hexagon shapes, with the hexagon size equal to the size used in the grid.
 
 \begin{figure}
-\includegraphics[width=14cm]{figures/flowchart.pdf}
+\includegraphics[width=14cm]{figs/flowchart.pdf}
 \caption{\label{fig:sugarbag_flow}A flow diagram detailing the necessary steps to create a hexagon tile map.}
 \end{figure}
 
@@ -228,7 +228,7 @@ qld_hexmap
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=14cm]{figures/aus_gghexmap.pdf}
+\includegraphics[width=14cm]{figs/aus_gghexmap.pdf}
 \caption{\label{fig:melanoma-hex}A hexagon tile map of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated SIR, they range from much lower than average (blue) to much higher than average (red)}
 \end{figure}
 
@@ -260,7 +260,7 @@ centroids <- create_centroids(shp_sf = tas_sa2, sf_id = "SA2_NAME16")
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=14cm]{figures/1centroids.pdf}
+\includegraphics[width=14cm]{figs/1centroids.pdf}
 \caption{\label{fig:centroids_plot}The geographic shapes of the Statistical Areas of Queensland at Level 2. The points show the locations of the centroids of the SA2 areas.}
 \end{figure}
 
@@ -292,7 +292,7 @@ Figure \ref{fig:grid2} shows the original grid on the left, to allow for tessell
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=16cm]{figures/2grid.pdf}
+\includegraphics[width=16cm]{figs/2grid.pdf}
 \caption{\label{fig:grid2}Grid points to create a hexagon tile map.}
 \end{figure}
 
@@ -324,7 +324,7 @@ The grid points are kept only if they fall between the rolling average of the mi
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=10cm]{figures/3grid.pdf}
+\includegraphics[width=10cm]{figs/3grid.pdf}
 \caption{\label{fig:filter-grid}The remaining hexagon locations from all the possible points in the initial grid after the buffer is applied. The blue dots show the grid points left to choose from after the buffer step.}
 \end{figure}
 
@@ -374,7 +374,7 @@ The algorithm then removes the outer corners of the square, creating a circle of
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=16cm]{figures/4grid.pdf}
+\includegraphics[width=16cm]{figs/4grid.pdf}
 \caption{\label{fig:buffers}The remaining available hexagon locations after filtering for the grid points within a square distance, then circular around the centroid.}
 \end{figure}
 
@@ -388,7 +388,7 @@ The `width` parameter is used to take a slice of the remaining points. The width
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=16cm]{figures/5allocate.pdf}
+\includegraphics[width=16cm]{figs/5allocate.pdf}
 \caption{\label{fig:angles}The remaining available hexagon locations after filtering for grid points within the angle from the focal point to the centroid.}
 \end{figure}
 
@@ -405,7 +405,7 @@ By default the angle filter to hexagon grid points that fall within the bounds o
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=16cm]{figures/6allocate.pdf}
+\includegraphics[width=16cm]{figs/6allocate.pdf}
 \caption{\label{fig:buffs}A complete hexagon tile map of Queensland.}
 \end{figure}
 
@@ -421,7 +421,7 @@ The small red areas visible in the choropleth map (a) along the north coast are 
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=14cm]{figures/7SIR.pdf}
+\includegraphics[width=14cm]{figs/7SIR.pdf}
 \caption{\label{fig:sir}The Australian Cancer Atlas data displayed on a choropleth and hexagon tile map. The colour of each Statistical Area of Australian at Level 2 coloured by SIR. A choropleth map (a) of SIR is paired with a hexagon tile map (b) to contrast the colours that are made obvious when every SA2 is equally represented.}
 \end{figure}
 
@@ -444,7 +444,7 @@ Compared to the choropleth map display, the low rates in the rural Australian co
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=14cm]{figures/aus_gghexmap.pdf}
+\includegraphics[width=14cm]{figs/aus_gghexmap.pdf}
 \caption{\label{fig:melanoma-geo}A hexagon tile map of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated SIR of Melanoma for males, they range from much lower than average (blue) to much higher than average (red).}
 \end{figure}
 
