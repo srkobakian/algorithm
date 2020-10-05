@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2020.10.5)  5 OCT 2020 13:20
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2020.10.5)  5 OCT 2020 14:03
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -969,32 +969,9 @@ Package hyperref Warning: Difference (2) between bookmark levels is greater
 (hyperref)                than one, level fixed on input line 23.
 
 
-Package natbib Warning: Citation `TACA' on page 1 undefined on input line 26.
-
-
-Package natbib Warning: Citation `SAMGIS' on page 1 undefined on input line 31.
-
-
-
-Package natbib Warning: Citation `ACTUC' on page 1 undefined on input line 34.
-
-
-Package natbib Warning: Citation `EI' on page 1 undefined on input line 38.
-
-
 Package natbib Warning: Citation `BCM' on page 1 undefined on input line 41.
 
-
-Package natbib Warning: Citation `abs2011' on page 1 undefined on input line 45
-.
-
-
-Package natbib Warning: Citation `ACCAC' on page 1 undefined on input line 53.
-
-
-Package natbib Warning: Citation `ACCAC' on page 1 undefined on input line 57.
-
-<figs/aus_melanoma_p.png, id=40, 722.7pt x 722.7pt>
+<figs/aus_melanoma_p.png, id=53, 722.7pt x 722.7pt>
 File: figs/aus_melanoma_p.png Graphic file (type png)
 <use figs/aus_melanoma_p.png>
 Package pdftex.def Info: figs/aus_melanoma_p.png  used on input line 62.
@@ -1019,28 +996,7 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 
-Package natbib Warning: Citation `ORC' on page 1 undefined on input line 83.
-
-
-Package natbib Warning: Citation `ACTUC' on page 1 undefined on input line 84.
-
-
 LaTeX Warning: Reference `fig:nsw_grid' on page 1 undefined on input line 89.
-
-
-Package natbib Warning: Citation `abs2011' on page 1 undefined on input line 92
-.
-
-
-Package natbib Warning: Citation `ACTUC' on page 1 undefined on input line 99.
-
-
-Package natbib Warning: Citation `TVSSS' on page 1 undefined on input line 102.
-
-
-
-Package natbib Warning: Citation `CBATCC' on page 1 undefined on input line 104
-.
 
 
 LaTeX Warning: Reference `fig:nsw_grid' on page 1 undefined on input line 105.
@@ -1049,7 +1005,7 @@ LaTeX Warning: Reference `fig:nsw_grid' on page 1 undefined on input line 105.
 map/pdftex.map}
 
 ] [2 <./figs/aus_melanoma_p.png>] [3]
-<kobakian-cook_files/figure-latex/fullhexmap-1.pdf, id=64, 469.755pt x 325.215p
+<kobakian-cook_files/figure-latex/fullhexmap-1.pdf, id=99, 469.755pt x 325.215p
 t>
 File: kobakian-cook_files/figure-latex/fullhexmap-1.pdf Graphic file (type pdf)
 
@@ -1067,8 +1023,9 @@ Underfull \hbox (badness 10000) in paragraph at lines 208--209
 
  []
 
-<kobakian-cook_files/figure-latex/alternatives-1.pdf, id=65, 469.755pt x 325.21
-5pt>
+[4 <./kobakian-cook_files/figure-latex/fullhexmap-1.pdf>]
+<kobakian-cook_files/figure-latex/alternatives-1.pdf, id=107, 469.755pt x 325.2
+15pt>
 File: kobakian-cook_files/figure-latex/alternatives-1.pdf Graphic file (type pd
 f)
 <use kobakian-cook_files/figure-latex/alternatives-1.pdf>
@@ -1080,9 +1037,8 @@ Overfull \hbox (86.41528pt too wide) in paragraph at lines 237--237
 [][] 
  []
 
-[4 <./kobakian-cook_files/figure-latex/fullhexmap-1.pdf>]
-<kobakian-cook_files/figure-latex/unnamed-chunk-1-1.pdf, id=73, 469.755pt x 325
-.215pt>
+<kobakian-cook_files/figure-latex/unnamed-chunk-1-1.pdf, id=108, 469.755pt x 32
+5.215pt>
 File: kobakian-cook_files/figure-latex/unnamed-chunk-1-1.pdf Graphic file (type
  pdf)
 <use kobakian-cook_files/figure-latex/unnamed-chunk-1-1.pdf>
@@ -1095,8 +1051,8 @@ Overfull \hbox (86.41528pt too wide) in paragraph at lines 265--265
  []
 
 [5 <./kobakian-cook_files/figure-latex/alternatives-1.pdf>]
-<kobakian-cook_files/figure-latex/unnamed-chunk-1-2.pdf, id=81, 469.755pt x 325
-.215pt>
+<kobakian-cook_files/figure-latex/unnamed-chunk-1-2.pdf, id=116, 469.755pt x 32
+5.215pt>
 File: kobakian-cook_files/figure-latex/unnamed-chunk-1-2.pdf Graphic file (type
  pdf)
 <use kobakian-cook_files/figure-latex/unnamed-chunk-1-2.pdf>
@@ -1109,8 +1065,8 @@ Overfull \hbox (86.41528pt too wide) in paragraph at lines 283--283
  []
 
 [6 <./kobakian-cook_files/figure-latex/unnamed-chunk-1-1.pdf>]
-<kobakian-cook_files/figure-latex/unnamed-chunk-2-1.pdf, id=89, 469.755pt x 325
-.215pt>
+<kobakian-cook_files/figure-latex/unnamed-chunk-2-1.pdf, id=124, 469.755pt x 32
+5.215pt>
 File: kobakian-cook_files/figure-latex/unnamed-chunk-2-1.pdf Graphic file (type
  pdf)
 <use kobakian-cook_files/figure-latex/unnamed-chunk-2-1.pdf>
@@ -1123,7 +1079,8 @@ Overfull \hbox (86.41528pt too wide) in paragraph at lines 307--307
  []
 
 [7 <./kobakian-cook_files/figure-latex/unnamed-chunk-1-2.pdf>]
-<kobakian-cook_files/figure-latex/mapgrid-1.pdf, id=98, 469.755pt x 325.215pt>
+<kobakian-cook_files/figure-latex/mapgrid-1.pdf, id=133, 469.755pt x 325.215pt>
+
 File: kobakian-cook_files/figure-latex/mapgrid-1.pdf Graphic file (type pdf)
 <use kobakian-cook_files/figure-latex/mapgrid-1.pdf>
 Package pdftex.def Info: kobakian-cook_files/figure-latex/mapgrid-1.pdf  used o
@@ -1136,36 +1093,10 @@ Overfull \hbox (86.41528pt too wide) in paragraph at lines 324--324
 
 [8 <./kobakian-cook_files/figure-latex/unnamed-chunk-2-1.pdf>]
 
-Package natbib Warning: Citation `TVSSS' on page 9 undefined on input line 332.
-
-
-
 LaTeX Warning: Reference `fig:nsw_grid' on page 9 undefined on input line 335.
 
 
-Package natbib Warning: Citation `DMAHP' on page 9 undefined on input line 337.
-
-
-
-Package natbib Warning: Citation `TVSSS' on page 9 undefined on input line 341.
-
-
-
 LaTeX Warning: Reference `fig:nsw_grid' on page 9 undefined on input line 345.
-
-
-Package natbib Warning: Citation `NAC' on page 9 undefined on input line 350.
-
-
-Package natbib Warning: Citation `ECGC' on page 9 undefined on input line 351.
-
-
-Package natbib Warning: Citation `TVSSS' on page 9 undefined on input line 357.
-
-
-
-Package natbib Warning: Citation `ACTUC' on page 9 undefined on input line 361.
-
 
 
 LaTeX Warning: Reference `fig:nsw_grid' on page 9 undefined on input line 361.
@@ -1174,26 +1105,13 @@ LaTeX Warning: Reference `fig:nsw_grid' on page 9 undefined on input line 361.
 LaTeX Warning: Reference `fig:nsw_grid' on page 9 undefined on input line 365.
 
 [9 <./kobakian-cook_files/figure-latex/mapgrid-1.pdf>]
-
-Package natbib Warning: Citation `PH' on page 10 undefined on input line 382.
-
-<figs/sugarbag flow.png, id=116, 805.0075pt x 772.8875pt>
+<figs/sugarbag flow.png, id=171, 805.0075pt x 772.8875pt>
 File: figs/sugarbag flow.png Graphic file (type png)
 <use figs/sugarbag flow.png>
 Package pdftex.def Info: figs/sugarbag flow.png  used on input line 397.
 (pdftex.def)             Requested size: 398.33858pt x 382.44487pt.
 [10 <./figs/sugarbag flow.png>]
-
-Package natbib Warning: Citation `sf' on page 11 undefined on input line 453.
-
-
-Package natbib Warning: Citation `sf' on page 11 undefined on input line 480.
-
-
-Package natbib Warning: Citation `abs2011' on page 11 undefined on input line 4
-91.
-
-<figs/1centroids.png, id=125, 722.7pt x 361.35pt>
+<figs/1centroids.png, id=187, 722.7pt x 361.35pt>
 File: figs/1centroids.png Graphic file (type png)
 <use figs/1centroids.png>
 Package pdftex.def Info: figs/1centroids.png  used on input line 533.
@@ -1202,7 +1120,7 @@ Package pdftex.def Info: figs/1centroids.png  used on input line 533.
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [11]
-<figs/2grid.png, id=136, 867.24pt x 433.62pt>
+<figs/2grid.png, id=199, 867.24pt x 433.62pt>
 File: figs/2grid.png Graphic file (type png)
 <use figs/2grid.png>
 Package pdftex.def Info: figs/2grid.png  used on input line 572.
@@ -1213,13 +1131,13 @@ Overfull \hbox (56.9055pt too wide) in paragraph at lines 572--573
  []
 
 [12 <./figs/1centroids.png> <./figs/2grid.png>]
-<figs/3grid.png, id=148, 361.35pt x 361.35pt>
+<figs/3grid.png, id=211, 361.35pt x 361.35pt>
 File: figs/3grid.png Graphic file (type png)
 <use figs/3grid.png>
 Package pdftex.def Info: figs/3grid.png  used on input line 615.
 (pdftex.def)             Requested size: 284.52756pt x 284.53156pt.
 [13 <./figs/3grid.png>]
-<figs/4grid.png, id=160, 722.7pt x 361.35pt>
+<figs/4grid.png, id=222, 722.7pt x 361.35pt>
 File: figs/4grid.png Graphic file (type png)
 <use figs/4grid.png>
 Package pdftex.def Info: figs/4grid.png  used on input line 692.
@@ -1229,7 +1147,7 @@ Overfull \hbox (56.9055pt too wide) in paragraph at lines 692--693
  [][] 
  []
 
-<figs/5allocate.png, id=162, 578.16pt x 686.565pt>
+<figs/5allocate.png, id=224, 578.16pt x 686.565pt>
 File: figs/5allocate.png Graphic file (type png)
 <use figs/5allocate.png>
 Package pdftex.def Info: figs/5allocate.png  used on input line 706.
@@ -1243,7 +1161,7 @@ Overfull \hbox (56.9055pt too wide) in paragraph at lines 706--707
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [14 <./figs/4grid.png>]
-<figs/6allocate.png, id=172, 722.7pt x 361.35pt>
+<figs/6allocate.png, id=234, 722.7pt x 361.35pt>
 File: figs/6allocate.png Graphic file (type png)
 <use figs/6allocate.png>
 Package pdftex.def Info: figs/6allocate.png  used on input line 724.
@@ -1256,25 +1174,13 @@ Overfull \hbox (56.9055pt too wide) in paragraph at lines 724--725
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-
-Package natbib Warning: Citation `TACA' on page 15 undefined on input line 730.
-
-
-<figs/7SIR.png, id=174, 794.97pt x 505.89pt>
+<figs/7SIR.png, id=238, 794.97pt x 505.89pt>
 File: figs/7SIR.png Graphic file (type png)
 <use figs/7SIR.png>
 Package pdftex.def Info: figs/7SIR.png  used on input line 742.
 (pdftex.def)             Requested size: 398.33858pt x 253.49243pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-Package natbib Warning: Citation `gganimate' on page 15 undefined on input line
- 791.
-
-
-Package natbib Warning: Citation `sugarbag' on page 15 undefined on input line 
-818.
 
 [15]
 
@@ -1285,25 +1191,130 @@ LaTeX Warning: Reference `fig:nsw_grid' on page 16 undefined on input line 848.
 LaTeX Warning: Reference `fig:melanoma-hex' on page 16 undefined on input line 
 855.
 
-(./RJwrapper.bbl
-No file RJwrapper.brf.
+(./RJwrapper.bbl (./RJwrapper.brf)
 \tf@brf=\write6
 \openout6 = `RJwrapper.brf'.
 
-Runaway argument?
- {ABS}. \newblock Statistical area level 2 (sa2) asgs ed 2011 digital\ETC.
-! Paragraph ended before \BR@@lbibitem was complete.
-<to be read again> 
-                   \par 
-l.14 
-      
-Here is how much of TeX's memory you used:
- 22092 strings out of 481886
- 416555 string characters out of 5929870
- 723715 words of memory out of 5000000
- 37739 multiletter control sequences out of 15000+600000
- 559728 words of font info for 150 fonts, out of 8000000 for 9000
- 14 hyphenation exceptions out of 8191
- 108i,12n,122p,469b,675s stack positions out of 5000i,500n,10000p,200000b,80000s
+LaTeX Font Info:    Trying to load font information for OT1+ppl on input line 1
+9.
 
-!  ==> Fatal error occurred, no output PDF file produced!
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ot1p
+pl.fd
+File: ot1ppl.fd 2001/06/04 font definitions for OT1/ppl.
+)
+LaTeX Font Info:    Trying to load font information for OML+zplm on input line 
+19.
+
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/omlz
+plm.fd
+File: omlzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OML/zplm.
+)
+LaTeX Font Info:    Trying to load font information for OMS+zplm on input line 
+19.
+
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/omsz
+plm.fd
+File: omszplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMS/zplm.
+)
+LaTeX Font Info:    Trying to load font information for OMX+zplm on input line 
+19.
+
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/omxz
+plm.fd
+File: omxzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMX/zplm.
+)
+LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 
+19.
+
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ot1z
+plm.fd
+File: ot1zplm.fd 2002/09/08 Fontinst v1.914 font definitions for OT1/zplm.
+)
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `zplm' (encoding: OT1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+LaTeX Font Info:    Font shape `U/msa/m/n' will be
+(Font)              scaled to size 9.37807pt on input line 19.
+
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/m
+t-msa.cfg
+File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
+)
+LaTeX Font Info:    Font shape `U/msa/m/n' will be
+(Font)              scaled to size 7.29405pt on input line 19.
+LaTeX Font Info:    Font shape `U/msa/m/n' will be
+(Font)              scaled to size 5.21004pt on input line 19.
+LaTeX Font Info:    Font shape `U/msb/m/n' will be
+(Font)              scaled to size 9.37807pt on input line 19.
+
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/m
+t-msb.cfg
+File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
+)
+LaTeX Font Info:    Font shape `U/msb/m/n' will be
+(Font)              scaled to size 7.29405pt on input line 19.
+LaTeX Font Info:    Font shape `U/msb/m/n' will be
+(Font)              scaled to size 5.21004pt on input line 19.
+[16]
+Underfull \hbox (badness 10000) in paragraph at lines 53--53
+[]\T1/ppl/m/n/9 (+20) S. Kobakian and D. Cook.  \T1/ppl/m/it/9 (+20) sug-arbag:
+ Cre-ate Tes-sel-lated Hexagon Maps\T1/ppl/m/n/9 (+20) , 2019.
+ []
+
+)
+
+LaTeX Font Warning: Font shape `T1/zi4/m/it' undefined
+(Font)              using `T1/zi4/m/n' instead on input line 911.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 911--912
+
+ []
+
+LaTeX Font Info:    Font shape `T1/zi4/m/it' will be
+(Font)              scaled to size 9.18004pt on input line 921.
+)
+Underfull \hbox (badness 10000) in paragraph at lines 921--25
+
+ []
+
+[17] [18 <./figs/5allocate.png>] [19 <./figs/6allocate.png> <./figs/7SIR.png>]
+
+Package natbib Warning: There were undefined citations.
+
+(./RJwrapper.aux)
+Package rerunfilecheck Info: File `RJwrapper.out' has not changed.
+(rerunfilecheck)             Checksum: AB2159DC5D6A0609C2EBE8024BFD6866;601.
+Package rerunfilecheck Info: File `RJwrapper.brf' has not changed.
+(rerunfilecheck)             Checksum: E8A25E724556B3686D245C041674F9F0;1299.
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+
+LaTeX Warning: There were undefined references.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 22379 strings out of 481886
+ 421104 string characters out of 5929870
+ 728426 words of memory out of 5000000
+ 37950 multiletter control sequences out of 15000+600000
+ 568226 words of font info for 185 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 108i,12n,122p,474b,675s stack positions out of 5000i,500n,10000p,200000b,80000s
+{c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/inc
+onsolata/i4-t1-0.enc}{c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/
+fonts/enc/dvips/base/8r.enc}<c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texm
+f-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb><c:/Users/Mr. Norman
+by/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb><c:/U
+sers/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/u
+plr8a.pfb><c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1
+/urw/palatino/uplri8a.pfb>
+Output written on RJwrapper.pdf (19 pages, 2445249 bytes).
+PDF statistics:
+ 349 PDF objects out of 1000 (max. 8388607)
+ 291 compressed objects within 3 object streams
+ 76 named destinations out of 1000 (max. 500000)
+ 30360 words of extra memory for PDF output out of 35830 (max. 10000000)
+
