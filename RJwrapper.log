@@ -1,161 +1,168 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2020.10.2)  2 OCT 2020 13:57
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2020.10.5)  5 OCT 2020 13:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **RJwrapper.tex
 (./RJwrapper.tex
-LaTeX2e <2020-02-02> patch level 5
-L3 programming layer <2020-09-24> (c:/Users/steff/AppData/Roaming/TinyTeX/texmf
--dist/tex/latex/base/report.cls
-Document Class: report 2019/12/20 v1.4l Standard LaTeX document class
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/size10.clo
-File: size10.clo 2019/12/20 v1.4l Standard LaTeX file (size option)
+LaTeX2e <2020-10-01>
+L3 programming layer <2020-09-24> xparse <2020-03-03>
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/report
+.cls
+Document Class: report 2020/04/10 v1.4m Standard LaTeX document class
+
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/size10
+.clo
+File: size10.clo 2020/04/10 v1.4m Standard LaTeX file (size option)
 )
-\c@part=\count168
-\c@chapter=\count169
-\c@section=\count170
-\c@subsection=\count171
-\c@subsubsection=\count172
-\c@paragraph=\count173
-\c@subparagraph=\count174
-\c@figure=\count175
-\c@table=\count176
+\c@part=\count175
+\c@chapter=\count176
+\c@section=\count177
+\c@subsection=\count178
+\c@subsubsection=\count179
+\c@paragraph=\count180
+\c@subparagraph=\count181
+\c@figure=\count182
+\c@table=\count183
 \abovecaptionskip=\skip47
 \belowcaptionskip=\skip48
-\bibindent=\dimen134
-) (c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/inputenc.st
-y
-Package: inputenc 2018/08/11 v1.3c Input encoding file
+\bibindent=\dimen138
+)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/inpute
+nc.sty
+Package: inputenc 2020/08/01 v1.3d Input encoding file
 \inpenc@prehook=\toks15
 \inpenc@posthook=\toks16
-) (c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/fontenc.sty
-Package: fontenc 2020/02/11 v2.0o Standard LaTeX package
+)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/fonten
+c.sty
+Package: fontenc 2020/08/10 v2.0s Standard LaTeX package
 ) (./RJournal.sty
 Package: RJournal 2013/08/27 v0.13 RJournal package
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/frontendlayer/
-tikz.sty
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/basiclayer/pgf
-.sty
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/utilities/pgfr
-cs.sty
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pg
-futil-common.tex
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/fronten
+dlayer/tikz.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/basicla
+yer/pgf.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/utiliti
+es/pgfrcs.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utili
+ties/pgfutil-common.tex
 \pgfutil@everybye=\toks17
-\pgfutil@tempdima=\dimen135
-\pgfutil@tempdimb=\dimen136
+\pgfutil@tempdima=\dimen139
+\pgfutil@tempdimb=\dimen140
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pg
-futil-common-lists.tex))
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pg
-futil-latex.def
-\pgfutil@abb=\box45
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/ms/everyshi.sty
-Package: everyshi 2001/05/15 v3.00 EveryShipout Package (MS)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utili
+ties/pgfutil-common-lists.tex))
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utili
+ties/pgfutil-latex.def
+\pgfutil@abb=\box47
+)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utili
+ties/pgfrcs.code.tex
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/pgf.r
+evision.tex)
+Package: pgfrcs 2020/10/01 v3.1.6a (3.1.6a)
 ))
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pg
-frcs.code.tex
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/pgf.revision
-.tex)
-Package: pgfrcs 2020/09/28 v3.1.6 (3.1.6)
-))
-Package: pgf 2020/09/28 v3.1.6 (3.1.6)
+Package: pgf 2020/10/01 v3.1.6a (3.1.6a)
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/basiclayer/pgf
-core.sty
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/graphicx.
-sty
-Package: graphicx 2019/11/30 v1.2a Enhanced LaTeX Graphics (DPC,SPQR)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/basicla
+yer/pgfcore.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/gr
+aphicx.sty
+Package: graphicx 2020/09/09 v1.2b Enhanced LaTeX Graphics (DPC,SPQR)
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/keyval.st
-y
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/ke
+yval.sty
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 \KV@toks@=\toks18
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/graphics.
-sty
-Package: graphics 2019/11/30 v1.4a Standard LaTeX Graphics (DPC,SPQR)
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/trig.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/gr
+aphics.sty
+Package: graphics 2020/08/30 v1.4c Standard LaTeX Graphics (DPC,SPQR)
+
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/tr
+ig.sty
 Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-cfg/graph
-ics.cfg
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-cf
+g/graphics.cfg
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
 Package graphics Info: Driver file: pdftex.def on input line 105.
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-def/pdfte
-x.def
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-de
+f/pdftex.def
 File: pdftex.def 2020/08/26 v1.2 Graphics/color driver for pdftex
 ))
-\Gin@req@height=\dimen137
-\Gin@req@width=\dimen138
+\Gin@req@height=\dimen141
+\Gin@req@width=\dimen142
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/systemlayer/pg
-fsys.sty
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/
-pgfsys.code.tex
-Package: pgfsys 2020/09/28 v3.1.6 (3.1.6)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/systeml
+ayer/pgfsys.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/syste
+mlayer/pgfsys.code.tex
+Package: pgfsys 2020/10/01 v3.1.6a (3.1.6a)
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pg
-fkeys.code.tex
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utili
+ties/pgfkeys.code.tex
 \pgfkeys@pathtoks=\toks19
 \pgfkeys@temptoks=\toks20
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pg
-fkeysfiltered.code.tex
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utili
+ties/pgfkeysfiltered.code.tex
 \pgfkeys@tmptoks=\toks21
 ))
-\pgf@x=\dimen139
-\pgf@y=\dimen140
-\pgf@xa=\dimen141
-\pgf@ya=\dimen142
-\pgf@xb=\dimen143
-\pgf@yb=\dimen144
-\pgf@xc=\dimen145
-\pgf@yc=\dimen146
-\pgf@xd=\dimen147
-\pgf@yd=\dimen148
+\pgf@x=\dimen143
+\pgf@y=\dimen144
+\pgf@xa=\dimen145
+\pgf@ya=\dimen146
+\pgf@xb=\dimen147
+\pgf@yb=\dimen148
+\pgf@xc=\dimen149
+\pgf@yc=\dimen150
+\pgf@xd=\dimen151
+\pgf@yd=\dimen152
 \w@pgf@writea=\write3
 \r@pgf@reada=\read2
-\c@pgf@counta=\count177
-\c@pgf@countb=\count178
-\c@pgf@countc=\count179
-\c@pgf@countd=\count180
+\c@pgf@counta=\count184
+\c@pgf@countb=\count185
+\c@pgf@countc=\count186
+\c@pgf@countd=\count187
 \t@pgf@toka=\toks22
 \t@pgf@tokb=\toks23
 \t@pgf@tokc=\toks24
-\pgf@sys@id@count=\count181
+\pgf@sys@id@count=\count188
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/
-pgf.cfg
-File: pgf.cfg 2020/09/28 v3.1.6 (3.1.6)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/syste
+mlayer/pgf.cfg
+File: pgf.cfg 2020/10/01 v3.1.6a (3.1.6a)
 )
 Driver file for pgf: pgfsys-pdftex.def
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/
-pgfsys-pdftex.def
-File: pgfsys-pdftex.def 2020/09/28 v3.1.6 (3.1.6)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/syste
+mlayer/pgfsys-pdftex.def
+File: pgfsys-pdftex.def 2020/10/01 v3.1.6a (3.1.6a)
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/
-pgfsys-common-pdf.def
-File: pgfsys-common-pdf.def 2020/09/28 v3.1.6 (3.1.6)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/syste
+mlayer/pgfsys-common-pdf.def
+File: pgfsys-common-pdf.def 2020/10/01 v3.1.6a (3.1.6a)
 )))
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/
-pgfsyssoftpath.code.tex
-File: pgfsyssoftpath.code.tex 2020/09/28 v3.1.6 (3.1.6)
-\pgfsyssoftpath@smallbuffer@items=\count182
-\pgfsyssoftpath@bigbuffer@items=\count183
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/syste
+mlayer/pgfsyssoftpath.code.tex
+File: pgfsyssoftpath.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+\pgfsyssoftpath@smallbuffer@items=\count189
+\pgfsyssoftpath@bigbuffer@items=\count190
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/
-pgfsysprotocol.code.tex
-File: pgfsysprotocol.code.tex 2020/09/28 v3.1.6 (3.1.6)
-)) (c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xcolor/xcolor.s
-ty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/syste
+mlayer/pgfsysprotocol.code.tex
+File: pgfsysprotocol.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+))
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xcolor/xcol
+or.sty
 Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-cfg/color
-.cfg
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-cf
+g/color.cfg
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package xcolor Info: Driver file: pdftex.def on input line 225.
@@ -169,252 +176,255 @@ Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
-gfcore.code.tex
-Package: pgfcore 2020/09/28 v3.1.6 (3.1.6)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basic
+layer/pgfcore.code.tex
+Package: pgfcore 2020/10/01 v3.1.6a (3.1.6a)
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
-.code.tex
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
-calc.code.tex
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
-util.code.tex)
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
-parser.code.tex
-\pgfmath@dimen=\dimen149
-\pgfmath@count=\count184
-\pgfmath@box=\box46
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/
+pgfmath.code.tex
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/
+pgfmathcalc.code.tex
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/
+pgfmathutil.code.tex)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/
+pgfmathparser.code.tex
+\pgfmath@dimen=\dimen153
+\pgfmath@count=\count191
+\pgfmath@box=\box48
 \pgfmath@toks=\toks25
 \pgfmath@stack@operand=\toks26
 \pgfmath@stack@operation=\toks27
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
-functions.code.tex
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
-functions.basic.code.tex)
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
-functions.trigonometric.code.tex)
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
-functions.random.code.tex)
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
-functions.comparison.code.tex)
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
-functions.base.code.tex)
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
-functions.round.code.tex)
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
-functions.misc.code.tex)
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
-functions.integerarithmetics.code.tex)))
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
-float.code.tex
-\c@pgfmathroundto@lastzeros=\count185
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/
+pgfmathfunctions.code.tex
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/
+pgfmathfunctions.basic.code.tex)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/
+pgfmathfunctions.trigonometric.code.tex)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/
+pgfmathfunctions.random.code.tex)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/
+pgfmathfunctions.comparison.code.tex)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/
+pgfmathfunctions.base.code.tex)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/
+pgfmathfunctions.round.code.tex)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/
+pgfmathfunctions.misc.code.tex)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/
+pgfmathfunctions.integerarithmetics.code.tex)))
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/
+pgfmathfloat.code.tex
+\c@pgfmathroundto@lastzeros=\count192
 ))
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfint.
-code.tex)
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
-gfcorepoints.code.tex
-File: pgfcorepoints.code.tex 2020/09/28 v3.1.6 (3.1.6)
-\pgf@picminx=\dimen150
-\pgf@picmaxx=\dimen151
-\pgf@picminy=\dimen152
-\pgf@picmaxy=\dimen153
-\pgf@pathminx=\dimen154
-\pgf@pathmaxx=\dimen155
-\pgf@pathminy=\dimen156
-\pgf@pathmaxy=\dimen157
-\pgf@xx=\dimen158
-\pgf@xy=\dimen159
-\pgf@yx=\dimen160
-\pgf@yy=\dimen161
-\pgf@zx=\dimen162
-\pgf@zy=\dimen163
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/
+pgfint.code.tex)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basic
+layer/pgfcorepoints.code.tex
+File: pgfcorepoints.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+\pgf@picminx=\dimen154
+\pgf@picmaxx=\dimen155
+\pgf@picminy=\dimen156
+\pgf@picmaxy=\dimen157
+\pgf@pathminx=\dimen158
+\pgf@pathmaxx=\dimen159
+\pgf@pathminy=\dimen160
+\pgf@pathmaxy=\dimen161
+\pgf@xx=\dimen162
+\pgf@xy=\dimen163
+\pgf@yx=\dimen164
+\pgf@yy=\dimen165
+\pgf@zx=\dimen166
+\pgf@zy=\dimen167
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
-gfcorepathconstruct.code.tex
-File: pgfcorepathconstruct.code.tex 2020/09/28 v3.1.6 (3.1.6)
-\pgf@path@lastx=\dimen164
-\pgf@path@lasty=\dimen165
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basic
+layer/pgfcorepathconstruct.code.tex
+File: pgfcorepathconstruct.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+\pgf@path@lastx=\dimen168
+\pgf@path@lasty=\dimen169
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
-gfcorepathusage.code.tex
-File: pgfcorepathusage.code.tex 2020/09/28 v3.1.6 (3.1.6)
-\pgf@shorten@end@additional=\dimen166
-\pgf@shorten@start@additional=\dimen167
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basic
+layer/pgfcorepathusage.code.tex
+File: pgfcorepathusage.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+\pgf@shorten@end@additional=\dimen170
+\pgf@shorten@start@additional=\dimen171
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
-gfcorescopes.code.tex
-File: pgfcorescopes.code.tex 2020/09/28 v3.1.6 (3.1.6)
-\pgfpic=\box47
-\pgf@hbox=\box48
-\pgf@layerbox@main=\box49
-\pgf@picture@serial@count=\count186
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basic
+layer/pgfcorescopes.code.tex
+File: pgfcorescopes.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+\pgfpic=\box49
+\pgf@hbox=\box50
+\pgf@layerbox@main=\box51
+\pgf@picture@serial@count=\count193
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
-gfcoregraphicstate.code.tex
-File: pgfcoregraphicstate.code.tex 2020/09/28 v3.1.6 (3.1.6)
-\pgflinewidth=\dimen168
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basic
+layer/pgfcoregraphicstate.code.tex
+File: pgfcoregraphicstate.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+\pgflinewidth=\dimen172
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
-gfcoretransformations.code.tex
-File: pgfcoretransformations.code.tex 2020/09/28 v3.1.6 (3.1.6)
-\pgf@pt@x=\dimen169
-\pgf@pt@y=\dimen170
-\pgf@pt@temp=\dimen171
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basic
+layer/pgfcoretransformations.code.tex
+File: pgfcoretransformations.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+\pgf@pt@x=\dimen173
+\pgf@pt@y=\dimen174
+\pgf@pt@temp=\dimen175
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
-gfcorequick.code.tex
-File: pgfcorequick.code.tex 2020/09/28 v3.1.6 (3.1.6)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basic
+layer/pgfcorequick.code.tex
+File: pgfcorequick.code.tex 2020/10/01 v3.1.6a (3.1.6a)
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
-gfcoreobjects.code.tex
-File: pgfcoreobjects.code.tex 2020/09/28 v3.1.6 (3.1.6)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basic
+layer/pgfcoreobjects.code.tex
+File: pgfcoreobjects.code.tex 2020/10/01 v3.1.6a (3.1.6a)
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
-gfcorepathprocessing.code.tex
-File: pgfcorepathprocessing.code.tex 2020/09/28 v3.1.6 (3.1.6)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basic
+layer/pgfcorepathprocessing.code.tex
+File: pgfcorepathprocessing.code.tex 2020/10/01 v3.1.6a (3.1.6a)
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
-gfcorearrows.code.tex
-File: pgfcorearrows.code.tex 2020/09/28 v3.1.6 (3.1.6)
-\pgfarrowsep=\dimen172
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basic
+layer/pgfcorearrows.code.tex
+File: pgfcorearrows.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+\pgfarrowsep=\dimen176
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
-gfcoreshade.code.tex
-File: pgfcoreshade.code.tex 2020/09/28 v3.1.6 (3.1.6)
-\pgf@max=\dimen173
-\pgf@sys@shading@range@num=\count187
-\pgf@shadingcount=\count188
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basic
+layer/pgfcoreshade.code.tex
+File: pgfcoreshade.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+\pgf@max=\dimen177
+\pgf@sys@shading@range@num=\count194
+\pgf@shadingcount=\count195
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
-gfcoreimage.code.tex
-File: pgfcoreimage.code.tex 2020/09/28 v3.1.6 (3.1.6)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basic
+layer/pgfcoreimage.code.tex
+File: pgfcoreimage.code.tex 2020/10/01 v3.1.6a (3.1.6a)
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
-gfcoreexternal.code.tex
-File: pgfcoreexternal.code.tex 2020/09/28 v3.1.6 (3.1.6)
-\pgfexternal@startupbox=\box50
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basic
+layer/pgfcoreexternal.code.tex
+File: pgfcoreexternal.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+\pgfexternal@startupbox=\box52
 ))
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
-gfcorelayers.code.tex
-File: pgfcorelayers.code.tex 2020/09/28 v3.1.6 (3.1.6)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basic
+layer/pgfcorelayers.code.tex
+File: pgfcorelayers.code.tex 2020/10/01 v3.1.6a (3.1.6a)
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
-gfcoretransparency.code.tex
-File: pgfcoretransparency.code.tex 2020/09/28 v3.1.6 (3.1.6)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basic
+layer/pgfcoretransparency.code.tex
+File: pgfcoretransparency.code.tex 2020/10/01 v3.1.6a (3.1.6a)
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
-gfcorepatterns.code.tex
-File: pgfcorepatterns.code.tex 2020/09/28 v3.1.6 (3.1.6)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basic
+layer/pgfcorepatterns.code.tex
+File: pgfcorepatterns.code.tex 2020/10/01 v3.1.6a (3.1.6a)
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/p
-gfcorerdf.code.tex
-File: pgfcorerdf.code.tex 2020/09/28 v3.1.6 (3.1.6)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basic
+layer/pgfcorerdf.code.tex
+File: pgfcorerdf.code.tex 2020/10/01 v3.1.6a (3.1.6a)
 )))
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfm
-oduleshapes.code.tex
-File: pgfmoduleshapes.code.tex 2020/09/28 v3.1.6 (3.1.6)
-\pgfnodeparttextbox=\box51
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modul
+es/pgfmoduleshapes.code.tex
+File: pgfmoduleshapes.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+\pgfnodeparttextbox=\box53
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfm
-oduleplot.code.tex
-File: pgfmoduleplot.code.tex 2020/09/28 v3.1.6 (3.1.6)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modul
+es/pgfmoduleplot.code.tex
+File: pgfmoduleplot.code.tex 2020/10/01 v3.1.6a (3.1.6a)
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/compatibility/
-pgfcomp-version-0-65.sty
-Package: pgfcomp-version-0-65 2020/09/28 v3.1.6 (3.1.6)
-\pgf@nodesepstart=\dimen174
-\pgf@nodesepend=\dimen175
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/compati
+bility/pgfcomp-version-0-65.sty
+Package: pgfcomp-version-0-65 2020/10/01 v3.1.6a (3.1.6a)
+\pgf@nodesepstart=\dimen178
+\pgf@nodesepend=\dimen179
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/compatibility/
-pgfcomp-version-1-18.sty
-Package: pgfcomp-version-1-18 2020/09/28 v3.1.6 (3.1.6)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/compati
+bility/pgfcomp-version-1-18.sty
+Package: pgfcomp-version-1-18 2020/10/01 v3.1.6a (3.1.6a)
 ))
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/utilities/pgff
-or.sty
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/utilities/pgfk
-eys.sty
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pg
-fkeys.code.tex))
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/math/pgfmath.s
-ty
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
-.code.tex))
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pg
-ffor.code.tex
-Package: pgffor 2020/09/28 v3.1.6 (3.1.6)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/utiliti
+es/pgffor.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/utiliti
+es/pgfkeys.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utili
+ties/pgfkeys.code.tex))
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/math/pg
+fmath.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/
+pgfmath.code.tex))
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utili
+ties/pgffor.code.tex
+Package: pgffor 2020/10/01 v3.1.6a (3.1.6a)
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath
-.code.tex)
-\pgffor@iter=\dimen176
-\pgffor@skip=\dimen177
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/
+pgfmath.code.tex)
+\pgffor@iter=\dimen180
+\pgffor@skip=\dimen181
 \pgffor@stack=\toks28
 \pgffor@toks=\toks29
 ))
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/frontendlaye
-r/tikz/tikz.code.tex
-Package: tikz 2020/09/28 v3.1.6 (3.1.6)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/front
+endlayer/tikz/tikz.code.tex
+Package: tikz 2020/10/01 v3.1.6a (3.1.6a)
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/libraries/pg
-flibraryplothandlers.code.tex
-File: pgflibraryplothandlers.code.tex 2020/09/28 v3.1.6 (3.1.6)
-\pgf@plot@mark@count=\count189
-\pgfplotmarksize=\dimen178
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/libra
+ries/pgflibraryplothandlers.code.tex
+File: pgflibraryplothandlers.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+\pgf@plot@mark@count=\count196
+\pgfplotmarksize=\dimen182
 )
-\tikz@lastx=\dimen179
-\tikz@lasty=\dimen180
-\tikz@lastxsaved=\dimen181
-\tikz@lastysaved=\dimen182
-\tikz@lastmovetox=\dimen183
-\tikz@lastmovetoy=\dimen184
-\tikzleveldistance=\dimen185
-\tikzsiblingdistance=\dimen186
-\tikz@figbox=\box52
-\tikz@figbox@bg=\box53
-\tikz@tempbox=\box54
-\tikz@tempbox@bg=\box55
-\tikztreelevel=\count190
-\tikznumberofchildren=\count191
-\tikznumberofcurrentchild=\count192
-\tikz@fig@count=\count193
+\tikz@lastx=\dimen183
+\tikz@lasty=\dimen184
+\tikz@lastxsaved=\dimen185
+\tikz@lastysaved=\dimen186
+\tikz@lastmovetox=\dimen187
+\tikz@lastmovetoy=\dimen188
+\tikzleveldistance=\dimen189
+\tikzsiblingdistance=\dimen190
+\tikz@figbox=\box54
+\tikz@figbox@bg=\box55
+\tikz@tempbox=\box56
+\tikz@tempbox@bg=\box57
+\tikztreelevel=\count197
+\tikznumberofchildren=\count198
+\tikznumberofcurrentchild=\count199
+\tikz@fig@count=\count266
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfm
-odulematrix.code.tex
-File: pgfmodulematrix.code.tex 2020/09/28 v3.1.6 (3.1.6)
-\pgfmatrixcurrentrow=\count194
-\pgfmatrixcurrentcolumn=\count195
-\pgf@matrix@numberofcolumns=\count196
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modul
+es/pgfmodulematrix.code.tex
+File: pgfmodulematrix.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+\pgfmatrixcurrentrow=\count267
+\pgfmatrixcurrentcolumn=\count268
+\pgf@matrix@numberofcolumns=\count269
 )
-\tikz@expandcount=\count197
+\tikz@expandcount=\count270
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/frontendlaye
-r/tikz/libraries/tikzlibrarytopaths.code.tex
-File: tikzlibrarytopaths.code.tex 2020/09/28 v3.1.6 (3.1.6)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/front
+endlayer/tikz/libraries/tikzlibrarytopaths.code.tex
+File: tikzlibrarytopaths.code.tex 2020/10/01 v3.1.6a (3.1.6a)
 )))
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/geometry/geometry.
-sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/geometry/ge
+ometry.sty
 Package: geometry 2020/01/02 v5.9 Page Geometry
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/ifvtex.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/ifv
+tex.sty
 Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/iftex.sty
+
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/ift
+ex.sty
 Package: iftex 2020/03/06 v1.0d TeX engine tests
 ))
-\Gm@cnth=\count198
-\Gm@cntv=\count199
-\c@Gm@tempcnt=\count266
-\Gm@bindingoffset=\dimen187
-\Gm@wd@mp=\dimen188
-\Gm@odd@mp=\dimen189
-\Gm@even@mp=\dimen190
-\Gm@layoutwidth=\dimen191
-\Gm@layoutheight=\dimen192
-\Gm@layouthoffset=\dimen193
-\Gm@layoutvoffset=\dimen194
+\Gm@cnth=\count271
+\Gm@cntv=\count272
+\c@Gm@tempcnt=\count273
+\Gm@bindingoffset=\dimen191
+\Gm@wd@mp=\dimen192
+\Gm@odd@mp=\dimen193
+\Gm@even@mp=\dimen194
+\Gm@layoutwidth=\dimen195
+\Gm@layoutheight=\dimen196
+\Gm@layouthoffset=\dimen197
+\Gm@layoutvoffset=\dimen198
 \Gm@dimlist=\toks30
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fancyhdr/fancyhdr.
-sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fancyhdr/fa
+ncyhdr.sty
 Package: fancyhdr 2019/01/31 v3.10 Extensive control of page headers and footer
 s
 \f@nch@headwidth=\skip49
@@ -427,18 +437,18 @@ s
 \f@nch@O@olf=\skip56
 \f@nch@O@orf=\skip57
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/microtyp
-e.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/m
+icrotype.sty
 Package: microtype 2019/11/18 v2.7d Micro-typographical refinements (RS)
 \MT@toks=\toks31
-\MT@count=\count267
+\MT@count=\count274
 LaTeX Info: Redefining \textls on input line 790.
-\MT@outer@kern=\dimen195
+\MT@outer@kern=\dimen199
 LaTeX Info: Redefining \textmicrotypecontext on input line 1354.
-\MT@listname@count=\count268
+\MT@listname@count=\count275
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/microtyp
-e-pdftex.def
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/m
+icrotype-pdftex.def
 File: microtype-pdftex.def 2019/11/18 v2.7d Definitions specific to pdftex (RS)
 
 LaTeX Info: Redefining \lsstyle on input line 914.
@@ -447,122 +457,129 @@ LaTeX Info: Redefining \lslig on input line 914.
 )
 Package microtype Info: Loading configuration file microtype.cfg.
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/microtyp
-e.cfg
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/m
+icrotype.cfg
 File: microtype.cfg 2019/11/18 v2.7d microtype main configuration file (RS)
-)) (c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/helvet.s
-ty
+))
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/helv
+et.sty
 Package: helvet 2020/03/25 PSNFSS-v9.3 (WaS) 
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/palatino.st
-y
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/pala
+tino.sty
 Package: palatino 2020/03/25 PSNFSS-v9.3 (SPQR) 
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/mathpazo.st
-y
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/math
+pazo.sty
 Package: mathpazo 2020/03/25 PSNFSS-v9.3 Palatino w/ Pazo Math (D.Puga, WaS) 
 \symupright=\mathgroup4
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/inconsolata/incons
-olata.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/inconsolata
+/inconsolata.sty
 Package: inconsolata 2019/05/17 v1.12
-`inconsolata-zi4' v1.12, 2019/05/17 Text macros for Inconsolata (msharpe) (c:/U
-sers/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/textcomp.sty
+`inconsolata-zi4' v1.12, 2019/05/17 Text macros for Inconsolata (msharpe)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/textco
+mp.sty
 Package: textcomp 2020/02/02 v2.0n Standard LaTeX package
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xkeyval/xkeyval.st
-y
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xkeyval/xke
+yval.sty
 Package: xkeyval 2014/12/03 v2.7a package option processing (HA)
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/xkeyval/xkeyval.
-tex
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/xkeyval/xkvutils
-.tex
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/xkeyval/x
+keyval.tex
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/xkeyval/x
+kvutils.tex
 \XKV@toks=\toks32
 \XKV@tempa@toks=\toks33
 )
-\XKV@depth=\count269
+\XKV@depth=\count276
 File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
 ))
-\zifour@ocount=\count270
-) (c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/fontenc.sty
-Package: fontenc 2020/02/11 v2.0o Standard LaTeX package
+\zifour@ocount=\count277
+)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/fonten
+c.sty
+Package: fontenc 2020/08/10 v2.0s Standard LaTeX package
 LaTeX Font Info:    Trying to load font information for T1+ppl on input line 11
 2.
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/t1ppl.fd
+
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/t1pp
+l.fd
 File: t1ppl.fd 2001/06/04 font definitions for T1/ppl.
-)) (c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/url/url.sty
+))
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip16
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.
-sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hy
+perref.sty
 Package: hyperref 2020-05-15 v7.00e Hypertext links for LaTeX
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/ltxcmds/ltxcmds.
-sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/ltxcmds/l
+txcmds.sty
 Package: ltxcmds 2020-05-10 v1.25 LaTeX kernel commands for general use (HO)
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pdftexcmds/pdfte
-xcmds.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pdftexcmd
+s/pdftexcmds.sty
 Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
 )
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/infwarerr/infwar
-err.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/infwarerr
+/infwarerr.sty
 Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
 )
 Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
 Package pdftexcmds Info: \pdfdraftmode found.
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/kvsetkeys/kvsetk
-eys.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/kvsetkeys
+/kvsetkeys.sty
 Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/kvdefinekeys/kvd
-efinekeys.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/kvdefinek
+eys/kvdefinekeys.sty
 Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pdfescape/pdfesc
-ape.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pdfescape
+/pdfescape.sty
 Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hycolor/hycolor.st
-y
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hycolor/hyc
+olor.sty
 Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/letltxmacro/letltx
-macro.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/letltxmacro
+/letltxmacro.sty
 Package: letltxmacro 2019/12/03 v1.6 Let assignment for LaTeX macros (HO)
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/auxhook/auxhook.st
-y
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/auxhook/aux
+hook.sty
 Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/kvoptions/kvoption
-s.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/kvoptions/k
+voptions.sty
 Package: kvoptions 2019/11/29 v3.13 Key value format for package options (HO)
 )
-\@linkdim=\dimen196
-\Hy@linkcounter=\count271
-\Hy@pagecounter=\count272
+\@linkdim=\dimen256
+\Hy@linkcounter=\count278
+\Hy@pagecounter=\count279
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/pd1enc.de
-f
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/pd
+1enc.def
 File: pd1enc.def 2020-05-15 v7.00e Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
 ... no UTF-8 mapping file for font encoding PD1
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/intcalc/intcalc.
-sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/intcalc/i
+ntcalc.sty
 Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/etexcmds/etexcmd
-s.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/etexcmds/
+etexcmds.sty
 Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
 )
-\Hy@SavedSpaceFactor=\count273
+\Hy@SavedSpaceFactor=\count280
 Package hyperref Info: Hyper figures OFF on input line 4464.
 Package hyperref Info: Link nesting OFF on input line 4469.
 Package hyperref Info: Hyper index ON on input line 4472.
@@ -571,42 +588,43 @@ Package hyperref Info: Backreferencing ON on input line 4482.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4717.
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/backref.s
-ty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/ba
+ckref.sty
 Package: backref 2020/01/14 v1.40 Bibliographical back referencing
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/rerunfilecheck/rer
-unfilecheck.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/rerunfilech
+eck/rerunfilecheck.sty
 Package: rerunfilecheck 2019/12/05 v1.9 Rerun checks for auxiliary files (HO)
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/atveryend/atveryen
-d.sty
-Package: atveryend 2019-12-11 v1.11 Hooks at the very end of document (HO)
-Package atveryend Info: \enddocument detected (standard20110627).
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/atvery
+end-ltx.sty
+Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atvery packag
+e
+with kernel methods
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/uniquecounter/un
-iquecounter.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/uniquecou
+nter/uniquecounter.sty
 Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bigintcalc/bigin
-tcalc.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bigintcal
+c/bigintcalc.sty
 Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
 )
 ))
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 86.
 ))
-\c@Hy@tempcnt=\count274
+\c@Hy@tempcnt=\count281
 LaTeX Info: Redefining \url on input line 5076.
-\XeTeXLinkMargin=\dimen197
+\XeTeXLinkMargin=\dimen257
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bitset/bitset.st
-y
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bitset/bi
+tset.sty
 Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
 )
-\Fld@menulength=\count275
-\Field@Width=\dimen198
-\Fld@charsize=\dimen199
+\Fld@menulength=\count282
+\Field@Width=\dimen258
+\Fld@charsize=\dimen259
 Package hyperref Info: Hyper figures OFF on input line 6347.
 Package hyperref Info: Link nesting OFF on input line 6352.
 Package hyperref Info: Hyper index ON on input line 6355.
@@ -617,72 +635,77 @@ Package hyperref Info: PDF/A mode OFF on input line 6377.
 LaTeX Info: Redefining \ref on input line 6417.
 LaTeX Info: Redefining \pageref on input line 6421.
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/atbegshi/atbegsh
-i.sty
-Package: atbegshi 2019/12/05 v1.19 At begin shipout hook (HO)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/atbegs
+hi-ltx.sty
+Package: atbegshi-ltx 2020/08/17 v1.0a Emulation of the original atbegshi packa
+ge
+with kernel methods
 )
-\Hy@abspage=\count276
-\c@Item=\count277
-\c@Hfootnote=\count278
+\Hy@abspage=\count283
+\c@Item=\count284
+\c@Hfootnote=\count285
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hpdftex.d
-ef
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hp
+dftex.def
 File: hpdftex.def 2020-05-15 v7.00e Hyperref driver for pdfTeX
-\Fld@listcount=\count279
-\c@bookmark@seq@number=\count280
+\Fld@listcount=\count286
+\c@bookmark@seq@number=\count287
 \Hy@SectionHShift=\skip59
 )
 Package hyperref Info: Option `colorlinks' set `true' on input line 62.
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/setspace/setspace.
-sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/setspace/se
+tspace.sty
 Package: setspace 2011/12/19 v6.7a set line spacing
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/titlesec/titlesec.
-sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/titlesec/ti
+tlesec.sty
 Package: titlesec 2019/10/16 v2.13 Sectioning titles
-\ttl@box=\box56
+\ttl@box=\box58
 \beforetitleunit=\skip60
 \aftertitleunit=\skip61
-\ttl@plus=\dimen256
-\ttl@minus=\dimen257
+\ttl@plus=\dimen260
+\ttl@minus=\dimen261
 \ttl@toksa=\toks34
-\titlewidth=\dimen258
-\titlewidthlast=\dimen259
-\titlewidthfirst=\dimen260
+\titlewidth=\dimen262
+\titlewidthlast=\dimen263
+\titlewidthfirst=\dimen264
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/titlesec/titletoc.
-sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/titlesec/ti
+tletoc.sty
 Package: titletoc 2019/10/16 v2.13 TOC entries
-\ttl@leftsep=\dimen261
+\ttl@leftsep=\dimen265
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/placeins/placeins.
-sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/placeins/pl
+aceins.sty
 Package: placeins 2005/04/18  v 2.2
-) (c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/natbib/natbib.st
-y
+)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/natbib/natb
+ib.sty
 Package: natbib 2010/09/13 8.31b (PWD, AO)
 \bibhang=\skip62
 \bibsep=\skip63
 LaTeX Info: Redefining \cite on input line 694.
-\c@NAT@ctr=\count281
+\c@NAT@ctr=\count288
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fancyvrb/fancyvrb.
-sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fancyvrb/fa
+ncyvrb.sty
 Package: fancyvrb 2020/05/03 v3.6 verbatim text (tvz,hv)
-\FV@CodeLineNo=\count282
+\FV@CodeLineNo=\count289
 \FV@InFile=\read3
-\FV@TabBox=\box57
-\c@FancyVerbLine=\count283
-\FV@StepNumber=\count284
+\FV@TabBox=\box59
+\c@FancyVerbLine=\count290
+\FV@StepNumber=\count291
 \FV@OutFile=\write4
-) (c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/alltt.sty
+)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/alltt.
+sty
 Package: alltt 1997/06/16 v2.0g defines alltt environment
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/amsfonts.
-sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/am
+sfonts.sty
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 \@emptytoks=\toks35
 \symAMSa=\mathgroup5
@@ -691,165 +714,169 @@ LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/caption.st
-y
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/cap
+tion.sty
 Package: caption 2020/09/12 v3.5b Customizing captions (AR)
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/caption3.s
-ty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/cap
+tion3.sty
 Package: caption3 2020/09/17 v2.1b caption3 kernel (AR)
-\captionmargin=\dimen262
-\captionmargin@=\dimen263
-\captionwidth=\dimen264
-\caption@tempdima=\dimen265
-\caption@indent=\dimen266
-\caption@parindent=\dimen267
-\caption@hangindent=\dimen268
+\captionmargin=\dimen266
+\captionmargin@=\dimen267
+\captionwidth=\dimen268
+\caption@tempdima=\dimen269
+\caption@indent=\dimen270
+\caption@parindent=\dimen271
+\caption@hangindent=\dimen272
 Package caption Info: Standard document class detected.
 )
-\c@caption@flags=\count285
-\c@continuedfloat=\count286
+\c@caption@flags=\count292
+\c@continuedfloat=\count293
 Package caption Info: hyperref package is loaded.
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/environ/environ.st
-y
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/environ/env
+iron.sty
 Package: environ 2014/05/04 v0.3 A new way to define environments
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/trimspaces/trimspa
-ces.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/trimspaces/
+trimspaces.sty
 Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
 )
 \@envbody=\toks36
 ))
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsmath.st
-y
-Package: amsmath 2020/01/20 v2.17e AMS math features
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/ams
+math.sty
+Package: amsmath 2020/09/23 v2.17i AMS math features
 \@mathmargin=\skip64
 For additional information on amsmath, use the `?' option.
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amstext.st
-y
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/ams
+text.sty
 Package: amstext 2000/06/29 v2.01 AMS text
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsgen.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/ams
+gen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
 \@emptytoks=\toks37
-\ex@=\dimen269
+\ex@=\dimen273
 ))
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsbsy.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/ams
+bsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
-\pmbraise@=\dimen270
+\pmbraise@=\dimen274
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsopn.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/ams
+opn.sty
 Package: amsopn 2016/03/08 v2.02 operator names
 LaTeX Info: Redefining \operatorname on input line 43.
 )
-\inf@bad=\count287
-LaTeX Info: Redefining \frac on input line 227.
-\uproot@=\count288
-\leftroot@=\count289
-LaTeX Info: Redefining \overline on input line 389.
-\classnum@=\count290
-\DOTSCASE@=\count291
-LaTeX Info: Redefining \ldots on input line 486.
-LaTeX Info: Redefining \dots on input line 489.
-LaTeX Info: Redefining \cdots on input line 610.
-\Mathstrutbox@=\box58
-\strutbox@=\box59
-\big@size=\dimen271
-LaTeX Font Info:    Redeclaring font encoding OML on input line 733.
-LaTeX Font Info:    Redeclaring font encoding OMS on input line 734.
-\macc@depth=\count292
-\c@MaxMatrixCols=\count293
+\inf@bad=\count294
+LaTeX Info: Redefining \frac on input line 234.
+\uproot@=\count295
+\leftroot@=\count296
+LaTeX Info: Redefining \overline on input line 399.
+\classnum@=\count297
+\DOTSCASE@=\count298
+LaTeX Info: Redefining \ldots on input line 496.
+LaTeX Info: Redefining \dots on input line 499.
+LaTeX Info: Redefining \cdots on input line 620.
+\Mathstrutbox@=\box60
+\strutbox@=\box61
+\big@size=\dimen275
+LaTeX Font Info:    Redeclaring font encoding OML on input line 743.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 744.
+\macc@depth=\count299
+\c@MaxMatrixCols=\count300
 \dotsspace@=\muskip17
-\c@parentequation=\count294
-\dspbrk@lvl=\count295
+\c@parentequation=\count301
+\dspbrk@lvl=\count302
 \tag@help=\toks38
-\row@=\count296
-\column@=\count297
-\maxfields@=\count298
+\row@=\count303
+\column@=\count304
+\maxfields@=\count305
 \andhelp@=\toks39
-\eqnshift@=\dimen272
-\alignsep@=\dimen273
-\tagshift@=\dimen274
-\tagwidth@=\dimen275
-\totwidth@=\dimen276
-\lineht@=\dimen277
+\eqnshift@=\dimen276
+\alignsep@=\dimen277
+\tagshift@=\dimen278
+\tagwidth@=\dimen279
+\totwidth@=\dimen280
+\lineht@=\dimen281
 \@envbody=\toks40
 \multlinegap=\skip65
 \multlinetaggap=\skip66
 \mathdisplay@stack=\toks41
-LaTeX Info: Redefining \[ on input line 2859.
-LaTeX Info: Redefining \] on input line 2860.
+LaTeX Info: Redefining \[ on input line 2923.
+LaTeX Info: Redefining \] on input line 2924.
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/amssymb.s
-ty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/am
+ssymb.sty
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
-) (c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/array.sty
-Package: array 2019/08/31 v2.4l Tabular extension package (FMi)
-\col@sep=\dimen278
-\ar@mcellbox=\box60
-\extrarowheight=\dimen279
+)
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/array
+.sty
+Package: array 2020/10/01 v2.5c Tabular extension package (FMi)
+\col@sep=\dimen282
+\ar@mcellbox=\box62
+\extrarowheight=\dimen283
 \NC@list=\toks42
 \extratabsurround=\skip67
 \backup@length=\skip68
-\ar@cellbox=\box61
+\ar@cellbox=\box63
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/booktabs/booktabs.
-sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/booktabs/bo
+oktabs.sty
 Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
-\heavyrulewidth=\dimen280
-\lightrulewidth=\dimen281
-\cmidrulewidth=\dimen282
-\belowrulesep=\dimen283
-\belowbottomsep=\dimen284
-\aboverulesep=\dimen285
-\abovetopsep=\dimen286
-\cmidrulesep=\dimen287
-\cmidrulekern=\dimen288
-\defaultaddspace=\dimen289
-\@cmidla=\count299
-\@cmidlb=\count300
-\@aboverulesep=\dimen290
-\@belowrulesep=\dimen291
-\@thisruleclass=\count301
-\@lastruleclass=\count302
-\@thisrulewidth=\dimen292
+\heavyrulewidth=\dimen284
+\lightrulewidth=\dimen285
+\cmidrulewidth=\dimen286
+\belowrulesep=\dimen287
+\belowbottomsep=\dimen288
+\aboverulesep=\dimen289
+\abovetopsep=\dimen290
+\cmidrulesep=\dimen291
+\cmidrulekern=\dimen292
+\defaultaddspace=\dimen293
+\@cmidla=\count306
+\@cmidlb=\count307
+\@aboverulesep=\dimen294
+\@belowrulesep=\dimen295
+\@thisruleclass=\count308
+\@lastruleclass=\count309
+\@thisrulewidth=\dimen296
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3backend/l3backen
-d-pdftex.def
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3backend/l
+3backend-pdftex.def
 File: l3backend-pdftex.def 2020-09-24 L3 backend support: PDF output (pdfTeX)
-\l__kernel_color_stack_int=\count303
-\l__pdf_internal_box=\box62
-)
-No file RJwrapper.aux.
+\l__kernel_color_stack_int=\count310
+\l__pdf_internal_box=\box64
+) (./RJwrapper.aux)
 \openout1 = `RJwrapper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-ABD: EveryShipout initializing macros
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epsto
-pdf-base.sty
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/epstopdf-pk
+g/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 85.
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/latexconfig/epstop
-df-sys.cfg
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/latexconfig
+/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
@@ -889,51 +916,51 @@ e
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Info: Redefining \microtypecontext on input line 13.
+LaTeX Info: Redefining \microtypecontext on input line 14.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
 Package microtype Info: Automatic font expansion enabled (level 2),
 (microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
 Package microtype Info: Using default expansion set `basictext'.
-LaTeX Info: Redefining \showhyphens on input line 13.
+LaTeX Info: Redefining \showhyphens on input line 14.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/mt-ppl.c
-fg
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/m
+t-ppl.cfg
 File: mt-ppl.cfg 2005/11/16 v1.6 microtype config. file: Palatino (RS)
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/upquote/upquote.st
-y
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/upquote/upq
+uote.sty
 Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verba
 tim
 )
-Package backref Info: ** backref set up for natbib ** on input line 13.
-\AtBeginShipoutBox=\box63
-Package hyperref Info: Link coloring ON on input line 13.
+Package hyperref Info: Link coloring ON on input line 14.
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.s
-ty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/na
+meref.sty
 Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/refcount/refcount.
-sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/refcount/re
+fcount.sty
 Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 )
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/gettitlestring/g
-ettitlestring.sty
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/gettitles
+tring/gettitlestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count304
+\c@section@level=\count311
 )
-LaTeX Info: Redefining \ref on input line 13.
-LaTeX Info: Redefining \pageref on input line 13.
-LaTeX Info: Redefining \nameref on input line 13.
+LaTeX Info: Redefining \ref on input line 14.
+LaTeX Info: Redefining \pageref on input line 14.
+LaTeX Info: Redefining \nameref on input line 14.
+(./RJwrapper.out) (./RJwrapper.out)
 \@outlinefile=\write5
 \openout5 = `RJwrapper.out'.
 
+Package backref Info: ** backref set up for natbib ** on input line 14.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 (./kobakian-cook.tex
@@ -958,10 +985,6 @@ Package natbib Warning: Citation `EI' on page 1 undefined on input line 38.
 Package natbib Warning: Citation `BCM' on page 1 undefined on input line 41.
 
 
-LaTeX Warning: Reference `fig:melanoma-geo' on page 1 undefined on input line 4
-2.
-
-
 Package natbib Warning: Citation `abs2011' on page 1 undefined on input line 45
 .
 
@@ -971,7 +994,7 @@ Package natbib Warning: Citation `ACCAC' on page 1 undefined on input line 53.
 
 Package natbib Warning: Citation `ACCAC' on page 1 undefined on input line 57.
 
-<figs/aus_melanoma_p.png, id=7, 722.7pt x 722.7pt>
+<figs/aus_melanoma_p.png, id=40, 722.7pt x 722.7pt>
 File: figs/aus_melanoma_p.png Graphic file (type png)
 <use figs/aus_melanoma_p.png>
 Package pdftex.def Info: figs/aus_melanoma_p.png  used on input line 62.
@@ -985,8 +1008,8 @@ Package natbib Warning: Citation `TAAM' on page 1 undefined on input line 68.
 LaTeX Font Info:    Trying to load font information for T1+zi4 on input line 75
 .
 
-(c:/Users/steff/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/inconsolata/t1zi4.
-fd
+(c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/inconsolata
+/t1zi4.fd
 File: t1zi4.fd 2018/01/14 T1/zi4 (Inconsolata)
 )
 LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
@@ -1022,30 +1045,265 @@ Package natbib Warning: Citation `CBATCC' on page 1 undefined on input line 104
 
 LaTeX Warning: Reference `fig:nsw_grid' on page 1 undefined on input line 105.
 
-[1{c:/Users/steff/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdf
-tex.map}
+[1{c:/Users/Mr. Normanby/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/upd
+map/pdftex.map}
 
-] [2 <./figs/aus_melanoma_p.png>] [3] [4]
+] [2 <./figs/aus_melanoma_p.png>] [3]
+<kobakian-cook_files/figure-latex/fullhexmap-1.pdf, id=64, 469.755pt x 325.215p
+t>
+File: kobakian-cook_files/figure-latex/fullhexmap-1.pdf Graphic file (type pdf)
 
-LaTeX Warning: File `figs/nsw_grid.png' not found on input line 299.
+<use kobakian-cook_files/figure-latex/fullhexmap-1.pdf>
+Package pdftex.def Info: kobakian-cook_files/figure-latex/fullhexmap-1.pdf  use
+d on input line 208.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+
+Overfull \hbox (86.41528pt too wide) in paragraph at lines 208--209
+[][]
+ []
 
 
-! Package pdftex.def Error: File `figs/nsw_grid.png' not found: using draft set
-ting.
+Underfull \hbox (badness 10000) in paragraph at lines 208--209
 
-See the pdftex.def package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.299 ...degraphics[width=14cm]{figs/nsw_grid.png}
-                                                   
+ []
+
+<kobakian-cook_files/figure-latex/alternatives-1.pdf, id=65, 469.755pt x 325.21
+5pt>
+File: kobakian-cook_files/figure-latex/alternatives-1.pdf Graphic file (type pd
+f)
+<use kobakian-cook_files/figure-latex/alternatives-1.pdf>
+Package pdftex.def Info: kobakian-cook_files/figure-latex/alternatives-1.pdf  u
+sed on input line 237.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+
+Overfull \hbox (86.41528pt too wide) in paragraph at lines 237--237
+[][] 
+ []
+
+[4 <./kobakian-cook_files/figure-latex/fullhexmap-1.pdf>]
+<kobakian-cook_files/figure-latex/unnamed-chunk-1-1.pdf, id=73, 469.755pt x 325
+.215pt>
+File: kobakian-cook_files/figure-latex/unnamed-chunk-1-1.pdf Graphic file (type
+ pdf)
+<use kobakian-cook_files/figure-latex/unnamed-chunk-1-1.pdf>
+Package pdftex.def Info: kobakian-cook_files/figure-latex/unnamed-chunk-1-1.pdf
+  used on input line 265.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+
+Overfull \hbox (86.41528pt too wide) in paragraph at lines 265--265
+[][] 
+ []
+
+[5 <./kobakian-cook_files/figure-latex/alternatives-1.pdf>]
+<kobakian-cook_files/figure-latex/unnamed-chunk-1-2.pdf, id=81, 469.755pt x 325
+.215pt>
+File: kobakian-cook_files/figure-latex/unnamed-chunk-1-2.pdf Graphic file (type
+ pdf)
+<use kobakian-cook_files/figure-latex/unnamed-chunk-1-2.pdf>
+Package pdftex.def Info: kobakian-cook_files/figure-latex/unnamed-chunk-1-2.pdf
+  used on input line 283.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+
+Overfull \hbox (86.41528pt too wide) in paragraph at lines 283--283
+[][] 
+ []
+
+[6 <./kobakian-cook_files/figure-latex/unnamed-chunk-1-1.pdf>]
+<kobakian-cook_files/figure-latex/unnamed-chunk-2-1.pdf, id=89, 469.755pt x 325
+.215pt>
+File: kobakian-cook_files/figure-latex/unnamed-chunk-2-1.pdf Graphic file (type
+ pdf)
+<use kobakian-cook_files/figure-latex/unnamed-chunk-2-1.pdf>
+Package pdftex.def Info: kobakian-cook_files/figure-latex/unnamed-chunk-2-1.pdf
+  used on input line 307.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+
+Overfull \hbox (86.41528pt too wide) in paragraph at lines 307--307
+[][] 
+ []
+
+[7 <./kobakian-cook_files/figure-latex/unnamed-chunk-1-2.pdf>]
+<kobakian-cook_files/figure-latex/mapgrid-1.pdf, id=98, 469.755pt x 325.215pt>
+File: kobakian-cook_files/figure-latex/mapgrid-1.pdf Graphic file (type pdf)
+<use kobakian-cook_files/figure-latex/mapgrid-1.pdf>
+Package pdftex.def Info: kobakian-cook_files/figure-latex/mapgrid-1.pdf  used o
+n input line 324.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+
+Overfull \hbox (86.41528pt too wide) in paragraph at lines 324--324
+[][] 
+ []
+
+[8 <./kobakian-cook_files/figure-latex/unnamed-chunk-2-1.pdf>]
+
+Package natbib Warning: Citation `TVSSS' on page 9 undefined on input line 332.
+
+
+
+LaTeX Warning: Reference `fig:nsw_grid' on page 9 undefined on input line 335.
+
+
+Package natbib Warning: Citation `DMAHP' on page 9 undefined on input line 337.
+
+
+
+Package natbib Warning: Citation `TVSSS' on page 9 undefined on input line 341.
+
+
+
+LaTeX Warning: Reference `fig:nsw_grid' on page 9 undefined on input line 345.
+
+
+Package natbib Warning: Citation `NAC' on page 9 undefined on input line 350.
+
+
+Package natbib Warning: Citation `ECGC' on page 9 undefined on input line 351.
+
+
+Package natbib Warning: Citation `TVSSS' on page 9 undefined on input line 357.
+
+
+
+Package natbib Warning: Citation `ACTUC' on page 9 undefined on input line 361.
+
+
+
+LaTeX Warning: Reference `fig:nsw_grid' on page 9 undefined on input line 361.
+
+
+LaTeX Warning: Reference `fig:nsw_grid' on page 9 undefined on input line 365.
+
+[9 <./kobakian-cook_files/figure-latex/mapgrid-1.pdf>]
+
+Package natbib Warning: Citation `PH' on page 10 undefined on input line 382.
+
+<figs/sugarbag flow.png, id=116, 805.0075pt x 772.8875pt>
+File: figs/sugarbag flow.png Graphic file (type png)
+<use figs/sugarbag flow.png>
+Package pdftex.def Info: figs/sugarbag flow.png  used on input line 397.
+(pdftex.def)             Requested size: 398.33858pt x 382.44487pt.
+[10 <./figs/sugarbag flow.png>]
+
+Package natbib Warning: Citation `sf' on page 11 undefined on input line 453.
+
+
+Package natbib Warning: Citation `sf' on page 11 undefined on input line 480.
+
+
+Package natbib Warning: Citation `abs2011' on page 11 undefined on input line 4
+91.
+
+<figs/1centroids.png, id=125, 722.7pt x 361.35pt>
+File: figs/1centroids.png Graphic file (type png)
+<use figs/1centroids.png>
+Package pdftex.def Info: figs/1centroids.png  used on input line 533.
+(pdftex.def)             Requested size: 398.33858pt x 199.16766pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[11]
+<figs/2grid.png, id=136, 867.24pt x 433.62pt>
+File: figs/2grid.png Graphic file (type png)
+<use figs/2grid.png>
+Package pdftex.def Info: figs/2grid.png  used on input line 572.
+(pdftex.def)             Requested size: 455.24408pt x 227.62082pt.
+
+Overfull \hbox (56.9055pt too wide) in paragraph at lines 572--573
+ [][] 
+ []
+
+[12 <./figs/1centroids.png> <./figs/2grid.png>]
+<figs/3grid.png, id=148, 361.35pt x 361.35pt>
+File: figs/3grid.png Graphic file (type png)
+<use figs/3grid.png>
+Package pdftex.def Info: figs/3grid.png  used on input line 615.
+(pdftex.def)             Requested size: 284.52756pt x 284.53156pt.
+[13 <./figs/3grid.png>]
+<figs/4grid.png, id=160, 722.7pt x 361.35pt>
+File: figs/4grid.png Graphic file (type png)
+<use figs/4grid.png>
+Package pdftex.def Info: figs/4grid.png  used on input line 692.
+(pdftex.def)             Requested size: 455.24408pt x 227.62413pt.
+
+Overfull \hbox (56.9055pt too wide) in paragraph at lines 692--693
+ [][] 
+ []
+
+<figs/5allocate.png, id=162, 578.16pt x 686.565pt>
+File: figs/5allocate.png Graphic file (type png)
+<use figs/5allocate.png>
+Package pdftex.def Info: figs/5allocate.png  used on input line 706.
+(pdftex.def)             Requested size: 455.24408pt x 540.59947pt.
+
+Overfull \hbox (56.9055pt too wide) in paragraph at lines 706--707
+ [][] 
+ []
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[14 <./figs/4grid.png>]
+<figs/6allocate.png, id=172, 722.7pt x 361.35pt>
+File: figs/6allocate.png Graphic file (type png)
+<use figs/6allocate.png>
+Package pdftex.def Info: figs/6allocate.png  used on input line 724.
+(pdftex.def)             Requested size: 455.24408pt x 227.62413pt.
+
+Overfull \hbox (56.9055pt too wide) in paragraph at lines 724--725
+ [][] 
+ []
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Package natbib Warning: Citation `TACA' on page 15 undefined on input line 730.
+
+
+<figs/7SIR.png, id=174, 794.97pt x 505.89pt>
+File: figs/7SIR.png Graphic file (type png)
+<use figs/7SIR.png>
+Package pdftex.def Info: figs/7SIR.png  used on input line 742.
+(pdftex.def)             Requested size: 398.33858pt x 253.49243pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Package natbib Warning: Citation `gganimate' on page 15 undefined on input line
+ 791.
+
+
+Package natbib Warning: Citation `sugarbag' on page 15 undefined on input line 
+818.
+
+[15]
+
+LaTeX Warning: Reference `fig:nsw_grid' on page 16 undefined on input line 848.
+
+
+
+LaTeX Warning: Reference `fig:melanoma-hex' on page 16 undefined on input line 
+855.
+
+(./RJwrapper.bbl
+No file RJwrapper.brf.
+\tf@brf=\write6
+\openout6 = `RJwrapper.brf'.
+
+Runaway argument?
+ {ABS}. \newblock Statistical area level 2 (sa2) asgs ed 2011 digital\ETC.
+! Paragraph ended before \BR@@lbibitem was complete.
+<to be read again> 
+                   \par 
+l.14 
+      
 Here is how much of TeX's memory you used:
- 21875 strings out of 482823
- 408057 string characters out of 5954498
- 682175 words of memory out of 5000000
- 36701 multiletter control sequences out of 15000+600000
- 553231 words of font info for 106 fonts, out of 8000000 for 9000
+ 22092 strings out of 481886
+ 416555 string characters out of 5929870
+ 723715 words of memory out of 5000000
+ 37739 multiletter control sequences out of 15000+600000
+ 559728 words of font info for 150 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 68i,11n,101p,425b,651s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 108i,12n,122p,469b,675s stack positions out of 5000i,500n,10000p,200000b,80000s
 
 !  ==> Fatal error occurred, no output PDF file produced!
