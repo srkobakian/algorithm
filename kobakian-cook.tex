@@ -106,226 +106,8 @@ communication of distributions \citep{CBATCC}. In figure
 alternative maps to allow for comparisons to be made.
 
 \begin{Schunk}
-\begin{Sinput}
-states <- absmapsdata::state2011 %>% 
-  filter(!state_name_2011 == "Other Territories") %>% 
-  rmapshaper::ms_simplify(keep = 0.25, keep_shapes = TRUE)
 
-sa2 <- absmapsdata::sa22011 %>% 
-  filter(state_name_2011 == "Tasmania") %>% 
-  filter(!st_is_empty(geometry)) %>% 
-  filter(!state_name_2011 == "Other Territories")
-
-# sa2 <- sa2 %>% rmapshaper::ms_simplify(keep = 0.05, keep_shapes = TRUE)
-
-SIR <- read_csv("data/SIR Downloadable Data.csv") %>% 
-  filter(SA2_name %in% sa2$sa2_name_2011) %>% 
-  dplyr::select(Cancer_name, SA2_name, Sex_name, p50) %>% 
-  filter(Cancer_name == "Thyroid", Sex_name == "Females")
-ERP <- read_csv("data/ERP.csv") %>%
-  filter(REGIONTYPE == "SA2", Time == 2011, Region %in% SIR$SA2_name) %>% 
-  dplyr::select(Region, Value)
-
-# Alternative maps
-# Join with sa2 sf object
-sa2thyroid_ERP <- SIR %>% 
-  left_join(sa2, ., by = c("sa2_name_2011" = "SA2_name")) %>%
-  left_join(., ERP %>% 
-              dplyr::select(Region, 
-              Population = Value), by = c("sa2_name_2011"= "Region")) %>% 
-  filter(!st_is_empty(geometry))
-
-sa2thyroid_ERP <- sa2thyroid_ERP %>% 
-  filter(!is.na(Population)) %>% 
-  mutate(SIR = map_chr(p50, aus_colours)) %>% 
-  st_as_sf() 
-
-aus_ggchoro <- ggplot(sa2thyroid_ERP) + 
-  geom_sf(fill = "lightgrey", data = states %>% filter(state_name_2011=="Tasmania")) + 
-  geom_sf(aes(fill = SIR)) + 
-  scale_fill_identity() +invthm
-\end{Sinput}
-\end{Schunk}
-
-\begin{Schunk}
-\begin{Sinput}
-## Create centroids set
-centroids <- absmapsdata::sa22011 %>% 
-  filter(!st_is_empty(geometry)) %>% 
-  filter(state_name_2011 == "Tasmania") %>% 
- # filter(!sa2_name_2011 == "Lord Howe Island") %>% 
-  create_centroids(., "sa2_name_2011")
-
-## Create hexagon grid
-grid <- create_grid(centroids = centroids,
-                    hex_size = 0.2,
-                    buffer_dist = 5)
-
-## Allocate polygon centroids to hexagon grid points
-hex_allocated <- allocate(
-  centroids = centroids,
-  hex_grid = grid,
-  sf_id = "sa2_name_2011",
-  ## same column used in create_centroids
-  hex_size = 0.2,
-  ## same size used in create_grid
-  hex_filter = 10,
-  focal_points = capital_cities,
-  width = 35,
-  verbose = FALSE
-)
-
-## Prepare to plot
-fort_hex <- fortify_hexagon(data = hex_allocated,
-                            sf_id = "sa2_name_2011",
-                            hex_size = 0.2) %>% 
-            left_join(sa2thyroid_ERP %>% select(sa2_name_2011, SIR, p50))
-
-fort_aus <- sa2thyroid_ERP %>%
- # filter(!sa2_name_2011 == "Lord Howe Island") %>% 
-  fortify_sfc()
-
-fort_state <- states %>% 
-  filter(state_name_2011 == "Tasmania") %>% 
-  fortify_sfc() %>% 
-  filter(long < 159) 
-
-
-
-## Make a plot
-library(ggplot2)
-aus_hexmap <- ggplot() +
-  geom_polygon(aes(x = long,  y = lat, group = interaction(state_name_2011, polygon)),
-               fill = "darkgrey",  data = fort_state) +
-  geom_polygon(aes(x = long,  y = lat,  group = interaction(sa2_name_2011, polygon)),
-               fill = "black",  colour = "darkgrey",  size = 0.1, data = fort_aus) +
-  geom_polygon(aes(x = long, y = lat, group = hex_id, fill = SIR), data = fort_hex) +
-  scale_fill_identity() +
-  invthm + coord_equal()
-aus_hexmap
-\end{Sinput}
-
-\includegraphics{kobakian-cook_files/figure-latex/fullhexmap-1} \end{Schunk}
-
-\begin{Schunk}
-\begin{Sinput}
-sa2thyroid_ERP <- st_transform(sa2thyroid_ERP, 3112)
-sa2thyroid_ERP <- sa2thyroid_ERP %>% 
-  mutate(sva = sqrt(as.numeric(Population)/as.numeric(albers_sqkm)))
-
-
-###############################################################################
-# Contiguous Cartograms
-
-cont <- sa2thyroid_ERP %>% 
-  mutate(Population = Population + 1) %>% 
-  cartogram_cont(., weight = "Population", itermax = 20) %>%
-  st_as_sf()
-
-save(cont, file = "data/cont.rda")
-load("data/cont.rda")
-
-aus_ggcont <- ggplot(cont) + 
-  geom_sf(fill = "darkgrey",  data = states %>% st_transform(., 3112) %>% filter(state_name_2011 == "Tasmania")) +
-  geom_sf(fill = "darkgrey",  data = sa2thyroid_ERP) +
-  geom_sf(aes(fill = SIR), colour = NA) + 
-  scale_fill_identity() + 
-  invthm + guides(fill=FALSE)
-aus_ggcont
-\end{Sinput}
-
-\includegraphics{kobakian-cook_files/figure-latex/alternatives-1} \begin{Sinput}
-ggsave(filename = "figs/aus_ggcont.png", plot = aus_ggcont,
-       device = "png", bg = "transparent", dpi = 300,  width = 7, height = 6)
-\end{Sinput}
-\end{Schunk}
-
-\begin{Schunk}
-\begin{Sinput}
-###############################################################################
-# Non - Contiguous Cartograms
-
-ncont <- cartogram_ncont(sa2thyroid_ERP, k = 1.5,
-                         weight = "Population") %>% 
-                          st_as_sf()
-
-
-save(ncont, file = "data/ncont.rda")
-load("data/ncont.rda")
-
-tas_ggncont <- ggplot(ncont %>% filter(state_name_2011 == "Tasmania")) + 
-  geom_sf(fill = "darkgrey",  data = states %>% st_transform(., 3112) %>% filter(state_name_2011 == "Tasmania")) +
-  geom_sf(fill = "darkgrey",  data = sa2thyroid_ERP) +
-  geom_sf(aes(fill = SIR), colour = NA) + 
-  scale_fill_identity() + 
-  invthm + guides(fill=FALSE)
-tas_ggncont
-\end{Sinput}
-
-\includegraphics{kobakian-cook_files/figure-latex/unnamed-chunk-1-1} \begin{Sinput}
-# Hobart
-hobart <- ggplot(ncont %>% filter(gcc_name_2011 == "Greater Hobart")) + 
-  geom_sf(fill = "darkgrey",  data = sa2thyroid_ERP %>% filter(gcc_name_2011 == "Greater Hobart")) +
-  geom_sf(aes(fill = SIR, size = 0.001), colour = "black") + 
-  scale_fill_identity() + 
-  scale_size_identity() +
-  invthm + guides(fill=FALSE) + 
-  theme(plot.background = element_rect(fill = "transparent", colour = NA)) + 
-  theme(panel.background = element_rect(fill = "transparent", colour = "white"))
-  
-
-aus_ggncont <- ggdraw(xlim = c(0, 1), ylim = c(0, 2)) +
-  draw_plot(tas_ggncont, width = 1, height = 2) +
-  draw_plot(hobart, x = 0, width = 0.4, height = 0.4)
-aus_ggncont
-\end{Sinput}
-
-\includegraphics{kobakian-cook_files/figure-latex/unnamed-chunk-1-2} \begin{Sinput}
-ggsave(filename = "figs/aus_ggncont.png", plot = aus_ggncont,
-       device = "png", bg = "transparent", dpi = 300,  width = 7, height = 6)
-\end{Sinput}
-\end{Schunk}
-
-\begin{Schunk}
-\begin{Sinput}
-###############################################################################
-# Non - Contiguous Dorling Cartograms
-
-dorl <- sa2thyroid_ERP %>%
-  #mutate(pop = (Population/max(Population))*10) %>% # helpful for all of Australia
-  cartogram_dorling(., weight = "Population", k = 0.2, m_weight = 1) %>% st_as_sf()
-d <- st_bbox(dorl)
-aus_ggdorl <- ggplot(dorl) +
-  geom_sf(fill = "darkgrey",  data = states %>% st_transform(., 3112) %>% filter(state_name_2011 == "Tasmania")) +
-  geom_sf(fill = "darkgrey",  data = sa2thyroid_ERP) + 
-  geom_sf(aes(fill = SIR)) + 
-  scale_fill_identity()+
-  invthm + guides(fill = FALSE)
-aus_ggdorl
-\end{Sinput}
-
-\includegraphics{kobakian-cook_files/figure-latex/unnamed-chunk-2-1} \begin{Sinput}
-ggsave(filename = "figs/aus_ggdorl.png", plot = aus_ggdorl,
-       device = "png", bg = "transparent", dpi = 300,  width = 7, height = 6)
-\end{Sinput}
-\end{Schunk}
-
-\begin{Schunk}
-\begin{Sinput}
-aus_grid <- ggdraw(xlim = c(0, 2), ylim = c(0, 4)) +
-  draw_plot(aus_ggchoro, x = 0, y = 2, width = 1, height = 2) +
-  draw_plot(aus_ggcont,  x = 1, y = 2, width = 1, height = 2) +
-  draw_plot(aus_ggncont, x = 0, y = 0, width = 1, height = 2) +
-  draw_plot(aus_ggdorl,  x = 1, y = 0, width = 1, height = 2)
-
-aus_grid
-\end{Sinput}
-
-\includegraphics{kobakian-cook_files/figure-latex/mapgrid-1} \begin{Sinput}
-ggsave(filename = "figs/aus_grid.png", plot = aus_grid,
-  device = "png", bg = "transparent", dpi = 300, width = 8, height = 10)
-\end{Sinput}
-\end{Schunk}
+\includegraphics[width=0.9\linewidth]{kobakian-cook_files/figure-latex/tas_displays-1} \end{Schunk}
 
 When communicating information that is relevant to the population, each
 member of the population can be given equal representation by
@@ -479,12 +261,6 @@ themselves, the necessary inputs will change for each function.
 Users may choose to only use the \texttt{allocate} function when they
 wish to use a set of centroids, rather than \citep{sf} polygons.
 
-\begin{Schunk}
-\begin{Sinput}
-aus_hexmap
-\end{Sinput}
-\end{Schunk}
-
 \hypertarget{polygon-set}{%
 \paragraph{Polygon set}\label{polygon-set}}
 
@@ -498,12 +274,6 @@ The longitude and latitude centre of the capital cities of Australia are
 used as focal points to allocate each geographic area around the closest
 capital city. Hobart will be the common focal point, as this example
 uses only the areas in the state of Tasmania.
-
-\begin{Schunk}
-\begin{Sinput}
-data(capital_cities)
-\end{Sinput}
-\end{Schunk}
 
 The buffer distance, hexagon size, hexagon amount to filter and width of
 angle are parameters that will be determined within
@@ -522,12 +292,6 @@ in creating this object for use in \texttt{R}.
 The centroids can be derived from the set of polygons using the
 \texttt{create\_centroids} function:
 
-\begin{Schunk}
-\begin{Sinput}
-centroids <- create_centroids(shp_sf = tas_sa2, sf_id = "SA2_NAME16")
-\end{Sinput}
-\end{Schunk}
-
 \begin{figure}[h]
 \centering
 \includegraphics[width=14cm]{figs/1centroids.png}
@@ -544,12 +308,6 @@ represent the geographic units on a hexagon tile map.
 The grid of possible hexagon locations is made using the
 \texttt{create\_grid} function. It uses the centroids, the hexagon size
 and the buffer distance.
-
-\begin{Schunk}
-\begin{Sinput}
-grid <- create_grid(centroids = centroids, hex_size = 0.2, buffer_dist = 1.2)
-\end{Sinput}
-\end{Schunk}
 
 \hypertarget{creating-a-tessellated-grid}{%
 \subparagraph{Creating a tessellated
@@ -648,20 +406,6 @@ between the centroid and the furthest considered hexagon. It is used to
 subset possible grid points to only those surrounding the polygon
 centroid within an appropriate range. A smaller distance will increase
 speed, but can decrease accuracy when width of the angle increases.
-
-\begin{Schunk}
-\begin{Sinput}
-hexmap_allocation <- allocate(
-  centroids = centroids %>% select(SA2_NAME16, longitude, latitude),
-  sf_id = "SA2_NAME16",
-  hex_grid = grid,
-  hex_size = 0.2, ## same size used in create_grid
-  hex_filter = 10,
-  width = 35,
-  focal_points = capital_cities,
-  verbose = TRUE)
-\end{Sinput}
-\end{Schunk}
 
 The following example considers the first of the Statistical Areas at
 Level 2. Within the algorithm, these steps are repeated for each
@@ -876,27 +620,9 @@ many geographic units.
 
 The package can be installed from CRAN:
 
-\begin{Schunk}
-\begin{Sinput}
-install.packages("sugarbag")
-\end{Sinput}
-\end{Schunk}
-
 and the development version can be install from the GitHub repository:
 
-\begin{Schunk}
-\begin{Sinput}
-devtools::install_github("srkobakian","sugarbag")
-\end{Sinput}
-\end{Schunk}
-
 Load the library into your R session with:
-
-\begin{Schunk}
-\begin{Sinput}
-library(sugarbag)
-\end{Sinput}
-\end{Schunk}
 
 \bibliography{kobakian-cook.bib}
 
@@ -919,3 +645,4 @@ Department of Econometrics and Business Statistics\\
 %
 \\\href{mailto:dicook@monash.edu}{\nolinkurl{dicook@monash.edu}}
 }
+

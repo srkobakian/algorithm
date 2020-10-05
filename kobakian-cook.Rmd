@@ -22,22 +22,35 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r setup, echo=FALSE, message=FALSE, warning=FALSE, comment = FALSE}
+```{r defaults, echo=FALSE, message=FALSE, warning=FALSE, comment = FALSE}
+knitr::opts_chunk$set(warning = FALSE, 
+                      message = FALSE, 
+                      comment = FALSE,
+                      echo = FALSE,
+                      eval = TRUE,
+                      out.width = "90%",
+                      retina = 3,
+                      dev = "png",
+                      fig.pos = "center")
+```
+
+```{r setup}
 library(knitcitations)
 library(kableExtra)
 library(RefManageR)
+options("citation_format" = "pandoc")
+BibOptions(check.entries = FALSE, style = "markdown")
+
 library(sp)
 library(sf)
 library(sugarbag)
+# remotes::install_github("wfmackey/absmapsdata")
 library(absmapsdata)
 library(tidyverse)
 library(cartogram)
 library(ggthemes)
 library(cowplot)
 
-knitr::opts_chunk$set(warning = FALSE, message = FALSE)
-options("citation_format" = "pandoc")
-BibOptions(check.entries = FALSE, style = "markdown")
 
 
 invthm <- theme_map() + 
@@ -98,7 +111,7 @@ There are several established alternative visualisation methods. Tile maps, Rect
 
 The familiar choropleth map display is often used to allow the user to orient themselves. However, the emphasis on the land mass diminishes the features of the distribution in densely populated communities due to the small size on the display [@ACTUC]. The unique shapes of boundaries can be helpful for orienting users but may not contribute to their understanding of the spatial disease distribution as many of the communities are not visible in a choropleth display [@TVSSS]. This presents an opportunity for explicit map transformations to improve communication of distributions [@CBATCC]. In figure \ref{fig:nsw_grid}a) the choropleth map is presented with the alternative maps to allow for comparisons to be made.
 
-```{r choro}
+```{r thyroiddata}
 states <- absmapsdata::state2011 %>% 
   filter(!state_name_2011 == "Other Territories") %>% 
   rmapshaper::ms_simplify(keep = 0.25, keep_shapes = TRUE)
@@ -131,7 +144,9 @@ sa2thyroid_ERP <- sa2thyroid_ERP %>%
   filter(!is.na(Population)) %>% 
   mutate(SIR = map_chr(p50, aus_colours)) %>% 
   st_as_sf() 
+```
 
+```{r choro, eval=FALSE}
 aus_ggchoro <- ggplot(sa2thyroid_ERP) + 
   geom_sf(fill = "lightgrey", data = states %>% filter(state_name_2011=="Tasmania")) + 
   geom_sf(aes(fill = SIR)) + 
@@ -192,7 +207,7 @@ aus_hexmap <- ggplot() +
   geom_polygon(aes(x = long, y = lat, group = hex_id, fill = SIR), data = fort_hex) +
   scale_fill_identity() +
   invthm + coord_equal()
-aus_hexmap
+#aus_hexmap
 ```
 
 ```{r alternatives}
@@ -218,25 +233,30 @@ aus_ggcont <- ggplot(cont) +
   geom_sf(aes(fill = SIR), colour = NA) + 
   scale_fill_identity() + 
   invthm + guides(fill=FALSE)
-aus_ggcont
+#aus_ggcont
 
-ggsave(filename = "figs/aus_ggcont.png", plot = aus_ggcont,
-       device = "png", bg = "transparent", dpi = 300,  width = 7, height = 6)
+#ggsave(filename = "figs/aus_ggcont.png", plot = aus_ggcont,
+#       device = "png", bg = "transparent", dpi = 300,  width = 7, height = 6)
 
 ```
 
 
-```{r}
+```{r contcart}
 
 ###############################################################################
 # Non - Contiguous Cartograms
-
+if (!file.exists("data/ncont.rda")) {
 ncont <- cartogram_ncont(sa2thyroid_ERP, k = 1.5,
                          weight = "Population") %>% 
                           st_as_sf()
 
 
 save(ncont, file = "data/ncont.rda")
+}
+
+```
+
+```{r plotcontcart}
 load("data/ncont.rda")
 
 tas_ggncont <- ggplot(ncont %>% filter(state_name_2011 == "Tasmania")) + 
@@ -245,7 +265,7 @@ tas_ggncont <- ggplot(ncont %>% filter(state_name_2011 == "Tasmania")) +
   geom_sf(aes(fill = SIR), colour = NA) + 
   scale_fill_identity() + 
   invthm + guides(fill=FALSE)
-tas_ggncont
+#tas_ggncont
 
 # Hobart
 hobart <- ggplot(ncont %>% filter(gcc_name_2011 == "Greater Hobart")) + 
@@ -261,15 +281,15 @@ hobart <- ggplot(ncont %>% filter(gcc_name_2011 == "Greater Hobart")) +
 aus_ggncont <- ggdraw(xlim = c(0, 1), ylim = c(0, 2)) +
   draw_plot(tas_ggncont, width = 1, height = 2) +
   draw_plot(hobart, x = 0, width = 0.4, height = 0.4)
-aus_ggncont
+# aus_ggncont
 
-ggsave(filename = "figs/aus_ggncont.png", plot = aus_ggncont,
-       device = "png", bg = "transparent", dpi = 300,  width = 7, height = 6)
+#ggsave(filename = "figs/aus_ggncont.png", plot = aus_ggncont,
+#       device = "png", bg = "transparent", dpi = 300,  width = 7, height = 6)
 
 ```
 
 
-```{r}
+```{r dorl}
 
 ###############################################################################
 # Non - Contiguous Dorling Cartograms
@@ -282,17 +302,17 @@ aus_ggdorl <- ggplot(dorl) +
   geom_sf(fill = "darkgrey",  data = states %>% st_transform(., 3112) %>% filter(state_name_2011 == "Tasmania")) +
   geom_sf(fill = "darkgrey",  data = sa2thyroid_ERP) + 
   geom_sf(aes(fill = SIR)) + 
-  scale_fill_identity()+
+  scale_fill_identity() +
   invthm + guides(fill = FALSE)
-aus_ggdorl
+# aus_ggdorl
 
-ggsave(filename = "figs/aus_ggdorl.png", plot = aus_ggdorl,
-       device = "png", bg = "transparent", dpi = 300,  width = 7, height = 6)
+#ggsave(filename = "figs/aus_ggdorl.png", plot = aus_ggdorl,
+#       device = "png", bg = "transparent", dpi = 300,  width = 7, height = 6)
 
 ```
 
 
-```{r mapgrid, width = 8, height = 10}
+```{r mapgrid, width = 8, height = 10, eval=FALSE}
 aus_grid <- ggdraw(xlim = c(0, 2), ylim = c(0, 4)) +
   draw_plot(aus_ggchoro, x = 0, y = 2, width = 1, height = 2) +
   draw_plot(aus_ggcont,  x = 1, y = 2, width = 1, height = 2) +
@@ -303,6 +323,11 @@ aus_grid
 
 ggsave(filename = "figs/aus_grid.png", plot = aus_grid,
   device = "png", bg = "transparent", dpi = 300, width = 8, height = 10)
+```
+
+```{r tas_displays, width = 10, height = 4}
+library(gridExtra)
+grid.arrange(aus_ggcont, tas_ggncont, aus_ggdorl, ncol=3)
 ```
 
 
