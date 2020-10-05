@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.9.25)  5 OCT 2020 15:03
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.9.25)  5 OCT 2020 15:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -800,7 +800,7 @@ Package hyperref Warning: Difference (2) between bookmark levels is greater
 
 Package natbib Warning: Citation `BCM' on page 1 undefined on input line 41.
 
-<figs/aus_melanoma_p.png, id=53, 722.7pt x 722.7pt>
+<figs/aus_melanoma_p.png, id=54, 722.7pt x 722.7pt>
 File: figs/aus_melanoma_p.png Graphic file (type png)
 <use figs/aus_melanoma_p.png>
 Package pdftex.def Info: figs/aus_melanoma_p.png  used on input line 62.
@@ -831,7 +831,7 @@ LaTeX Warning: Reference `fig:nsw_grid' on page 1 undefined on input line 105.
 [1{/usr/local/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 ]
-<kobakian-cook_files/figure-latex/tas_displays-1.png, id=88, 469.755pt x 194.72
+<kobakian-cook_files/figure-latex/tas_displays-1.png, id=89, 469.755pt x 194.72
 75pt>
 File: kobakian-cook_files/figure-latex/tas_displays-1.png Graphic file (type pn
 g)
@@ -853,13 +853,13 @@ LaTeX Warning: Reference `fig:nsw_grid' on page 3 undefined on input line 143.
 
 LaTeX Warning: Reference `fig:nsw_grid' on page 3 undefined on input line 147.
 
-<figs/sugarbag flow.png, id=116, 805.0075pt x 772.8875pt>
+<figs/sugarbag flow.png, id=117, 805.0075pt x 772.8875pt>
 File: figs/sugarbag flow.png Graphic file (type png)
 <use figs/sugarbag flow.png>
 Package pdftex.def Info: figs/sugarbag flow.png  used on input line 179.
 (pdftex.def)             Requested size: 398.33858pt x 382.44487pt.
 [3] [4 <./figs/sugarbag flow.png>]
-<figs/1centroids.png, id=139, 722.7pt x 361.35pt>
+<figs/1centroids.png, id=140, 722.7pt x 361.35pt>
 File: figs/1centroids.png Graphic file (type png)
 <use figs/1centroids.png>
 Package pdftex.def Info: figs/1centroids.png  used on input line 297.
@@ -879,13 +879,13 @@ Overfull \hbox (56.9055pt too wide) in paragraph at lines 330--331
  []
 
 [6 <./figs/1centroids.png> <./figs/2grid.png>]
-<figs/3grid.png, id=165, 361.35pt x 361.35pt>
+<figs/3grid.png, id=166, 361.35pt x 361.35pt>
 File: figs/3grid.png Graphic file (type png)
 <use figs/3grid.png>
 Package pdftex.def Info: figs/3grid.png  used on input line 373.
 (pdftex.def)             Requested size: 284.52756pt x 284.53156pt.
 [7 <./figs/3grid.png>]
-<figs/4grid.png, id=177, 722.7pt x 361.35pt>
+<figs/4grid.png, id=178, 722.7pt x 361.35pt>
 File: figs/4grid.png Graphic file (type png)
 <use figs/4grid.png>
 Package pdftex.def Info: figs/4grid.png  used on input line 436.
@@ -895,7 +895,7 @@ Overfull \hbox (56.9055pt too wide) in paragraph at lines 436--437
  [][] 
  []
 
-<figs/5allocate.png, id=179, 578.16pt x 686.565pt>
+<figs/5allocate.png, id=180, 578.16pt x 686.565pt>
 File: figs/5allocate.png Graphic file (type png)
 <use figs/5allocate.png>
 Package pdftex.def Info: figs/5allocate.png  used on input line 450.
@@ -908,7 +908,7 @@ Overfull \hbox (56.9055pt too wide) in paragraph at lines 450--451
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<figs/6allocate.png, id=180, 722.7pt x 361.35pt>
+<figs/6allocate.png, id=181, 722.7pt x 361.35pt>
 File: figs/6allocate.png Graphic file (type png)
 <use figs/6allocate.png>
 Package pdftex.def Info: figs/6allocate.png  used on input line 468.
@@ -921,7 +921,7 @@ Overfull \hbox (56.9055pt too wide) in paragraph at lines 468--469
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<figs/7SIR.png, id=184, 794.97pt x 505.89pt>
+<figs/7SIR.png, id=185, 794.97pt x 505.89pt>
 File: figs/7SIR.png Graphic file (type png)
 <use figs/7SIR.png>
 Package pdftex.def Info: figs/7SIR.png  used on input line 486.
@@ -1037,7 +1037,7 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 26.
 Here is how much of TeX's memory you used:
  22396 strings out of 480608
  405796 string characters out of 5903630
- 692597 words of memory out of 5000000
+ 692609 words of memory out of 5000000
  37555 multiletter control sequences out of 15000+600000
  565476 words of font info for 180 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1048,10 +1048,10 @@ ive/2020/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb></usr/l
 ocal/texlive/2020/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/te
 xlive/2020/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2
 020/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on RJwrapper.pdf (13 pages, 690920 bytes).
+Output written on RJwrapper.pdf (13 pages, 690965 bytes).
 PDF statistics:
- 300 PDF objects out of 1000 (max. 8388607)
- 258 compressed objects within 3 object streams
+ 301 PDF objects out of 1000 (max. 8388607)
+ 259 compressed objects within 3 object streams
  70 named destinations out of 1000 (max. 500000)
  30335 words of extra memory for PDF output out of 35830 (max. 10000000)
 
