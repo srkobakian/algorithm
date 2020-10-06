@@ -37,19 +37,20 @@ knitr::opts_chunk$set(warning = FALSE,
 ```{r setup}
 library(knitcitations)
 library(kableExtra)
-library(RefManageR)
-options("citation_format" = "pandoc")
-BibOptions(check.entries = FALSE, style = "markdown")
-
 library(sp)
 library(sf)
 library(sugarbag)
-# remotes::install_github("wfmackey/absmapsdata")
-library(absmapsdata)
 library(tidyverse)
 library(cartogram)
 library(ggthemes)
 library(cowplot)
+
+# remotes::install_github("wfmackey/absmapsdata")
+library(absmapsdata)
+
+library(RefManageR)
+options("citation_format" = "pandoc")
+BibOptions(check.entries = FALSE, style = "markdown")
 
 
 
@@ -86,40 +87,14 @@ Many cancer atlases present geospatial cancer data on a choropleth map display. 
 
 <!-- Issues with choropleth map displays... -->
 
-In many countries, residents are increasingly gathering to live in urban areas around major cities [@ACTUC]. The creation of approximately equal population areas results in dramatically different square meterage of the administrative geographic units, such as states or electorates. The units are filled with colour to represent the value of the statistic for each unit [@EI]. This can lead to unequal emphasis on the statistical value of each of the geographic units. This allows choropleth map displays to misrepresent the spatial distributions of human related statistics due to area-size bias [@BCM]. Figure \ref{fig:melanoma-geo} is a choropleth map that uses colour to display the estimated Standardised Incidence Ratios (SIRs) of melanoma cancer for males for each of the Statistical Areas at Level 2 (SA2) used by the @abs2011. The Australian choropleth map display draws attention to the expanse of light blue areas across the rural communities in all states. The SA2s around Hobart stand out as more orange and red. To create this choropleth map the SA2 polygons for 2011 from the Australian Bureau of Statistics.
+In many countries, residents are increasingly gathering to live in urban areas around major cities [@ACTUC]. The creation of approximately equal population areas results in dramatically different square meterage of the administrative geographic units, such as states or electorates. The units are filled with colour to represent the value of the statistic for each unit [@EI]. This can lead to unequal emphasis on the statistical value of each of the geographic units. This allows choropleth map displays to misrepresent the spatial distributions of human related statistics due to area-size bias [@BCM]. Figure \ref{fig:thyroid-geo} is a choropleth map that uses colour to display the estimated Standardised Incidence Ratios (SIRs) of melanoma cancer for males for each of the Statistical Areas at Level 2 (SA2) used by the @abs2011. The Australian choropleth map display draws attention to the expanse of light blue areas across the rural communities in all states. The SA2s around Hobart stand out as more orange and red. To create this choropleth map the SA2 polygons for 2011 from the Australian Bureau of Statistics.
 
-<!-- solutions -->
-
-The solutions to this visualisation problem begin with the geography. Alternative maps shift the focus from land area and shape, to the value of the statistics in a group of areas [@ACCAC]. Different styles of cartograms apply transformations to the geographic areas, to highlight the values of the value of the statistic of interest. These displays result in a distortion of the map space to represent differences in the statistic across the areas [@ACCAC] as the statistic of interest is used to determine the cartogram layout.
-
-```{=tex}
-\begin{figure}[h]
-\centering
-\includegraphics[width=14cm]{figs/aus_melanoma_p.png}
-\caption{\label{fig:melanoma-geo}A choropleth map of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated SIR of Melanoma for males, they range from much lower than average (blue) to much higher than average (red)}
-\end{figure}
-```
-Alternative mapping methods allow increased understanding of the spatial distribution of a variable across the population, by fairly representing the population in each administrative area [@TAAM]. This acknowledges that the number of residents can be different but recognises that each area, or person within it is equally important.
-
-This paper contains a discussion of Existing Mapping Practices in Section 2. This is followed by details of the Algorithm in Section 3. Section 4 describes the implementation of the algorithm in the `sugarbag` package. Section 5 outlines the use and benefits of animation.
-
-## Existing Mapping Practices
-
-There are several established alternative visualisation methods. Tile maps, Rectangular cartograms [@ORC] and Dorling cartograms [@ACTUC] all use one simple shape to represent each geographic unit. They all minimise the emphasis on the size or shape of the geographic areas. These alternative map displays focus on the relationship between neighbours, attempting to preserve connections, and disregard the unique shapes of the administrative boundaries. Figure \ref{fig:nsw_grid} shows a collection of alternative map displays, this includes a) a contiguous cartogram, b) a non-contiguous cartogram, c) a Dorling cartogram and d) a hexagon tile map. Each Statistical Area at Level 2 (SA2) [@abs2011] was designed to represent a community. These administrative areas are often used to aggregate census data and used to understand demographics of the Australian population.
-
-<!-- choropleth -->
-
-The familiar choropleth map display is often used to allow the user to orient themselves. However, the emphasis on the land mass diminishes the features of the distribution in densely populated communities due to the small size on the display [@ACTUC]. The unique shapes of boundaries can be helpful for orienting users but may not contribute to their understanding of the spatial disease distribution as many of the communities are not visible in a choropleth display [@TVSSS]. This presents an opportunity for explicit map transformations to improve communication of distributions [@CBATCC]. In figure \ref{fig:nsw_grid}a) the choropleth map is presented with the alternative maps to allow for comparisons to be made.
 
 ```{r thyroiddata}
-states <- absmapsdata::state2011 %>% 
-  filter(!state_name_2011 == "Other Territories") %>% 
-  rmapshaper::ms_simplify(keep = 0.25, keep_shapes = TRUE)
-
 sa2 <- absmapsdata::sa22011 %>% 
-  filter(state_name_2011 == "Tasmania") %>% 
   filter(!st_is_empty(geometry)) %>% 
-  filter(!state_name_2011 == "Other Territories")
+  filter(!state_name_2011 == "Other Territories") %>% 
+  filter(!sa2_name_2011 == "Lord Howe Island")
 
 # sa2 <- sa2 %>% rmapshaper::ms_simplify(keep = 0.05, keep_shapes = TRUE)
 
@@ -141,24 +116,37 @@ sa2thyroid_ERP <- SIR %>%
   filter(!st_is_empty(geometry))
 
 sa2thyroid_ERP <- sa2thyroid_ERP %>% 
-  filter(!is.na(Population)) %>% 
+  #filter(!is.na(Population)) %>% 
+  filter(!sa2_name_2011 == "Lord Howe Island") %>% 
   mutate(SIR = map_chr(p50, aus_colours)) %>% 
   st_as_sf() 
 ```
 
-```{r choro, eval=FALSE}
+```{r choro, fig.cap = "A choropleth map of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated SIR of Thyroid cancer for females, ranging from much lower than average (blue) to much higher than average (red)"}
 aus_ggchoro <- ggplot(sa2thyroid_ERP) + 
-  geom_sf(fill = "lightgrey", data = states %>% filter(state_name_2011=="Tasmania")) + 
-  geom_sf(aes(fill = SIR)) + 
-  scale_fill_identity() +invthm
+  geom_sf(aes(fill = SIR), size = 0.1) + 
+  scale_fill_identity() + invthm
 ```
 
-```{r fullhexmap}
+<!-- solutions -->
+
+The solutions to this visualisation problem begin with the geography. Alternative maps shift the focus from land area and shape, to the value of the statistics in a group of areas [@ACCAC]. Different styles of cartograms apply transformations to the geographic areas, to highlight the values of the value of the statistic of interest. These displays result in a distortion of the map space to represent differences in the statistic across the areas [@ACCAC] as the statistic of interest is used to determine the cartogram layout.
+
+Alternative mapping methods allow increased understanding of the spatial distribution of a variable across the population, by fairly representing the population in each administrative area [@TAAM]. This acknowledges that the number of residents can be different but recognises that each area, or person within it is equally important.
+
+This paper contains a discussion of Existing Mapping Practices in Section 2. This is followed by details of the Algorithm in Section 3. Section 4 describes the implementation of the algorithm in the `sugarbag` package. Section 5 outlines the use and benefits of animation.
+
+## Existing Mapping Practices
+
+There are several established alternative visualisation methods. Tile maps, Rectangular cartograms [@ORC] and Dorling cartograms [@ACTUC] all use one simple shape to represent each geographic unit. They all minimise the emphasis on the size or shape of the geographic areas. These alternative map displays focus on the relationship between neighbours, attempting to preserve connections, and disregard the unique shapes of the administrative boundaries. Figure \ref{fig:nsw_grid} shows a collection of alternative map displays, this includes a) a contiguous cartogram, b) a non-contiguous cartogram, c) a Dorling cartogram and d) a hexagon tile map. Each Statistical Area at Level 2 (SA2) [@abs2011] was designed to represent a community. These administrative areas are often used to aggregate census data and used to understand demographics of the Australian population.
+
+<!-- choropleth -->
+
+The familiar choropleth map display is often used to allow the user to orient themselves. However, the emphasis on the land mass diminishes the features of the distribution in densely populated communities due to the small size on the display [@ACTUC]. The unique shapes of boundaries can be helpful for orienting users but may not contribute to their understanding of the spatial disease distribution as many of the communities are not visible in a choropleth display [@TVSSS]. This presents an opportunity for explicit map transformations to improve communication of distributions [@CBATCC]. In figure \ref{fig:nsw_grid}a) the choropleth map is presented with the alternative maps to allow for comparisons to be made.
+
+```{r fullhexmap, fig.cap = "A choropleth hexagon tile map of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated SIR of Thyroid cancer for females, ranging from much lower than average (blue) to much higher than average (red)"}
 ## Create centroids set
-centroids <- absmapsdata::sa22011 %>% 
-  filter(!st_is_empty(geometry)) %>% 
-  filter(state_name_2011 == "Tasmania") %>% 
- # filter(!sa2_name_2011 == "Lord Howe Island") %>% 
+centroids <- sa2 %>% 
   create_centroids(., "sa2_name_2011")
 
 ## Create hexagon grid
@@ -187,52 +175,43 @@ fort_hex <- fortify_hexagon(data = hex_allocated,
             left_join(sa2thyroid_ERP %>% select(sa2_name_2011, SIR, p50))
 
 fort_aus <- sa2thyroid_ERP %>%
- # filter(!sa2_name_2011 == "Lord Howe Island") %>% 
   fortify_sfc()
-
-fort_state <- states %>% 
-  filter(state_name_2011 == "Tasmania") %>% 
-  fortify_sfc() %>% 
-  filter(long < 159) 
-
 
 
 ## Make a plot
-library(ggplot2)
 aus_hexmap <- ggplot() +
-  geom_polygon(aes(x = long,  y = lat, group = interaction(state_name_2011, polygon)),
-               fill = "darkgrey",  data = fort_state) +
   geom_polygon(aes(x = long,  y = lat,  group = interaction(sa2_name_2011, polygon)),
                fill = "black",  colour = "darkgrey",  size = 0.1, data = fort_aus) +
   geom_polygon(aes(x = long, y = lat, group = hex_id, fill = SIR), data = fort_hex) +
   scale_fill_identity() +
   invthm + coord_equal()
-#aus_hexmap
+aus_hexmap
 ```
 
 ```{r alternatives}
+# Project data 
 sa2thyroid_ERP <- st_transform(sa2thyroid_ERP, 3112)
 sa2thyroid_ERP <- sa2thyroid_ERP %>% 
   mutate(sva = sqrt(as.numeric(Population)/as.numeric(albers_sqkm)))
 
-
 ###############################################################################
 # Contiguous Cartograms
 
+if (!file.exists("data/ncont.rda")) {
 cont <- sa2thyroid_ERP %>% 
   mutate(Population = Population + 1) %>% 
   cartogram_cont(., weight = "Population", itermax = 20) %>%
   st_as_sf()
 
-save(cont, file = "data/cont.rda")
+save(cont, file = "data/cont.rda") }
+
 load("data/cont.rda")
 
 aus_ggcont <- ggplot(cont) + 
-  geom_sf(fill = "darkgrey",  data = states %>% st_transform(., 3112) %>% filter(state_name_2011 == "Tasmania")) +
+  
   geom_sf(fill = "darkgrey",  data = sa2thyroid_ERP) +
   geom_sf(aes(fill = SIR), colour = NA) + 
-  scale_fill_identity() + 
-  invthm + guides(fill=FALSE)
+  scale_fill_identity() + guides(fill=FALSE)
 #aus_ggcont
 
 #ggsave(filename = "figs/aus_ggcont.png", plot = aus_ggcont,
@@ -259,39 +238,18 @@ save(ncont, file = "data/ncont.rda")
 ```{r plotcontcart}
 load("data/ncont.rda")
 
-tas_ggncont <- ggplot(ncont %>% filter(state_name_2011 == "Tasmania")) + 
-  geom_sf(fill = "darkgrey",  data = states %>% st_transform(., 3112) %>% filter(state_name_2011 == "Tasmania")) +
+aus_ggncont <- ggplot(ncont %>% filter(state_name_2011 == "Tasmania")) + 
   geom_sf(fill = "darkgrey",  data = sa2thyroid_ERP) +
   geom_sf(aes(fill = SIR), colour = NA) + 
   scale_fill_identity() + 
-  invthm + guides(fill=FALSE)
-#tas_ggncont
-
-# Hobart
-hobart <- ggplot(ncont %>% filter(gcc_name_2011 == "Greater Hobart")) + 
-  geom_sf(fill = "darkgrey",  data = sa2thyroid_ERP %>% filter(gcc_name_2011 == "Greater Hobart")) +
-  geom_sf(aes(fill = SIR, size = 0.001), colour = "black") + 
-  scale_fill_identity() + 
-  scale_size_identity() +
-  invthm + guides(fill=FALSE) + 
-  theme(plot.background = element_rect(fill = "transparent", colour = NA)) + 
-  theme(panel.background = element_rect(fill = "transparent", colour = "white"))
-  
-
-aus_ggncont <- ggdraw(xlim = c(0, 1), ylim = c(0, 2)) +
-  draw_plot(tas_ggncont, width = 1, height = 2) +
-  draw_plot(hobart, x = 0, width = 0.4, height = 0.4)
-# aus_ggncont
-
-#ggsave(filename = "figs/aus_ggncont.png", plot = aus_ggncont,
-#       device = "png", bg = "transparent", dpi = 300,  width = 7, height = 6)
+  guides(fill=FALSE)
+#aus_ggncont
 
 ```
 
 
 ```{r dorl}
 
-###############################################################################
 # Non - Contiguous Dorling Cartograms
 
 dorl <- sa2thyroid_ERP %>%
@@ -299,7 +257,6 @@ dorl <- sa2thyroid_ERP %>%
   cartogram_dorling(., weight = "Population", k = 0.2, m_weight = 1) %>% st_as_sf()
 d <- st_bbox(dorl)
 aus_ggdorl <- ggplot(dorl) +
-  geom_sf(fill = "darkgrey",  data = states %>% st_transform(., 3112) %>% filter(state_name_2011 == "Tasmania")) +
   geom_sf(fill = "darkgrey",  data = sa2thyroid_ERP) + 
   geom_sf(aes(fill = SIR)) + 
   scale_fill_identity() +
@@ -600,7 +557,7 @@ These hexagons equally represent each area. However, the tessellation does not a
 
 The Dorling cartogram was the most influential in the design of the hexagon tile map. The use of a hexagon provides a simple shape that shifts the focus of the visualisation from the shape of SA2s to the distribution effects of a disease on communities. not impeded by the irregular and unusual shapes created by a contiguous cartogram and the immense white space created on the non-contiguous cartogram. Hexagons can emphasise the relationship between neighbouring communities by allowing their sides to touch. The tessellation crated by adjoining hexagons for densely populated areas is helpful as it shows that most communities are not islands onto themselves, but are intrinsically connected to those around them. As seen in the Dorling cartogram in figure \ref{fig:nsw_grid}c), the tessellation that allows boundary connections was not imposed for rural communities, where centroid of the geographic unit was located far from others, a feature that allows distant but dense populations of the coastal towns of Tasmania to be recognised.
 
-The choropleth map that uses the geographic shapes of areas can be seen in figure \ref{fig:melanoma-geo}. Figure \ref{fig:melanoma-hex} displays the Australian areas with equally sized hexagons. This display allows the small and densely populated inner city areas to be easily contrasted with their neighbouring areas.
+The choropleth map that uses the geographic shapes of areas can be seen in figure \ref{fig:thyroid-geo}. Figure \ref{fig:melanoma-hex} displays the Australian areas with equally sized hexagons. This display allows the small and densely populated inner city areas to be easily contrasted with their neighbouring areas.
 
 <!-- future -->
 
