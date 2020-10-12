@@ -5,16 +5,17 @@
 \maketitle
 
 \abstract{%
-This algorithm creates a tessellated hexagon display to represent a set
-of the spatial polygons. It allocates these hexagon in a manner that
-preserves the spatial relationship of the geographic units. The
-algorithm creates a display that showcases spatial distributions, by
-emphasising the small geographical regions that are often difficult to
-locate on geographic maps. Spatial distributions have been presented on
-alternative representations of geography for many years. In modern
-times, interactivity and animation have begun to play a larger role, as
-alternative representations have been popularised by online news sites,
-and atlas websites with a focus on public consumption. Applications are
+The algorithm presented creates a display that uses tessellated hexagons
+to represent a set of spatial polygons. It allocates these hexagon in a
+manner that preserves the spatial relationship of the geographic units,
+in light of their positions to points of interest. The display showcases
+spatial distributions, by emphasising the small geographical regions
+that are often difficult to locate on geographic maps. Spatial
+distributions have been presented on alternative representations of
+geography for many years. In modern times, interactivity and animation
+have allowed alternative displays to play a larger role. Alternative
+representations have been popularised by online news sites, and atlas
+websites with a focus on public consumption. Applications are
 increasingly widespread, especially in the areas of disease mapping, and
 election results.
 }
@@ -39,29 +40,28 @@ for each unit \citep{EI}. This can lead to unequal emphasis on the
 statistical value of each of the geographic units. This allows
 choropleth map displays to misrepresent the spatial distributions of
 human related statistics due to area-size bias \citep{BCM}. Figure
-\ref{fig:melanoma-geo} is a choropleth map that uses colour to display
-the estimated Standardised Incidence Ratios (SIRs) of melanoma cancer
-for males for each of the Statistical Areas at Level 2 (SA2) used by the
-Australian Bureau of Statistics \citeyearpar{abs2011}. The Australian
-choropleth map display draws attention to the expanse of light blue
-areas across the rural communities in all states. The SA2s around Hobart
-stand out as more orange and red. To create this choropleth map the SA2
-polygons for 2011 from the Australian Bureau of Statistics.
+\ref{fig:choro} is a choropleth map that uses colour to display the
+estimated Standardised Incidence Ratios (SIRs) of thyroid cancer for
+males for each of the Statistical Areas at Level 2 (SA2) used by the
+\citet{abs2011}. The Australian choropleth map display draws attention
+to the expanse of dark and light blue areas across the rural communities
+in all states. The SA2s around Brisbane stand out as more orange and
+red.
+
+\begin{Schunk}
+\begin{figure}
+\includegraphics[width=0.95\linewidth]{kobakian-cook_files/figure-latex/choro-1} \caption[A choropleth map of the Statistical Areas of Australia at Level 2]{A choropleth map of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated SIR of Thyroid cancer for females, ranging from much lower than average (blue) to much higher than average (red)}\label{fig:choro}
+\end{figure}
+\end{Schunk}
 
 The solutions to this visualisation problem begin with the geography.
 Alternative maps shift the focus from land area and shape, to the value
-of the statistics in a group of areas \citep{ACCAC}. Different styles of
-cartograms apply transformations to the geographic areas, to highlight
-the values of the value of the statistic of interest. These displays
-result in a distortion of the map space to represent differences in the
-statistic across the areas \citep{ACCAC} as the statistic of interest is
-used to determine the cartogram layout.
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=14cm]{figs/aus_melanoma_p.png}
-\caption{\label{fig:melanoma-geo}A choropleth map of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated SIR of Melanoma for males, they range from much lower than average (blue) to much higher than average (red)}
-\end{figure}
+of the statistics in a collection of areas \citep{ACCAC}. Each style of
+cartogram applies a different transformation to the geographic areas, to
+highlight the values of the statistic of interest. These displays result
+in a distortion of the map space to represent features of the
+distribution across the areas \citep{ACCAC} as the statistic of interest
+is used to determine the cartogram layout.
 
 Alternative mapping methods allow increased understanding of the spatial
 distribution of a variable across the population, by fairly representing
@@ -86,12 +86,9 @@ unit. They all minimise the emphasis on the size or shape of the
 geographic areas. These alternative map displays focus on the
 relationship between neighbours, attempting to preserve connections, and
 disregard the unique shapes of the administrative boundaries. Figure
-\ref{fig:nsw_grid} shows a collection of alternative map displays, this
-includes a) a contiguous cartogram, b) a non-contiguous cartogram, c) a
-Dorling cartogram and d) a hexagon tile map. Each Statistical Area at
-Level 2 (SA2) \citep{abs2011} was designed to represent a community.
-These administrative areas are often used to aggregate census data and
-used to understand demographics of the Australian population.
+\ref{fig:tas_displays} shows a collection of alternative map displays,
+this includes a) a contiguous cartogram, b) a non-contiguous cartogram,
+and c) a Dorling cartogram.
 
 The familiar choropleth map display is often used to allow the user to
 orient themselves. However, the emphasis on the land mass diminishes the
@@ -99,243 +96,57 @@ features of the distribution in densely populated communities due to the
 small size on the display \citep{ACTUC}. The unique shapes of boundaries
 can be helpful for orienting users but may not contribute to their
 understanding of the spatial disease distribution as many of the
-communities are not visible in a choropleth display \citep{TVSSS}. This
-presents an opportunity for explicit map transformations to improve
-communication of distributions \citep{CBATCC}. In figure
-\ref{fig:nsw_grid}a) the choropleth map is presented with the
-alternative maps to allow for comparisons to be made.
+communities are not visible in a choropleth display \citep{TVSSS}. Each
+Statistical Area at Level 2 (SA2) \citep{abs2011} was designed to
+represent a community. These administrative areas are often used to
+aggregate census data and used to understand demographics within
+communities of the Australian population. This presents an opportunity
+for explicit map transformations to improve communication of
+distributions \citep{CBATCC}. In figure \ref{fig:tas_displays} the
+choropleth map can be seen underneath each alternative map display to
+allow for comparisons to be made.
 
 \begin{Schunk}
-\begin{Sinput}
-states <- absmapsdata::state2011 %>% 
-  rmapshaper::ms_simplify(keep = 0.25, keep_shapes = TRUE) %>% 
-  filter(!state_name_2011 == "Other Territories")
-
-sa2 <- absmapsdata::sa22011 %>% 
-  filter(state_name_2011 == "New South Wales") %>% 
-  filter(!st_is_empty(geometry))
-
-# sa2 <- sa2 %>% rmapshaper::ms_simplify(keep = 0.05, keep_shapes = TRUE)
-
-SIR <- read_csv("data/SIR Downloadable Data.csv") %>% 
-  filter(SA2_name %in% sa2$sa2_name_2011) %>% 
-  dplyr::select(Cancer_name, SA2_name, Sex_name, p50) %>% 
-  filter(Cancer_name == "Thyroid", Sex_name == "Females")
-ERP <- read_csv("data/ERP.csv") %>%
-  filter(REGIONTYPE == "SA2", Time == 2011, Region %in% SIR$SA2_name) %>% 
-  dplyr::select(Region, Value)
-
-# Alternative maps
-# Join with sa2 sf object
-sa2thyroid_ERP <- SIR %>% 
-  left_join(sa2, ., by = c("sa2_name_2011" = "SA2_name")) %>%
-  left_join(., ERP %>% 
-              dplyr::select(Region, 
-              Population = Value), by = c("sa2_name_2011"= "Region")) %>% 
-  filter(!st_is_empty(geometry))
-
-sa2thyroid_ERP <- sa2thyroid_ERP %>% 
-  filter(!is.na(Population)) %>% 
-  mutate(SIR = map_chr(p50, aus_colours)) %>% 
-  st_as_sf() 
-
-aus_ggchoro <- ggplot(sa2thyroid_ERP) + 
-  #geom_sf(fill = "lightgrey", data = states) + 
-  geom_sf(aes(fill = SIR)) + 
-  scale_fill_identity()
-\end{Sinput}
-\end{Schunk}
-
-\begin{Schunk}
-\begin{Sinput}
-###############################################################################
-
-sa2thyroid_ERP <- st_transform(sa2thyroid_ERP, 3112)
-sa2thyroid_ERP <- sa2thyroid_ERP %>% 
-  mutate(sva = sqrt(as.numeric(Population)/as.numeric(albers_sqkm)))
-
-
-###############################################################################
-# Contiguous Cartograms
-
-cont <- sa2thyroid_ERP %>% 
-  mutate(Population = Population + 1) %>% 
-  cartogram_cont(., weight = "Population", itermax = 20) %>%
-  st_as_sf()
-
-save(cont, file = "data/cont.rda")
-load("data/cont.rda")
-
-aus_ggcont <- ggplot(cont) + 
-  geom_sf(aes(fill = SIR), colour = NA) + 
-  scale_fill_identity() + 
-  invthm + guides(fill=FALSE)
-aus_ggcont
-
-ggsave(filename = "figures/aus_ggcont.png", plot = aus_ggcont,
-       device = "png", bg = "transparent", dpi = 300,  width = 7, height = 6)
-\end{Sinput}
-\end{Schunk}
-
-\begin{Schunk}
-\begin{Sinput}
-###############################################################################
-# Non - Contiguous Cartograms
-
-ncont <- cartogram_ncont(sa2thyroid_ERP, k = 1/10,
-                         weight = "Population") %>% st_as_sf()
-
-save(ncont, file = "data/ncont.rda")
-load("data/ncont.rda")
-
-aus_ggncont <- ggplot(ncont) + 
-  geom_sf(aes(fill = SIR), colour = NA) + 
-  scale_fill_identity() + 
-  invthm + guides(fill=FALSE)
-aus_ggncont
-
-ggsave(filename = "figures/aus_ggncont.png", plot = aus_ggncont,
-       device = "png", bg = "transparent", dpi = 300,  width = 7, height = 6)
-\end{Sinput}
-\end{Schunk}
-
-\begin{Schunk}
-\begin{Sinput}
-###############################################################################
-# Non - Contiguous Dorling Cartograms
-
-dorl <- sa2lung_ERP %>%
-  mutate(pop = (Population/max(Population))*10) %>% 
-  cartogram_dorling(., k = 0.01, weight = "pop", m_weight = 1) %>% st_as_sf()
-d <- st_bbox(dorl)
-aus_ggdorl <- ggplot(dorl) + 
-  geom_sf(aes(fill = SIR)) + 
-  scale_fill_identity()+
-  invthm + guides(fill = FALSE)
-aus_ggdorl
-
-ggsave(filename = "figures/aus_ggdorl.png", plot = aus_ggdorl,
-       device = "png", bg = "transparent", dpi = 300,  width = 7, height = 6)
-\end{Sinput}
-\end{Schunk}
-
-\begin{Schunk}
-\begin{Sinput}
-## Load data
-tas_sa2 <- absmapsdata::sa22011 %>% 
-  filter(state_name_2011 == "New South Wales")
-
-## Create centroids set
-centroids <- create_centroids(tas_sa2, "sa2_name_2011")
-
-## Create hexagon grid
-grid <- create_grid(centroids = centroids,
-                    hex_size = 0.12,
-                    buffer_dist = 1.2)
-
-## Allocate polygon centroids to hexagon grid points
-hex_allocated <- allocate(
-  centroids = centroids,
-  hex_grid = grid,
-  sf_id = "sa2_name_2011",
-  ## same column used in create_centroids
-  hex_size = 0.12,
-  ## same size used in create_grid
-  hex_filter = 10,
-  use_neighbours = tas_sa2,
-  focal_points = capital_cities %>%
-    filter(points == "Hobart"),
-  width = 35,
-  verbose = FALSE
-)
-
-## Prepare to plot
-fort_hex <- fortify_hexagon(data = hex_allocated,
-                            sf_id = "sa2_name_2011",
-                            hex_size = 0.12)
-
-fort_tas <- tas_sa2 %>%
-  fortify_sfc()
-
-## Make a plot
-library(ggplot2)
-tas_hexmap <- ggplot() +
-  geom_polygon(aes(
-      x = long,
-      y = lat,
-      group = interaction(sa2_name_2011, polygon)
-    ),
-    fill = "white",
-    colour = "lightgrey",
-    data = fort_tas
-  ) +
-  geom_polygon(aes(
-    x = long,
-    y = lat,
-    group = hex_id,
-    fill = rownumber
-  ),
-  data = fort_hex) +
-  scale_fill_distiller("", palette = "PRGn") +
-  coord_equal() + theme_void()
-tas_hexmap
-\end{Sinput}
-\end{Schunk}
-
-\begin{Schunk}
-\begin{Sinput}
-###############################################################################
-
-aus_grid <- gridExtra::grid.arrange(aus_ggchoro, aus_ggcont, aus_ggncont, aus_ggdorl, nrow = 2)
-
-aus_grid
-ggsave(filename = "figures/aus_grid.png", plot = aus_grid,
-  device = "png", bg = "transparent", dpi = 300,  width = 7, height = 6)
-\end{Sinput}
-\end{Schunk}
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=14cm]{figs/nsw_grid.png}
-\caption{\label{fig:nsw_grid}A collection of alternative maps of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated SIR of Melanoma for males, ranging from much lower than average (blue) to much higher than average (red)}
+\begin{figure}
+\includegraphics[width=0.95\linewidth]{kobakian-cook_files/figure-latex/tas_displays-1} \caption[The three displays show alternative maps of the Statistical Areas at Level 2 in the Australian state of Tasmania]{The three displays show alternative maps of the Statistical Areas at Level 2 in the Australian state of Tasmania. These alternatives show the (a) contiguous cartogram, (b) non-contiguous cartogram and (c) Dorling cartogram of Tasmania.}\label{fig:tas_displays}
 \end{figure}
+\end{Schunk}
 
 When communicating information that is relevant to the population, each
 member of the population can be given equal representation by
 transforming the map \citep{TVSSS}. The impact of a disease over
 connected communities can be seen by allowing the boundaries to maintain
 connection in the transformed display. The contiguous cartogram
-displayed in figure \ref{fig:nsw_grid}b) draws attention to smaller
+displayed in figure \ref{fig:tas_displays}b) draws attention to smaller
 geographic units when they are rescaled according to the population
 \citep{DMAHP}. These new shapes can now be coloured to represent a
 second variable. This display can create twisted and unfamiliar shapes
 from the geographic units as the algorithms must satisfy the topology
 conditions, especially when there are communities located geographically
 far from their neighbours \citep{TVSSS}. This shown in the northern SA2s
-of New South Wales with an average (yellow) estimated SIR of Melanoma
-for males.
+of Tasmania with an average (yellow) estimated SIR of thyroid for males.
 
-The non-contiguous cartogram in figure \ref{fig:nsw_grid}c) also uses
-the population to rescale the geographic units. Unlike the contiguous
-cartogram, the SA2 areas maintain their geographic shape, but they may
-not retain the connection with their neighbours. The population of the
-SA2 areas is used to scale the geographic units in the non-contiguous
-cartogram \citep{NAC}. The amount of white space can be meaningful in
-non-contiguous cartograms \citep{ECGC}, in this example the disparity
-between large rural areas and small urban areas means that the city of
-Hobart, shown in the inset map looks reasonable, but these units are not
-visible in the context of the New South Wales state map. Depending on
-the difference between the population and geographic land size, the
-amount of white space can also prevent meaningful understanding of the
-distribution \citep{TVSSS}.
+The non-contiguous cartogram in figure \ref{fig:tas_displays}c) also
+uses the population to rescale the geographic units. Unlike the
+contiguous cartogram, the SA2 areas maintain their geographic shape, but
+they may not retain the connection with their neighbours. The population
+of the SA2 areas is used to scale the geographic units in the
+non-contiguous cartogram \citep{NAC}. The amount of white space can be
+meaningful in non-contiguous cartograms \citep{ECGC}, in this example
+the disparity between large rural areas and small urban areas means that
+the city of Hobart, shown in the inset map looks reasonable, but these
+units are not visible in the context of the Tasmania state map.
+Depending on the difference between the population and geographic land
+size, the amount of white space can also prevent meaningful
+understanding of the distribution \citep{TVSSS}.
 
 The Dorling cartogram presents each geographic unit as a circle, the
 size of the circle is scaled according to the population value of each
-area \citep{ACTUC}. Figure \ref{fig:nsw_grid}d) shows the New South
-Wales SA2 areas as an individual circle located as close as possible to
-the geographic centroid location. This map draws attention to the
-collection of coastal cities in New South Wales that were not apparent
-in figure \ref{fig:nsw_grid} a), b) or c).
+area \citep{ACTUC}. Figure \ref{fig:tas_displays}c) shows the Tasmania
+SA2 areas as an individual circle located as close as possible to the
+geographic centroid location. This map draws attention to the collection
+of coastal cities in Tasmania that were not apparent in figure
+\ref{fig:tas_displays} a), or b).
 
 \hypertarget{algorithm}{%
 \subsection{Algorithm}\label{algorithm}}
@@ -356,15 +167,36 @@ point \citep{PH}. This hive design inspired the use of multiple focal
 points in the algorithm, individual spirals are constructed outward from
 various points on the geographic map base.
 
-There are three key steps performed to create a tessellated hexagon tile
-map. First create the set of centroids from the polygons to allocate,
-then create the grid of hexagons locations. Each centroid can then be
-allocated to an available hexagon location. To make tessellated plots
-the points can be converted to hexagon shapes, with the hexagon size
-equal to the size used in the grid.
+The result of the algorithm is a display that emphasises the densely
+populated geographic regions surrounding the capital cities in
+Australia. Each capital city forms it's own layer of connected hexagons.
+Figure \ref{fig:hexmap} allows the distributions in the capital cities
+to be viewed at a deeper scale. Sydney is now notable for the
+considerable amount of red areas, not just for the surrounding orange
+areas around the New South Wales capital visible in the choropleth
+display in Figure \ref{fig:choro}. Brisbane and Perth also draw
+attention for the many orange areas. Interestingly there is no clear
+divide between rural and urban SA2 areas as Melbourne, Darwin, Adelaide
+and Hobart have low rates of thyroid cancer diagnosis.
+
+\begin{Schunk}
+\begin{figure}
+\includegraphics[width=0.95\linewidth]{kobakian-cook_files/figure-latex/hexmap-1} \caption[A hexagon tile map of the Statistical Areas of Australia at Level 2]{A hexagon tile map of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated SIR of thyroid for males, they range from much lower than average (blue) to much higher than average (red).}\label{fig:hexmap}
+\end{figure}
+\end{Schunk}
+
+There are three key steps performed to create the tessellated hexagon
+tile map shown in Figure \ref{fig:hexmap}. First, derive the set of
+centroids from the polygons provided, then create the grid of hexagons
+locations. These two steps are defined in the blue left column of the
+flow chart in Figure \ref{fig:sugarbag_flow}. Each centroid can then be
+allocated to an available hexagon location. The steps for the allocation
+process are detailed in the right column of Figure
+\ref{fig:sugarbag_flow}. To make tessellated plots, the point locations
+are converted to hexagon shapes, with the hexagon size used in the grid.
 
 \begin{figure}
-\includegraphics[width=14cm]{figs/flowchart.png}
+\includegraphics[width=14cm]{figs/sugarbag flow.png}
 \caption{\label{fig:sugarbag_flow}A flow diagram detailing the necessary steps to create a hexagon tile map.}
 \end{figure}
 
@@ -372,7 +204,7 @@ equal to the size used in the grid.
 \paragraph{User choices}\label{user-choices}}
 
 Only two inputs are necessary to begin using the algorithm, the shape
-file, and the id variable. The id column should uniquely identify each
+file, and the id variable. The id variable should uniquely identify each
 geographic unit in the shape file.
 
 The centroids can be derived from the shape file. The amount of
@@ -439,9 +271,9 @@ affect the speed of the creation.
 map}\label{creating-a-hexagon-tile-map}}
 
 The following code creates the hexagon tile map for all the Statistical
-Areas at Level 2 in New South Wales. These steps can be executed by the
-main function, \texttt{create\_hexmap}, or can be implemented separately
-for more flexibility.
+Areas at Level 2 in Tasmania. These steps can be executed by the main
+function, \texttt{create\_hexmap}, or can be implemented separately for
+more flexibility.
 
 If a user would like to perform each of the steps of the algorithm
 themselves, the necessary inputs will change for each function.
@@ -449,31 +281,19 @@ themselves, the necessary inputs will change for each function.
 Users may choose to only use the \texttt{allocate} function when they
 wish to use a set of centroids, rather than \citep{sf} polygons.
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=14cm]{figs/aus_gghexmap.png}
-\caption{\label{fig:melanoma-hex}A hexagon tile map of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated SIR, they range from much lower than average (blue) to much higher than average (red)}
-\end{figure}
-
 \hypertarget{polygon-set}{%
 \paragraph{Polygon set}\label{polygon-set}}
 
 The polygon set of Statistical Areas at Level 2 (SA2) \citep{abs2011} of
-New South Wales in 2011 is provided with the \texttt{sugarbag} package
-as \texttt{tas\_sa2}. A single column of the data set is used to
-identify the unique areas. In this case, the unique SA2 names for each
-SA2 have been used.
+Tasmania in 2011 is provided with the \texttt{sugarbag} package as
+\texttt{tas\_sa2}. A single column of the data set is used to identify
+the unique areas. In this case, the unique SA2 names for each SA2 have
+been used.
 
 The longitude and latitude centre of the capital cities of Australia are
 used as focal points to allocate each geographic area around the closest
 capital city. Hobart will be the common focal point, as this example
-uses only the areas in the state of New South Wales.
-
-\begin{Schunk}
-\begin{Sinput}
-data(capital_cities)
-\end{Sinput}
-\end{Schunk}
+uses only the areas in the state of Tasmania.
 
 The buffer distance, hexagon size, hexagon amount to filter and width of
 angle are parameters that will be determined within
@@ -493,16 +313,10 @@ The centroids can be derived from the set of polygons using the
 \texttt{create\_centroids} function:
 
 \begin{Schunk}
-\begin{Sinput}
-centroids <- create_centroids(shp_sf = tas_sa2, sf_id = "SA2_NAME16")
-\end{Sinput}
-\end{Schunk}
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=14cm]{figs/1centroids.png}
-\caption{\label{fig:centroids_plot}The geographic shapes of the Statistical Areas of New South Wales at Level 2. The points show the locations of the centroids of the SA2 areas.}
+\begin{figure}
+\includegraphics[width=0.95\linewidth]{kobakian-cook_files/figure-latex/centroids_plot-1} \caption[The Australian Cancer Atlas data has determined the colour of each Statistical Area of Australian at Level 2]{The Australian Cancer Atlas data has determined the colour of each Statistical Area of Australian at Level 2. A choropleth map (a) of Standardised Incidence Rates (SIRs) is paired with a hexagon tile map (b) to contrast the colours that are made obvious when every SA2 is equally represented.}\label{fig:centroids_plot}
 \end{figure}
+\end{Schunk}
 
 \hypertarget{step-2-create-the-hexagon-grid-points}{%
 \paragraph{Step 2: Create the hexagon grid
@@ -514,12 +328,6 @@ represent the geographic units on a hexagon tile map.
 The grid of possible hexagon locations is made using the
 \texttt{create\_grid} function. It uses the centroids, the hexagon size
 and the buffer distance.
-
-\begin{Schunk}
-\begin{Sinput}
-grid <- create_grid(centroids = centroids, hex_size = 0.2, buffer_dist = 1.2)
-\end{Sinput}
-\end{Schunk}
 
 \hypertarget{creating-a-tessellated-grid}{%
 \subparagraph{Creating a tessellated
@@ -537,11 +345,11 @@ grid on the left, to allow for tessellating hexagons, every second
 latitude row on the grid is shifted right, by half of the hexagon size.
 The grid for tessellation is shown on the right.
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=16cm]{figs/2grid.png}
-\caption{\label{fig:grid2}Grid points to create a hexagon tile map.}
+\begin{Schunk}
+\begin{figure}
+\includegraphics[width=0.95\linewidth]{kobakian-cook_files/figure-latex/grid2-1} \caption[Complete set of grid points to create a tile map]{Complete set of grid points to create a tile map.}\label{fig:grid2}
 \end{figure}
+\end{Schunk}
 
 \hypertarget{rolling-windows}{%
 \subparagraph{Rolling windows}\label{rolling-windows}}
@@ -557,10 +365,10 @@ centroid location. Then rows and columns of centroids are divided into
 20 groups. The amount of rows in each latitude group and the amount of
 columns in each longitude group are used as the width of rolling
 windows. The rolling windows can be seen on the bottom and right of the
-grid shown in Figure \ref{fig:filter-grid}. This will tailor the
-available grid points to those most likely to be used. It also helps
-reduce the amount of time taken, as it decreases the amount of points
-considered for each centroid allocation.
+grid shown in Figure \ref{fig:grid3}. This will tailor the available
+grid points to those most likely to be used. It also helps reduce the
+amount of time taken, as it decreases the amount of points considered
+for each centroid allocation.
 
 The first rolling window function finds the minimum and maximum centroid
 values for the sliding window groups of longitude columns and the groups
@@ -580,11 +388,11 @@ populated South-West region of National Park has much fewer points
 available compared to the South-East region containing the city of
 Hobart.
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=10cm]{figs/3grid.png}
-\caption{\label{fig:filter-grid}The remaining hexagon locations from all the possible points in the initial grid after the buffer is applied. The blue dots show the grid points left to choose from after the buffer step.}
+\begin{Schunk}
+\begin{figure}
+\includegraphics[width=0.95\linewidth]{kobakian-cook_files/figure-latex/grid3-1} \caption[The remaining hexagon locations from all the possible points in the initial grid after the buffer is applied]{The remaining hexagon locations from all the possible points in the initial grid after the buffer is applied. The blue dots show the grid points left to choose from after the buffer step.}\label{fig:grid3}
 \end{figure}
+\end{Schunk}
 
 \hypertarget{centroid-to-focal-point-distance}{%
 \subparagraph{Centroid to focal point
@@ -594,10 +402,10 @@ The distance between each centroid in the set, and each of the focal
 points provided is calculated. The name of the closest focal point, and
 the distance and angle from focal point to polygon centroid is joined to
 polygon data set. To minimise time taken for this step only one option
-is provided, New South Wales's capital city Hobart. The order for
-allocation is determined by the distance between the polygon centroid
-and it's closest focal point. The points are arranged from the centroid
-closest to the focal point(s), to the furthest.
+is provided, Tasmania's capital city Hobart. The order for allocation is
+determined by the distance between the polygon centroid and it's closest
+focal point. The points are arranged from the centroid closest to the
+focal point(s), to the furthest.
 
 \hypertarget{step-3-allocate-each-centroid-to-a-hexagon-grid-point}{%
 \paragraph{Step 3: Allocate each centroid to a hexagon grid
@@ -618,20 +426,6 @@ between the centroid and the furthest considered hexagon. It is used to
 subset possible grid points to only those surrounding the polygon
 centroid within an appropriate range. A smaller distance will increase
 speed, but can decrease accuracy when width of the angle increases.
-
-\begin{Schunk}
-\begin{Sinput}
-hexmap_allocation <- allocate(
-  centroids = centroids %>% select(SA2_NAME16, longitude, latitude),
-  sf_id = "SA2_NAME16",
-  hex_grid = grid,
-  hex_size = 0.2, ## same size used in create_grid
-  hex_filter = 10,
-  width = 35,
-  focal_points = capital_cities,
-  verbose = TRUE)
-\end{Sinput}
-\end{Schunk}
 
 The following example considers the first of the Statistical Areas at
 Level 2. Within the algorithm, these steps are repeated for each
@@ -657,25 +451,25 @@ The algorithm then removes the outer corners of the square, creating a
 circle of points, by only keeping points within a certain radial
 distance around the original centroid location.
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=16cm]{figs/4grid.png}
-\caption{\label{fig:buffers}The remaining available hexagon locations after filtering for the grid points within a square distance, then circular around the centroid.}
+\begin{Schunk}
+\begin{figure}
+\includegraphics[width=1\linewidth]{kobakian-cook_files/figure-latex/buffers-1} \caption[Filter for grid points within a square, then circular, distance for those closest to the centroid]{Filter for grid points within a square, then circular, distance for those closest to the centroid.}\label{fig:buffers}
 \end{figure}
+\end{Schunk}
 
 The \texttt{width} parameter is used to take a slice of the remaining
 points. The width is the amount of degrees used on either side of the
 angle from the focal point to centroid location. This uses the angle
 from the closest capital city, to the current centroid as seen in Figure
-\ref{fig:angles} . This allows the spatial relationship to be preserved,
-even when it is allocated to a hexagon that is further from the focal
-point then the original centroid location.
+\ref{fig:buffers2} . This allows the spatial relationship to be
+preserved, even when it is allocated to a hexagon that is further from
+the focal point then the original centroid location.
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=16cm]{figs/5allocate.png}
-\caption{\label{fig:angles}The remaining available hexagon locations after filtering for grid points within the angle from the focal point to the centroid.}
+\begin{Schunk}
+\begin{figure}
+\includegraphics[width=1\linewidth]{kobakian-cook_files/figure-latex/buffers2-1} \caption[Filter for grid points within a square, then circular, distance for those closest to the centroid]{Filter for grid points within a square, then circular, distance for those closest to the centroid.}\label{fig:buffers2}
 \end{figure}
+\end{Schunk}
 
 If no available hexagon grid point is found within the original filter
 distance and angle, the distance is expanded, only when a maximum
@@ -689,49 +483,17 @@ chosen to allow the algorithm to choose hexagons that best maintained
 the spatial relationship between the focal point and geographic
 centroid.
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=16cm]{figs/6allocate.png}
-\caption{\label{fig:buffs}A complete hexagon tile map of New South Wales.}
-\end{figure}
-
-A complete hexagon tile map of New South Wales is created by applying
-the algorithm steps to each centroid. The hexagon tile map visualisation
-is used below to visualise the Australian Cancer Atlas data
-\citep{TACA}. Two views of the same data are produced by filling
-according to the thyroid Cancer Standardised Incidence Rates (SIRs)
-downloaded from the Australian Cancer Atlas site. This small example in
-Figure \ref{fig:sir} shows the group of blue areas in the Hobart CBD
-more prominently in the hexagon tile map (b). The small red areas
-visible in the choropleth map (a) along the north coast are much larger
-in the hexagon tile maps. The hexagon tile map shows less yellow, this
-no longer overwhelms the map space with the information regarding the
-rural areas.
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=14cm]{figs/7SIR.png}
-\caption{\label{fig:sir}The Australian Cancer Atlas data displayed on a choropleth and hexagon tile map. The colour of each Statistical Area of Australian at Level 2 coloured by SIR. A choropleth map (a) of SIR is paired with a hexagon tile map (b) to contrast the colours that are made obvious when every SA2 is equally represented.}
-\end{figure}
-
-\hypertarget{neighbour-relationships}{%
-\paragraph{Neighbour relationships}\label{neighbour-relationships}}
-
-It is possible to consider the neighbouring areas for each SA2, for
-stronger preservation of the spatial distribution.
-
-An additional step can be included to allow the neighbours that have
-already been allocated to influence the placement of the current
-centroid. This requires specifying the \texttt{sf} object as the
-argument for the \texttt{use\_neighbours} parameter. This calculates
-neighbours using intersections of their polygons. This occurs for all
-areas before any allocations begin.
-
-During the allocation of each centroid, the list of neighbours is
-consulted. If any neighbour was already allocated, the hexagons
-surrounding the neighbours on the grid are prioritised. For multiple
-neighbours, the neighbouring hexagon grid points are aggregated and
-considered in order of distance from the original centroid.
+A complete hexagon tile map of Tasmania is created by applying the
+algorithm steps to each centroid. The hexagon tile map is used to
+visualise the Australian Cancer Atlas data \citep{TACA}. Two views of
+the same data are produced by filling according to the thyroid Cancer
+Standardised Incidence Rates (SIRs) downloaded from the Australian
+Cancer Atlas site. This small example in Figure \ref{fig:centroids_plot}
+shows the group of blue areas in the Hobart CBD more prominently in the
+hexagon tile map (b). The small red areas visible in the choropleth map
+(a) along the north coast are much larger in the hexagon tile maps. The
+hexagon tile map shows less yellow, this no longer overwhelms the map
+space with the information regarding the rural areas.
 
 \hypertarget{hexagon-tile-map-of-australia}{%
 \subsection{Hexagon tile map of
@@ -741,26 +503,20 @@ This algorithm has been applied to the complete set of all Australian
 Statistical Areas at Level 2. This display highlights the density of
 Australian capital cities, as it draws attention to the many communities
 in Sydney, Melbourne and Hobart. This display also highlights the
-disparity in the burden of Melanoma cancer for males in the communities
+disparity in the burden of thyroid cancer for males in the communities
 of these three cities. There are several collections of red hexagons in
 Hobart that draw attention and they represent the communities with much
 higher rates of diagnosis than the Australian average. The communities
 south of Hobart show a gradient of colour as the values progress from
 higher than average, to much lower than average for the communities
 closer to the Sydney CBD. This pattern progresses into the communities
-with lower than average rates in Melbourne and New South Wales.
+with lower than average rates in Melbourne and Tasmania.
 
 Compared to the choropleth map display, the low rates in the rural
 Australian communities are no longer dominating the display. The much
 higher than average rates in Sydney draw more attention in the hexagon
 tile map display unlike the red and orange areas in the city of Hobart
 that draw attention in both displays.
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=14cm]{figs/aus_gghexmap.png}
-\caption{\label{fig:melanoma-geo}A hexagon tile map of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated SIR of Melanoma for males, they range from much lower than average (blue) to much higher than average (red).}
-\end{figure}
 
 \hypertarget{animation}{%
 \subsection{Animation}\label{animation}}
@@ -806,10 +562,10 @@ works on the assumption that viewers can use directional relationships
 to identify their neighbourhoods but this can be aided by the animation.
 With careful consideration of the choropleth map, the small geographic
 inner city areas may have been noticed by viewers, but the hexagon tile
-map display emphasises them. The communities in northern New South Wales
-and the Northern territory do not draw attention because of their size
-as in the choropleth, but their colour is still noticeably below average
-when contrasted with the hexagons further south.
+map display emphasises them. The communities in northern Tasmania and
+the Northern territory do not draw attention because of their size as in
+the choropleth, but their colour is still noticeably below average when
+contrasted with the hexagons further south.
 
 The Dorling cartogram was the most influential in the design of the
 hexagon tile map. The use of a hexagon provides a simple shape that
@@ -822,16 +578,16 @@ allowing their sides to touch. The tessellation crated by adjoining
 hexagons for densely populated areas is helpful as it shows that most
 communities are not islands onto themselves, but are intrinsically
 connected to those around them. As seen in the Dorling cartogram in
-figure \ref{fig:nsw_grid}c), the tessellation that allows boundary
+figure \ref{fig:tas_displays}c), the tessellation that allows boundary
 connections was not imposed for rural communities, where centroid of the
 geographic unit was located far from others, a feature that allows
-distant but dense populations of the coastal towns of New South Wales to
-be recognised.
+distant but dense populations of the coastal towns of Tasmania to be
+recognised.
 
 The choropleth map that uses the geographic shapes of areas can be seen
-in figure \ref{fig:melanoma-geo}. Figure \ref{fig:melanoma-hex} displays
-the Australian areas with equally sized hexagons. This display allows
-the small and densely populated inner city areas to be easily contrasted
+in figure \ref{fig:choro}. Figure \ref{fig:hexmap} displays the
+Australian areas with equally sized hexagons. This display allows the
+small and densely populated inner city areas to be easily contrasted
 with their neighbouring areas.
 
 Future work will include refining the algorithm. It would be possible to
@@ -853,29 +609,11 @@ many geographic units.
 
 The package can be installed from CRAN:
 
-\begin{Schunk}
-\begin{Sinput}
-install.packages("sugarbag")
-\end{Sinput}
-\end{Schunk}
-
 and the development version can be install from the GitHub repository:
-
-\begin{Schunk}
-\begin{Sinput}
-devtools::install_github("srkobakian","sugarbag")
-\end{Sinput}
-\end{Schunk}
 
 Load the library into your R session with:
 
-\begin{Schunk}
-\begin{Sinput}
-library(sugarbag)
-\end{Sinput}
-\end{Schunk}
-
-\bibliography{sugarbag.bib}
+\bibliography{kobakian-cook.bib}
 
 \address{%
 Stephanie Kobakian\\
