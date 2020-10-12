@@ -155,6 +155,7 @@ ggsave(filename = "figures/aus_thyroid_f_hex.png", plot = aus_thyroid_f_hex,
 
 
 ###############################################################################
+
 ###########################     SUGARBAG Tasmania
 
 tas_sa2 <- absmapsdata::sa22011 %>% filter(state_name_2011 == "Tasmania") 
@@ -617,7 +618,6 @@ tas_sa2 <- tas_sa2 %>%
   select(sa2_name_2011, geometry, poly_type)
 
 all_areas <- rbind(fort_hex, tas_sa2)
-
 
 library(gganimate)
 ggplot(all_areas) +  
