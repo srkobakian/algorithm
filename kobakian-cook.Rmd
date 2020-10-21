@@ -407,7 +407,7 @@ g1 <- ggplot() +
   geom_polygon(aes(x = long, y = lat, group = interaction(sa2_name_2011, polygon)), data = fort_tas, fill = "#D3D3D3", colour = "white", size = 0.01) + 
    theme_void() + 
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#09661f", data = grid, size = 1) +
-  coord_equal() + ggtitle("a")
+  coord_equal()
 
 full_grid <- grid <- grid %>%
   mutate(hex_long_int = dense_rank(hex_long)-1,
@@ -547,7 +547,7 @@ g2 <- ggplot() +
    geom_polygon(aes(x = long, y = lat, group = interaction(sa2_name_2011, polygon)), data = fort_tas, fill = "#D3D3D3", colour = "white", size = 0.01) +  
   theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#55b56c", data = full_grid, size = 0.5) +
-  geom_point(aes(x = hex_long, y = hex_lat), colour = "#09661f", data = grid, size = 1.5) + ggtitle("b")
+  geom_point(aes(x = hex_long, y = hex_lat), colour = "#09661f", data = grid, size = 1)
 
 ```
 
@@ -641,16 +641,16 @@ f1 <- ggplot() +
   geom_polygon(aes(x = long, y = lat, group = interaction(sa2_name_2011, polygon)), data = fort_tas, fill = "#D3D3D3", colour = "white", size = 0.01) +
   theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#55b56c", data = grid, size = 0.5) +
-  geom_point(aes(x = hex_long, y = hex_lat), colour = "#09661f", data = f_grid, size = 1.5) + 
-  geom_point(aes(x=longitude, y = latitude), data = f_centroid, fill = "#ede187", shape = 24) + 
+  geom_point(aes(x = hex_long, y = hex_lat), colour = "#09661f", data = f_grid, size = 1) + 
+  geom_point(aes(x=longitude, y = latitude), data = f_centroid, fill = "#ede187", shape = 25) + 
 #Hobart
-  geom_point(aes(x = focal_longitude, y = focal_latitude), data = f_centroid, colour = "#e9f2ed", size = 2, shape = 3) + ggtitle("c") 
+  geom_point(aes(x = focal_longitude, y = focal_latitude), data = f_centroid, colour = "#e9f2ed", size = 2, shape = 4)
 
 ```
 
 The `width` parameter is used to take a slice of the remaining points. The width is the amount of degrees used on either side of the angle from the focal point to centroid location. This uses the angle from the closest capital city, to the current centroid as seen in Figure \ref{fig:filterprocess} . This allows the spatial relationship to be preserved, even when it is allocated to a hexagon that is further from the focal point then the original centroid location.
 
-```{r filterprocess, fig.cap = "Filter for grid points within a square, then circular, distance for those closest to the centroid.", echo = FALSE, height = 8}
+```{r filterprocess, fig.cap = "Filter for grid points within a square, then circular, distance for those closest to the centroid.", echo = FALSE, height = 12}
 full_grid <- full_grid %>% filter(hex_long > bbox$min[1], hex_long < bbox$max[1],
                                   hex_lat > bbox$min[2], hex_lat < bbox$max[2])
 
@@ -672,18 +672,22 @@ hex <- f_grid %>%
         select(hex_long, hex_lat, hex_id = id)
 
 f2 <- ggplot() + 
-  geom_polygon(aes(x = long, y = lat, group = interaction(sa2_name_2011, polygon)), data = fort_tas, fill = "#D3D3D3", colour = "white", size = 0.01) +
+  geom_polygon(aes(x = long, y = lat, group = interaction(sa2_name_2011, polygon)), data = fort_tas %>% filter(lat < -40.3), fill = "#D3D3D3", colour = "white", size = 0.01) +
   geom_polygon(aes(x = long, y = lat, group = interaction(sa2_name_2011)), data = fort_allocated, fill = "#353b38", colour = "black", size = 0.01) +
   #Hobart
-  geom_point(aes(x = focal_longitude, y = focal_latitude), data = f_centroid, colour = "#e9f2ed", size = 2, shape = 3) + 
-  geom_point(aes(x=longitude, y = latitude), data = f_centroid, fill = "#ede187", shape = 24) + 
+  geom_point(aes(x = focal_longitude, y = focal_latitude), data = f_centroid, colour = "#e9f2ed", size = 3, shape = 4) + 
+  geom_point(aes(x=longitude, y = latitude), data = f_centroid, fill = "#ede187", shape = 25, size = 2) + 
   theme_void() + coord_equal() +
-  geom_point(aes(x = hex_long, y = hex_lat), colour = "#09661f", data = f_grid, size = 1) +
-  geom_point(aes(x = hex_long, y = hex_lat), colour = "#09661f", fill = "white", data = hex, size = 1.5, shape = 21) + ggtitle("d")
+  # possible choices to select
+  geom_point(aes(x = hex_long, y = hex_lat), colour = "#09661f", data = f_grid, size = 1.5) +
+  # selected hexagon
+  geom_point(aes(x = hex_long, y = hex_lat), colour = "#09661f", fill = "#ede187", data = hex, size = 2.5, shape = 21)
+ 
+# gridExtra::grid.arrange(g1, g2,
+#                         f1, f2)
 
-
-gridExtra::grid.arrange(g1, g2,
-                        f1, f2)
+cowplot::plot_grid(g1, g2,
+                   f1, f2, labels = c("a", "b", "c", "d"))
 ```
 
 
