@@ -281,7 +281,7 @@ There are three key steps performed to create the tessellated hexagon tile map s
 \caption{\label{fig:sugarbag_flow}A flow diagram detailing the necessary steps to create a hexagon tile map.}
 \end{figure}
 
-#### User choices
+### User choices
 
 <!-- The`create_hexmap` function will -->
 
@@ -309,20 +309,15 @@ The `sugarbag` package has been written for R software, it contains a set of fun
 A user can tweak the parameters of the hexagon map using the additional arguments to the `create_hexmap` function, these options may affect the speed of the creation. 
 The hexagon size may need adjustments depending on the density of the population, users can provide an appropriate hexagon size and re-run the algorithm. The buffer distance may need to be increased if the coastal cities need to extend beyond the geographic land mass.
 
-#### Creating a hexagon tile map
 
-The following code creates the hexagon tile map for all the Statistical Areas at Level 2 in Tasmania. These steps can be executed by the main function, `create_hexmap`, or can be implemented separately for more flexibility.
+The following code creates the hexagon tile map for all the Statistical Areas at Level 2 in Tasmania. These steps can be executed by the main function, `create_hexmap`, or can be run separately for more flexibility.
 
-If a user would like to perform each of the steps of the algorithm themselves, the necessary inputs will change for each function.
-
-Users may choose to only use the `allocate` function when they wish to use a set of centroids, rather than [@sf] polygons.
+If a user would like to perform each of the steps of the algorithm themselves, the necessary inputs will change for each function. For example, the `allocate` function can be used directly when a user wishes to use a set of centroids, rather than [@sf] polygons.
 
 
-#### Polygon set
+The polygon set of Statistical Areas at Level 2 (SA2) [@abs2011] of Tasmania in 2011 is accessed from the `absmapsdata` package. A single column of the data set is used to identify the unique areas. In this case, the unique SA2 names for each SA2 have been used.
 
-The polygon set of Statistical Areas at Level 2 (SA2) [@abs2011] of Tasmania in 2011 is provided with the `sugarbag` package as `tas_sa2`. A single column of the data set is used to identify the unique areas. In this case, the unique SA2 names for each SA2 have been used.
-
-The longitude and latitude centre of the capital cities of Australia are used as focal points to allocate each geographic area around the closest capital city. Hobart will be the common focal point, as this example uses only the areas in the state of Tasmania.
+The longitude and latitude centre of the capital cities of Australia are used as focal points to allocate each geographic area around the closest capital city. Hobart will be the focal point, as this example uses only the areas in the state of Tasmania.
 
 ```{r capital_cities}
 data(capital_cities)
@@ -330,9 +325,9 @@ data(capital_cities)
 
 The buffer distance, hexagon size, hexagon amount to filter and width of angle are parameters that will be determined within `create_hexmap` if they are not provided. They are created as they are needed throughout the following example.
 
-#### Step 1: Derive the set of centroid points
+### Step 1: Derive the set of centroid points
 
-A set of centroids may be used directly. The set of polygons should be provided as an `sf` object, this is a data frame containing a `geometry` column. The `read_shape` function can assist in creating this object for use in `R`.
+The set of polygons should be provided as an `sf` object, this is a data frame containing a `geometry` column. The `read_shape` function can assist in creating this object for use in `R`.
 
 The centroids can be derived from the set of polygons using the `create_centroids` function:
 
@@ -370,15 +365,13 @@ tas_hexmap <- ggplot() +
   coord_equal()
 ```
 
-#### Step 2: Create the hexagon grid points
+### Step 2: Create the hexagon grid points
 
-A grid is created to ensure tessellation between the hexagons that represent the geographic units on a hexagon tile map.
+A grid is created to ensure tessellation between the hexagons that represent the geographic units on a hexagon tile map. The grid of possible hexagon locations is made using the `create_grid` function. It uses the centroids, the hexagon size and the buffer distance.
 
-The grid of possible hexagon locations is made using the `create_grid` function. It uses the centroids, the hexagon size and the buffer distance.
+#### Creating a tessellated grid
 
-##### Creating a tessellated grid
-
-A set of longitude columns, and latitude rows are created to define the locations of the hexagons. The distance between each row and column is the size specified by `hex_size`. Equally spaced columns are created from the minimum longitude minus the buffer distance, up to the maximum longitude plus the buffer distance. Similarly, the rows are created from the latitude values and the buffer distance. A unique hexagon location is created from all intersections of the longitude columns and latitude rows. Figure \ref{fig:filterprocess} shows the original grid on the left, to allow for tessellating hexagons, every second latitude row on the grid is shifted right, by half of the hexagon size. The grid for tessellation is shown on the right.
+A set of longitude columns, and latitude rows are created to define the locations of the hexagons. The distance between each row and column is the size specified by `hex_size`. Equally spaced columns are created from the minimum longitude minus the buffer distance, up to the maximum longitude plus the buffer distance. Similarly, the rows are created from the latitude values and the buffer distance. A unique hexagon location is created from all intersections of the longitude columns and latitude rows. Figure \ref{fig:filterprocess}a) allows for tessellating hexagons after every second latitude row on the grid is shifted right, by half of the hexagon size.
 
 
 ```{r grid, fig.cap = "Complete set of grid points to create a tile map.", height = 4}
@@ -394,22 +387,22 @@ grid <- grid %>%
   dplyr::mutate(assigned=FALSE)
 ```
 
-##### Rolling windows
+#### Rolling windows
 
-Not all of the grid points will be used, especially if islands result in a large grid space. To filter the grid for appropriate hexagon locations for allocation, the `create_buffer` function is used by `create_grid`. It finds the grid points needed to best capture the set of centroids on a hexagon tile map.
+Not all of the grid points will be used, especially if islands result in a large grid space. To filter the grid for appropriate hexagon locations for allocation, the `create_grid` function will call the `create_buffer` function. It finds the grid points needed to best capture the set of centroids on a hexagon tile map. It also helps reduce the amount of time taken, as it decreases the amount of points considered for each centroid allocation.
 
-The closest latitude row and longitude column are found for each centroid location. Then rows and columns of centroids are divided into 20 groups. The amount of rows in each latitude group and the amount of columns in each longitude group are used as the width of rolling windows. The rolling windows can be seen on the bottom and right of the grid shown in Figure \ref{fig:filterprocess}. This will tailor the available grid points to those most likely to be used. It also helps reduce the amount of time taken, as it decreases the amount of points considered for each centroid allocation.
+The closest latitude row and longitude column are found for each centroid location. Then rows and columns of centroids are divided into 20 groups. The amount of rows in each latitude group and the amount of columns in each longitude group are used as the width of rolling windows. 
 
-The first rolling window function finds the minimum and maximum centroid values for the sliding window groups of longitude columns and the groups of latitude rows.
+The first rolling window step finds the minimum and maximum centroid values within each of the sliding window groups of longitude columns, and the groups of latitude rows.
 
-The second rolling window function finds the average of the rolling minimum and maximum centroid values, for the longitude columns and latitude rows.
+The second rolling window step finds the average of the rolling minimum and maximum centroid values, for the longitude columns and latitude rows.
 
-##### Filtering the grid
+#### Filtering the grid
 
-The grid points are kept only if they fall between the rolling average of the minimum and maximum centroid values after accounting for the buffer distance, for each row and column of the grid. The sparsely populated South-West region of National Park has much fewer points available compared to the South-East region containing the city of Hobart.
+The hexagon grid points are kept only if they fall within the rolling average of the minimum and maximum centroid values after accounting for the buffer distance, for each row and column of the grid. The sparsely populated South-West region of National Park has very few points available compared to the South-East region near the city of Hobart.
 
 
-```{r filtergrid, fig.cap = "The remaining hexagon locations from all the possible points in the initial grid after the buffer is applied. The blue dots show the grid points left to choose from after the buffer step."}
+```{r filtergrid, fig.cap = "Each key step in the hexagon allocation process. The full hexagon grid in a) is created first. The buffer is applied and the remaining points are shown as larger, dark green circles, the potential hexagon points that were removed are shown as smaller, light green points. For each centroid in the set, c) shows the points left after the closest points are selected as potential locations. The relationship between Hobart (the cross) and the centroid (the yellow triangle is used to filter the potential locations within a wedge."}
 g1 <- ggplot() + 
   geom_polygon(aes(x = long, y = lat, group = interaction(sa2_name_2011, polygon)), data = fort_tas, fill = "#D3D3D3", colour = "white", size = 0.01) + 
    theme_void() + 
@@ -558,13 +551,13 @@ g2 <- ggplot() +
 
 ```
 
-##### Centroid to focal point distance
+#### Centroid to focal point distance
 
-The distance between each centroid in the set, and each of the focal points provided is calculated. The name of the closest focal point, and the distance and angle from focal point to polygon centroid is joined to polygon data set. To minimise time taken for this step only one option is provided, Tasmania's capital city Hobart. The order for allocation is determined by the distance between the polygon centroid and it's closest focal point. The points are arranged from the centroid closest to the focal point(s), to the furthest.
+The distance is calculated between each centroid in the set, and each of the focal points provided. The distance and angle from the closest focal point to polygon centroid is used in the allocation process as the order for allocation is determined by the distance between the polygon centroid and it's closest focal point. 
 
-#### Step 3: Allocate each centroid to a hexagon grid point
+### Step 3: Allocate each centroid to a hexagon grid point
 
-Allocation of all centroids takes place using the set of polygon centroids and the hexagon map grid. Centroid allocation begins with the closest centroid to a focal point. This will preserve spatial relationships with the focal point, as the inner city areas are allocated first, they will be placed closest to the capital, and the areas that are further will then be accommodated. The possible hexagon grid points reduces by one after each allocation, then only those that have not yet been allocated are considered.
+Allocation of all centroids takes place using the set of polygon centroids and the hexagon map grid. The points are arranged from the centroid closest to the focal point(s), to the furthest. Centroid allocation begins with the closest centroid to a focal point. This will preserve spatial relationships with the focal point, as the inner city areas are allocated first, they will be placed closest to the capital, and the areas that are further will then be accommodated. The set of possible hexagon grid points reduces by one after each centroid is allocated, then only the grid points that have not yet been selected are considered.
 
 The possible hexagon locations to consider for a centroid are determined by the `hex_filter`. This is the maximum amount of hexagons between the centroid and the furthest considered hexagon. It is used to subset possible grid points to only those surrounding the polygon centroid within an appropriate range. A smaller distance will increase speed, but can decrease accuracy when width of the angle increases.
 
@@ -582,15 +575,15 @@ hexmap_allocation <- allocate(
 
 The following example considers the first of the Statistical Areas at Level 2. Within the algorithm, these steps are repeated for each polygon.
 
-##### Filter the grid for unassigned hexagon points
+#### Filter the grid for unassigned hexagon points
 
 Keeping only the available hexagon points prevents multiple geographic units from being allocated to the same hexagon.
 
-##### Filter the grid points for those closest to the centroid
+#### Filter the grid points for those closest to the centroid
 
 A box of possible hexagon locations around the centroid allows only the closest points that are not yet assigned to be considered. The corners of the box may not appear square if the buffer step has already removed unnecessary points from over the ocean.
 
-The algorithm then removes the outer corners of the square, creating a circle of points, by only keeping points within a certain radial distance around the original centroid location.
+The algorithm creates a circle of points, by only keeping points within a certain radial distance around the original centroid location.
 
 ```{r buffers, fig.cap = "Filter for grid points within a square, then circular, distance for those closest to the centroid.", echo = FALSE, out.width = "100%", height = 4}
 centroids <- centroids %>%
@@ -604,7 +597,7 @@ centroids <- centroids %>%
 
 # Choose a centroid for allocation:
 f_centroid <- centroids %>%
-        filter(rownumber == 7)
+        filter(rownumber == 8)
 
 
 # filter_grid_points
@@ -657,13 +650,13 @@ f1 <- ggplot() +
 
 The `width` parameter is used to take a slice of the remaining points. The width is the amount of degrees used on either side of the angle from the focal point to centroid location. This uses the angle from the closest capital city, to the current centroid as seen in Figure \ref{fig:filterprocess} . This allows the spatial relationship to be preserved, even when it is allocated to a hexagon that is further from the focal point then the original centroid location.
 
-```{r filterprocess, fig.cap = "Filter for grid points within a square, then circular, distance for those closest to the centroid.", echo = FALSE, out.width = "120%", height = 8}
+```{r filterprocess, fig.cap = "Filter for grid points within a square, then circular, distance for those closest to the centroid.", echo = FALSE, height = 8}
 full_grid <- full_grid %>% filter(hex_long > bbox$min[1], hex_long < bbox$max[1],
                                   hex_lat > bbox$min[2], hex_lat < bbox$max[2])
 
 allocated_list <- aus_hexmap %>% 
                   filter(points == "Hobart") %>% 
-                  slice_min(rownumber, n = 6)
+                  slice_min(rownumber, n = 7)
 
 fort_allocated <- allocated_list %>% 
   fortify_hexagon(., sf_id = "sa2_name_2011", hex_size = 0.2)
@@ -686,11 +679,11 @@ f2 <- ggplot() +
   geom_point(aes(x=longitude, y = latitude), data = f_centroid, fill = "#ede187", shape = 24) + 
   theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#09661f", data = f_grid, size = 1) +
-  geom_point(aes(x = hex_long, y = hex_lat), colour = "#e374b9", data = hex, size = 1.5) + ggtitle("d")
+  geom_point(aes(x = hex_long, y = hex_lat), colour = "#09661f", fill = "white", data = hex, size = 1.5, shape = 21) + ggtitle("d")
 
 
-grid.arrange(g1, g2,
-             f1, f2, ncol = 2)
+gridExtra::grid.arrange(g1, g2,
+                        f1, f2)
 ```
 
 
@@ -702,54 +695,42 @@ By default the angle filter to hexagon grid points that fall within the bounds o
 
 A complete hexagon tile map of Tasmania is created by applying the algorithm steps to each centroid. The hexagon tile map is used to visualise the Australian Cancer Atlas data [@TACA]. Two views of the same data are produced by filling according to the thyroid Cancer Standardised Incidence Rates (SIRs) downloaded from the Australian Cancer Atlas site. This small example in Figure \ref{fig:filterprocess} shows the group of blue areas in the Hobart CBD more prominently in the hexagon tile map (b). The small red areas visible in the choropleth map (a) along the north coast are much larger in the hexagon tile maps. The hexagon tile map shows less yellow, this no longer overwhelms the map space with the information regarding the rural areas.
 
-### Hexagon tile map of Australia
+When the algorithm is applied to the complete set of all Australian Statistical Areas at Level 2 it results in the hexagon tile map display shown in Figure \ref{fig:hexmap}. This display highlights the density of Australian capital cities, as it draws attention to the many communities in Sydney, Melbourne and Hobart. This display also highlights the disparity in the burden of thyroid cancer for females in the communities of these cities. There are several collections of red hexagons in Sydney that represent the communities with much higher rates of diagnosis than the Australian average. Brisbane also experiences higher than average rates of diagnosis, but has more orange than red, which represents much higher rates. The females in the cities of Adelaide and Perth  show much lower rates of diagnosis.
 
-This algorithm has been applied to the complete set of all Australian Statistical Areas at Level 2. This display highlights the density of Australian capital cities, as it draws attention to the many communities in Sydney, Melbourne and Hobart. This display also highlights the disparity in the burden of thyroid cancer for females in the communities of these three cities. There are several collections of red hexagons in Hobart that draw attention and they represent the communities with much higher rates of diagnosis than the Australian average. The communities south of Hobart show a gradient of colour as the values progress from higher than average, to much lower than average for the communities closer to the Sydney CBD. This pattern progresses into the communities with lower than average rates in Melbourne and Tasmania.
-
-Compared to the choropleth map display, the low rates in the rural Australian communities are no longer dominating the display. The much higher than average rates in Sydney draw more attention in the hexagon tile map display unlike the red and orange areas in the city of Hobart that draw attention in both displays.
+Compared to the choropleth map display, the low rates in the rural Australian communities are no longer dominating the display. While the representative hexagons are still visible against the black background, the much lower than average rates in the Northern Territory are less noticeable.
 
 ## Animation
 
-The `gganimate` [@gganimate] package can be used to make an animation. It requires connecting the polygons for each area in two displays, which can be done using the `sf_id` variable, such as the SA2 name. The animation connecting these two displays will highlight the rapid growth of the inner-city areas that emphasises the density of the communities. The hexagons that move the furthest will move rapidly in the animation. The rapid decreases of the large rural areas also show how much greater the landmass of Statistical Areas can be.
+Creating an animation connecting these two displays can allow users t grasp the meaning of the connected hexagons. It will also highlight the density of the communities using the rapid expansion of the inner-city areas, these hexagons will move the furthest and will move rapidly in the animation from their geographic locations. The rapid decrease in size of the large rural areas can show how large the landmass of Statistical Areas can be, and how few people occupy rural areas. The `gganimate` [@gganimate] package can be used to make an animation. It connects the polygons for each area in the two displays using the `sf_id` variable, the names of the statistical areas, and creates intermediate displays as they geographic areas shrink or expand to the chosen hexagon size.
 
 ## Conclusion {#conclusion-03}
 
-It is possible to use alternative maps to communicate spatial distributions.While a choropleth map display is the current practice spatial visualisation of geographical data. Current methods do not always work for Australia due to the large geographic space between the densely populated capital cities. The administrative boundaries may also distract from the statistics communicated using colour.
+A choropleth map display is the current practice spatial visualisation for geographical data. It is possible to enhance the communication of spatial distributions using alternative map displays. Current methods for alternative maps do not always work for Australia due to the large rural geographic space between the densely populated capital cities. The administrative boundaries may also distract from the statistics communicated using colour due to the small size of some areas.
 
-Alternative maps highlight the value of the statistics across the geographic units. Alternative mapping methods allow increased understanding of the spatial distribution of a variable across the population, by fairly representing each administrative area. This acknowledges that the amount of residents can be different but recognises that each population area is equally important. The solution to this visualisation problem has equally sized areas, with neighbourhood boundary connections. This map algorithm is implemented in the `sugarbag` [@sugarbag] package written for `R`. The `sugarbag` package creates tessellated hexagon tile maps. The Australian application preserves the spatial relationships, emphasising capital cities. The hexagon tile map is a visualisation solution that highlights spatial distributions.
+Alternative maps highlight the value of the statistics across the geographic units. These methods allow increased understanding of the spatial distribution of a variable across the population, by fairly representing each administrative area. This acknowledges that the amount of residents can be different but recognises that each population area is equally important. The solution to this visualisation problem can be using equally sized areas, with neighbourhood boundary connections. The `sugarbag` package for `R` creates tessellated hexagon tile maps by automating an algorithm to design these displays. The Australian application preserves the spatial relationships, emphasising capital cities. 
 
-These hexagons equally represent each area. However, the tessellation does not allow the size of the hexagons to represent another variable, similar to the choropleth maps. The algorithm is heavily dependent on the focal points used, as this determines the order of allocation. It works on the assumption that viewers can use directional relationships to identify their neighbourhoods but this can be aided by the animation. With careful consideration of the choropleth map, the small geographic inner city areas may have been noticed by viewers, but the hexagon tile map display emphasises them. The communities in northern Tasmania and the Northern territory do not draw attention because of their size as in the choropleth, but their colour is still noticeably below average when contrasted with the hexagons further south.
+These hexagons equally represent each area. However, similar to the choropleth map display the tessellation does not allow the size of the hexagons to represent another variable. The algorithm is heavily dependent on the focal points used, as this determines the order of allocation. It works on the assumption that viewers can identify their neighbourhoods using the relative directional relationships but this can be aided by the use of animation. With careful consideration of the choropleth map, the small geographic inner city areas may have been noticed by viewers, but the hexagon tile map display emphasises them. The communities in northern Tasmania and the Northern territory do not draw attention because of their size as in the choropleth, but their colour is still noticeably below average when contrasted with the hexagons in New South Wales.
 
 <!-- why hexagon tile map addresses deficiencies -->
 
-The Dorling cartogram was the most influential in the design of the hexagon tile map. The use of a hexagon provides a simple shape that shifts the focus of the visualisation from the shape of SA2s to the distribution effects of a disease on communities. not impeded by the irregular and unusual shapes created by a contiguous cartogram and the immense white space created on the non-contiguous cartogram. Hexagons can emphasise the relationship between neighbouring communities by allowing their sides to touch. The tessellation crated by adjoining hexagons for densely populated areas is helpful as it shows that most communities are not islands onto themselves, but are intrinsically connected to those around them. As seen in the Dorling cartogram in figure \ref{fig:tas_displays}c), the tessellation that allows boundary connections was not imposed for rural communities, where centroid of the geographic unit was located far from others, a feature that allows distant but dense populations of the coastal towns of Tasmania to be recognised.
-
-The choropleth map that uses the geographic shapes of areas can be seen in figure \ref{fig:choro}. Figure \ref{fig:hexmap} displays the Australian areas with equally sized hexagons. This display allows the small and densely populated inner city areas to be easily contrasted with their neighbouring areas.
+The Dorling cartogram was the most influential alternative map display for the design of the hexagon tile map. The use of a hexagon shifts the focus of the visualisation from the shape of SA2s to the distribution effects of a disease on communities. It is not impeded by the irregular and unusual shapes created by a contiguous cartogram and the immense white space created on the non-contiguous cartogram. Hexagons can emphasise the relationship between neighbouring communities by allowing their sides to touch. The tessellation created by adjoining hexagons for densely populated areas is helpful as it shows that most communities are not islands onto themselves, but are intrinsically connected to those around them. As seen in the Dorling cartogram in figure \ref{fig:tas_displays}c), the tessellation that allows boundary connections was not imposed for rural communities, where centroid of the geographic unit was located far from others, a feature that allows distant but dense populations of the coastal towns of southern Tasmania to be recognised.
 
 <!-- future -->
 
-Future work will include refining the algorithm. It would be possible to take a logarithmic function rather than a direct angle to help choose a closer hexagon to the original centroid location, before increasing the width of the angle used to filter the hexagons.
-
 This algorithm has only been tested using single countries, and does not consider definite borders of countries. While the buffer allows extension beyond the furthest centroids, there is no mechanism to protect the borders and ensure centroids are placed within the geographic borders of a country.
-
+It would be also possible to take a logarithmic function in the filter steps for selection of a hexagon grid point. A direct angle is currently used, but this may narrowly miss appropriate hexagons, a logarithmic function may help to choose a closer hexagon to the original centroid location, before increasing the width of the angle used to filter the hexagons.
 This algorithm is an effective start to creating hexagon tile maps for many geographic units.
 
-#### Installation
+### Installation
 
 The package can be installed from CRAN:
 
-```{r eval=FALSE}
+```{r eval=FALSE, echo = TRUE}
 install.packages("sugarbag")
 ```
 
 and the development version can be install from the GitHub repository:
 
-```{r eval=FALSE}
+```{r eval=FALSE, echo = TRUE}
 devtools::install_github("srkobakian","sugarbag")
-```
-
-Load the library into your R session with:
-
-```{r}
-library(sugarbag)
 ```
