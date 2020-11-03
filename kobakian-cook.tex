@@ -1,6 +1,6 @@
 % !TeX root = RJwrapper.tex
 \title{A Hexagon Tile Map Algorithm for Displaying Spatial Data}
-\author{by Stephanie Kobakian and Dianne Cook}
+\author{by Stephanie Kobakian, Dianne Cook, and Earl Duncan}
 
 \maketitle
 
@@ -185,6 +185,24 @@ thyroid cancer diagnosis for females. The hexagon tile map display
 provides a more accurate representation of the spatial distribution of
 thyroid cancer incidence across Australia.
 
+When the algorithm is applied to the complete set of all Australian
+Statistical Areas at Level 2 it results in the hexagon tile map display
+shown in Figure \ref{fig:hexmap}. This display highlights the density of
+Australian capital cities, as it draws attention to the many communities
+in Sydney, Melbourne and Hobart. This display also highlights the
+disparity in the burden of thyroid cancer for females in the communities
+of these cities. There are several collections of red hexagons in Sydney
+that represent the communities with much higher rates of diagnosis than
+the Australian average. Brisbane also experiences higher than average
+rates of diagnosis, but has more orange than red. The females in the
+cities of Adelaide and Perth show much lower rates of diagnosis.
+
+Compared to the choropleth map display, the low rates in the rural
+Australian communities are no longer dominating the display. While the
+representative hexagons are still visible against the black background,
+the much lower than average rates in the Northern Territory are less
+noticeable.
+
 \begin{Schunk}
 \begin{figure}
 \includegraphics[width=0.95\linewidth]{kobakian-cook_files/figure-latex/hexmap-1} \caption[A hexagon tile map of the Statistical Areas of Australia at Level 2]{A hexagon tile map of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated SIR of thyroid for females, they range from much lower than average (blue) to much higher than average (red).}\label{fig:hexmap}
@@ -337,11 +355,12 @@ The centroids can be derived from an \texttt{sf} object using the
 \subsubsection{Step 2: Create the hexagon grid
 points}\label{step-2-create-the-hexagon-grid-points}}
 
-A grid is created to ensure tessellation between the hexagons that
-represent the geographic units on a hexagon tile map. The grid of
-possible hexagon locations is made using the \texttt{create\_grid()}
-function. It uses the centroids, the hexagon size and the buffer
-distance.
+A grid is created to allow tessellation of the hexagons that represent
+the geographic units. For a hexagon tile map, the grid of possible
+hexagon locations is made using the \texttt{create\_grid()} function. It
+uses the centroids, the hexagon size and the buffer distance. Figure
+\ref{fig:filterprocess}a) shows the initial locations of grid points
+created for Tasmania.
 
 \hypertarget{creating-a-tessellated-grid}{%
 \paragraph{Creating a tessellated
@@ -354,7 +373,7 @@ created from the minimum longitude minus the buffer distance, up to the
 maximum longitude plus the buffer distance. Similarly, the rows are
 created from the latitude values and the buffer distance. A unique
 hexagon location is created from all intersections of the longitude
-columns and latitude rows. Figure \ref{fig:filterprocess}a) shows the
+columns and latitude rows. Figure \ref{fig:filterprocess}a shows the
 hexagon grid after every second latitude row on the grid is shifted
 right, by half of the hexagon size.
 
@@ -365,9 +384,9 @@ Not all of the grid points will be used, especially if islands result in
 a large grid space. To filter the grid for appropriate hexagon locations
 for allocation, the \texttt{create\_grid} function will call the
 \texttt{create\_buffer} function. It finds the grid points needed to
-best capture the set of centroids on a hexagon tile map. It also helps
-reduce the amount of time taken, as it decreases the amount of points
-considered for each centroid allocation.
+best capture the set of centroids on a hexagon tile map. Reducing the
+buffer can help to decrease the amount of time taken, as there will be
+less points in the water to consider for each centroid allocation.
 
 The closest latitude row and longitude column are found for each
 centroid location. Then rows and columns of centroids are divided into
@@ -381,64 +400,62 @@ for the longitude columns and latitude rows.
 
 The hexagon grid points are kept only if they fall within the rolling
 average of the minimum and maximum centroid values after accounting for
-the buffer distance, for each row and column of the grid. Figure 5b
-displays remaining hexagon grid points after applying the buffer step.
-The sparsely populated South-West region of National Park has very few
-points available compared to the South-East region near the city of
-Hobart.
+the buffer distance, for each row and column of the grid. Figure
+\ref{fig:filterprocess}b displays remaining hexagon grid points after
+applying the buffer filter. The sparsely populated South-West region of
+National Park has fewer points available in the water compared to the
+South-East region near the city of Hobart.
 
 \hypertarget{centroid-to-focal-point-distance}{%
 \paragraph{Centroid to focal point
 distance}\label{centroid-to-focal-point-distance}}
 
 The distance is calculated between each centroid in the set, and each of
-the focal points provided. The distance and angle from the closest focal
-point to polygon centroid is used in the allocation process as the order
-for allocation is determined by the distance between the polygon
-centroid and it's closest focal point. For this example, this distance
-is only calculated for the capital city of Hobart.
+the focal points provided. The order for allocation is determined by the
+distance between the polygon centroid and it's closest focal point. For
+this example, this distance is only calculated for the capital city of
+Hobart, represented in Figure \ref{fig:filterprocess}c and d as a white
+cross.
 
 \hypertarget{step-3-allocate-each-centroid-to-a-hexagon-grid-point}{%
 \subsubsection{Step 3: Allocate each centroid to a hexagon grid
 point}\label{step-3-allocate-each-centroid-to-a-hexagon-grid-point}}
 
-Allocation of all centroids takes place using the set of polygon
-centroids and the hexagon map grid. The points are arranged from the
-centroid closest to the focal point(s), to the furthest. Centroid
-allocation begins with the closest centroid to a focal point. This will
+Allocation of all centroids requires the set of polygon centroids and
+the hexagon map grid. The polygon centroids are ordered from the
+centroid closest to the focal point(s), to the furthest. This will
 preserve spatial relationships with the focal point, as the inner city
-areas are allocated first, they will be placed closest to the capital,
-and the areas that are further will then be accommodated. The set of
-possible hexagon grid points reduces by one after each centroid is
-allocated, then only the grid points that have not yet been selected are
-considered.
-
-The possible hexagon locations to consider for a centroid are determined
-by the \texttt{hex\_filter}. This is the maximum amount of hexagons
-between the centroid and the furthest considered hexagon. It is used to
-subset possible grid points to only those surrounding the polygon
-centroid within an appropriate range. A smaller distance will increase
-speed, but can decrease accuracy when width of the angle increases.
-
-The following example considers the first of the Statistical Areas at
-Level 2. Within the algorithm, these steps are repeated for each
-polygon.
+areas are allocated first and placed closest to the capital, the areas
+that are further will then be accommodated. The following example
+considers the first of the Statistical Areas at Level 2. Within the
+algorithm, these steps are repeated for each polygon.
 
 \hypertarget{filter-the-grid-for-unassigned-hexagon-points}{%
 \paragraph{Filter the grid for unassigned hexagon
 points}\label{filter-the-grid-for-unassigned-hexagon-points}}
 
-Keeping only the available hexagon points prevents multiple geographic
-units from being allocated to the same hexagon.
+The set of possible hexagon grid points reduces by one after each
+centroid is allocated, then only the grid points that have not yet been
+selected are considered. Keeping only the available hexagon points
+prevents multiple geographic units from being allocated to the same
+hexagon. This is demonstrated in Figure \ref{fig:filterprocess}c and d
+by the black hexagons that represent the seven closest polygons to the
+capital city of Hobart. As the allocation process begins for the eighth
+closest centroid there are seven unavailable hexagon locations.
 
 \hypertarget{filter-the-grid-points-for-those-closest-to-the-centroid}{%
 \paragraph{Filter the grid points for those closest to the
 centroid}\label{filter-the-grid-points-for-those-closest-to-the-centroid}}
 
-A box of possible hexagon locations around the centroid allows only the
-closest points that are not yet assigned to be considered. The corners
-of the box may not appear square if the buffer step has already removed
-unnecessary points from over the ocean.
+A selection of possible hexagon locations around the centroid allows
+only the closest points that are not yet assigned to be considered. The
+number of possible hexagon locations to consider for a centroid is
+determined by the \texttt{hex\_filter}. This is the maximum amount of
+hexagons between the centroid and the furthest considered hexagon. It is
+used to subset possible grid points to only those surrounding the
+polygon centroid within an appropriate range. A smaller distance will
+increase speed, but can decrease accuracy when width of the angle
+increases.
 
 The algorithm creates a circle of points, by only keeping points within
 a certain radial distance around the original centroid location.
@@ -447,7 +464,7 @@ The \texttt{width} parameter is used to take a slice of the remaining
 points. The width is the amount of degrees used on either side of the
 angle from the focal point to centroid location. This uses the angle
 from the closest capital city, to the current centroid as seen in Figure
-\ref{fig:filterprocess} . This allows the spatial relationship to be
+\ref{fig:filterprocess}c.~This allows the spatial relationship to be
 preserved, even when it is allocated to a hexagon that is further from
 the focal point then the original centroid location.
 
@@ -460,45 +477,13 @@ the focal point then the original centroid location.
 If no available hexagon grid point is found within the original filter
 distance and angle, the distance is expanded, only when a maximum
 distance is reached will the angle expand to accommodate more possible
-grid points.\\
-By default the angle filter to hexagon grid points that fall within the
-bounds of the angle from the focal point to the geographic centroid,
-plus and minus 30 degrees. This will increase if no points can be found
-within the \texttt{hex\_filter} distance. The default angle of 30 was
-chosen to allow the algorithm to choose hexagons that best maintained
+grid points. By default the angle filter for the hexagon grid points
+create plus and minus 30 degrees bounds of the angle from the focal
+point to the geographic centroid. This will increase if no points can be
+found within the \texttt{hex\_filter} distance. The default angle of 30
+was chosen to allow the algorithm to find hexagons that best maintained
 the spatial relationship between the focal point and geographic
 centroid.
-
-A complete hexagon tile map of Tasmania is created by applying the
-algorithm steps to each centroid. The hexagon tile map is used to
-visualise the Australian Cancer Atlas data \citep{TACA}. Two views of
-the same data are produced by filling according to the thyroid Cancer
-Standardised Incidence Rates (SIRs) downloaded from the Australian
-Cancer Atlas site. This small example in Figure \ref{fig:filterprocess}
-shows the group of blue areas in the Hobart CBD more prominently in the
-hexagon tile map (b). The small red areas visible in the choropleth map
-(a) along the north coast are much larger in the hexagon tile maps. The
-hexagon tile map shows less yellow, this no longer overwhelms the map
-space with the information regarding the rural areas.
-
-When the algorithm is applied to the complete set of all Australian
-Statistical Areas at Level 2 it results in the hexagon tile map display
-shown in Figure \ref{fig:hexmap}. This display highlights the density of
-Australian capital cities, as it draws attention to the many communities
-in Sydney, Melbourne and Hobart. This display also highlights the
-disparity in the burden of thyroid cancer for females in the communities
-of these cities. There are several collections of red hexagons in Sydney
-that represent the communities with much higher rates of diagnosis than
-the Australian average. Brisbane also experiences higher than average
-rates of diagnosis, but has more orange than red, which represents much
-higher rates. The females in the cities of Adelaide and Perth show much
-lower rates of diagnosis.
-
-Compared to the choropleth map display, the low rates in the rural
-Australian communities are no longer dominating the display. While the
-representative hexagons are still visible against the black background,
-the much lower than average rates in the Northern Territory are less
-noticeable.
 
 \hypertarget{animation}{%
 \subsection{Animation}\label{animation}}
@@ -594,4 +579,14 @@ Department of Econometrics and Business Statistics\\
 %
 %
 \\\href{mailto:dicook@monash.edu}{\nolinkurl{dicook@monash.edu}}
+}
+
+\address{%
+Earl Duncan\\
+Queensland University of Technology\\%
+School of Mathematical Sciences\\
+%
+%
+%
+\\\href{mailto:earl.duncan@qut.edu.au}{\nolinkurl{earl.duncan@qut.edu.au}}
 }
