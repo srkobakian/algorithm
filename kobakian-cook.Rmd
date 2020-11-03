@@ -12,6 +12,11 @@ author:
     address:
     - Department of Econometrics and Business Statistics
     email:  dicook@monash.edu 
+  - name: Earl Duncan
+    affiliation: Queensland University of Technology
+    address:
+    - School of Mathematical Sciences
+    email:  earl.duncan@qut.edu.au
 abstract: >
   The algorithm presented creates a display that uses tessellated hexagons to represent a set of spatial polygons. It allocates these hexagon in a manner that preserves the spatial relationship of the geographic units, in light of their positions to points of interest. The display showcases spatial distributions, by emphasising the small geographical regions that are often difficult to locate on geographic maps. Spatial distributions have been presented on alternative representations of geography for many years. In modern times, interactivity and animation have allowed alternative displays to play a larger role. Alternative representations have been popularised by online news sites, and atlas websites with a focus on public consumption. Applications are increasingly widespread, especially in the areas of disease mapping, and election results.
 preamble: |
@@ -185,7 +190,8 @@ aus_hexmap_plot <- ggplot() +
 
 ```{r contcart}
 # Projected data 
-sa2thyroid_ERP <- st_transform(sa2thyroid_ERP, 3112) %>% filter(state_name_2011 == "Tasmania")
+sa2thyroid_ERP <- st_transform(sa2thyroid_ERP, 3112) %>% 
+  filter(state_name_2011 == "Tasmania")
 sa2thyroid_ERP <- sa2thyroid_ERP %>% 
   mutate(sva = sqrt(as.numeric(Population)/as.numeric(albers_sqkm)))
 
@@ -265,11 +271,18 @@ The Dorling cartogram presents each geographic unit as a circle, the size of the
 
 The purpose of this algorithm is to create an alternative map display that highlights the spatial distributions for populations. There has been an increasing need for displays that recognise the large number of people that live in dense urban environments. The algorithm intends to maintain the spatial relationships of a group of geographic units using the relationship between each unit and the closest focal point. The algorithm allocates geographic units to a representative hexagon, in order of their proximity to the closest focal point.
 
+
 The algorithm is implemented in the `sugarbag` package for R, this is the common name for the *Trigona carbonaria* bee species. Native to northern and eastern Australia this stingless species builds flat layers of hexagonal brood cells, spiralling out from a central point [@PH]. This hive design inspired the use of multiple focal points in the algorithm, individual spirals are constructed by building out from various points on the geographic map base.
+
 
 The result of the algorithm on rates of thyroid cancer for females in each of the SA2 areas of Australia is shown in Figure \ref{fig:hexmap}.
 The difference to the choropleth map in Figure \ref{fig:choro} are clear. Now the thyroid cancer incidence in the densely populated areas in Sydney, Brisbane and Perth are visible. Interestingly there is no clear divide between rural and urban SA2 areas as many rural areas, and the cities of Melbourne, Darwin, Adelaide and Hobart have low rates of thyroid cancer diagnosis for females. The hexagon tile map display provides a more accurate representation of the spatial distribution of thyroid cancer incidence across Australia.
 
+
+When the algorithm is applied to the complete set of all Australian Statistical Areas at Level 2 it results in the hexagon tile map display shown in Figure \ref{fig:hexmap}. This display highlights the density of Australian capital cities, as it draws attention to the many communities in Sydney, Melbourne and Hobart. This display also highlights the disparity in the burden of thyroid cancer for females in the communities of these cities. There are several collections of red hexagons in Sydney that represent the communities with much higher rates of diagnosis than the Australian average. Brisbane also experiences higher than average rates of diagnosis, but has more orange than red. The females in the cities of Adelaide and Perth  show much lower rates of diagnosis.
+
+
+Compared to the choropleth map display, the low rates in the rural Australian communities are no longer dominating the display. While the representative hexagons are still visible against the black background, the much lower than average rates in the Northern Territory are less noticeable.
 
 ```{r hexmap, fig.cap = "A hexagon tile map of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated SIR of thyroid for females, they range from much lower than average (blue) to much higher than average (red)."}
 aus_hexmap_plot
@@ -363,7 +376,7 @@ grid <- tibble::as_tibble(expand.grid(hex_long = seq(bbox$min[1] - buffer_dist,
 fort_tas <- fort_aus %>% filter(state_name_2011 == "Tasmania")
 
 tas_centroids <- ggplot() + 
-  geom_polygon(aes(x = long, y = lat, group = interaction(sa2_name_2011, polygon)), data = fort_tas, fill = "#D3D3D3", colour = "white", size = 0.01) + 
+  geom_polygon(aes(x = long, y = lat, group = interaction(sa2_name_2011, polygon)), data = fort_tas, fill = "#D3D3D3", colour = "white", size = 0.1) + 
   geom_point(aes(x=longitude, y = latitude), size = 2, shape = 19, colour = "white",
              data = centroids) +
   scale_colour_identity() +
@@ -371,7 +384,7 @@ tas_centroids <- ggplot() +
   coord_equal()
 
 tas_hexmap <- ggplot() +
-  geom_polygon(aes(x = long, y = lat, group = interaction(sa2_name_2011, polygon)), data = fort_tas, fill = "#D3D3D3", colour = "white", size = 0.01) + 
+  geom_polygon(aes(x = long, y = lat, group = interaction(sa2_name_2011, polygon)), data = fort_tas, fill = "#D3D3D3", colour = "white", size = 0.1) + 
   geom_polygon(aes(x = long, y = lat, group = hex_id, fill = SIR),
                data = fort_hex %>% filter(sa2_name_2011 %in% fort_tas$sa2_name_2011)) +
   scale_fill_identity() +
@@ -381,11 +394,11 @@ tas_hexmap <- ggplot() +
 
 ### Step 2: Create the hexagon grid points
 
-A grid is created to ensure tessellation between the hexagons that represent the geographic units on a hexagon tile map. The grid of possible hexagon locations is made using the `create_grid()` function. It uses the centroids, the hexagon size and the buffer distance.
+A grid is created to allow tessellation of the hexagons that represent the geographic units. For a hexagon tile map, the grid of possible hexagon locations is made using the `create_grid()` function. It uses the centroids, the hexagon size and the buffer distance. Figure \ref{fig:filterprocess}a) shows the initial locations of grid points created for Tasmania.
 
 #### Creating a tessellated grid
 
-A set of longitude columns, and latitude rows are created to define the locations of the hexagons. The distance between each row and column is the size specified by `hex_size`. Equally spaced columns are created from the minimum longitude minus the buffer distance, up to the maximum longitude plus the buffer distance. Similarly, the rows are created from the latitude values and the buffer distance. A unique hexagon location is created from all intersections of the longitude columns and latitude rows. Figure \ref{fig:filterprocess}a) shows the hexagon grid after every second latitude row on the grid is shifted right, by half of the hexagon size.
+A set of longitude columns, and latitude rows are created to define the locations of the hexagons. The distance between each row and column is the size specified by `hex_size`. Equally spaced columns are created from the minimum longitude minus the buffer distance, up to the maximum longitude plus the buffer distance. Similarly, the rows are created from the latitude values and the buffer distance. A unique hexagon location is created from all intersections of the longitude columns and latitude rows. Figure \ref{fig:filterprocess}a shows the hexagon grid after every second latitude row on the grid is shifted right, by half of the hexagon size.
 
 
 ```{r grid, fig.cap = "Complete set of grid points to create a tile map.", height = 4}
@@ -403,17 +416,18 @@ grid <- grid %>%
 
 #### Filtering the grid
 
-Not all of the grid points will be used, especially if islands result in a large grid space. To filter the grid for appropriate hexagon locations for allocation, the `create_grid` function will call the `create_buffer` function. It finds the grid points needed to best capture the set of centroids on a hexagon tile map. It also helps reduce the amount of time taken, as it decreases the amount of points considered for each centroid allocation.
+Not all of the grid points will be used, especially if islands result in a large grid space. To filter the grid for appropriate hexagon locations for allocation, the `create_grid` function will call the `create_buffer` function. It finds the grid points needed to best capture the set of centroids on a hexagon tile map. Reducing the buffer can help to decrease the amount of time taken, as there will be less points in the water to consider for each centroid allocation.
+
 
 The closest latitude row and longitude column are found for each centroid location. Then rows and columns of centroids are divided into 20 groups. The amount of rows in each latitude group and the amount of columns in each longitude group are used as the width of rolling windows. The first rolling window step finds the minimum and maximum centroid values within each of the sliding window groups of longitude columns, and the groups of latitude rows. The second rolling window step finds the average of the rolling minimum and maximum centroid values, for the longitude columns and latitude rows.
 
 
-The hexagon grid points are kept only if they fall within the rolling average of the minimum and maximum centroid values after accounting for the buffer distance, for each row and column of the grid. Figure 5b displays remaining hexagon grid points after applying the buffer step. The sparsely populated South-West region of National Park has very few points available compared to the South-East region near the city of Hobart.
+The hexagon grid points are kept only if they fall within the rolling average of the minimum and maximum centroid values after accounting for the buffer distance, for each row and column of the grid. Figure \ref{fig:filterprocess}b displays remaining hexagon grid points after applying the buffer filter. The sparsely populated South-West region of National Park has fewer points available in the water compared to the South-East region near the city of Hobart.
 
 
 ```{r filtergrid, fig.cap = "Each key step in the hexagon allocation process. The full hexagon grid in a) is created first. The buffer is applied and the remaining points are shown as larger, dark green circles, the potential hexagon points that were removed are shown as smaller, light green points. For each centroid in the set, c) shows the points left after the closest points are selected as potential locations. The relationship between Hobart (the cross) and the centroid (the yellow triangle is used to filter the potential locations within a wedge."}
 g1 <- ggplot() + 
-  geom_polygon(aes(x = long, y = lat, group = interaction(sa2_name_2011, polygon)), data = fort_tas, fill = "#D3D3D3", colour = "white", size = 0.01) + 
+  geom_polygon(aes(x = long, y = lat, group = interaction(sa2_name_2011, polygon)), data = fort_tas, fill = "#D3D3D3", colour = "white", size = 0.1) + 
    theme_void() + 
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#09661f", data = grid, size = 1) +
   coord_equal()
@@ -553,7 +567,7 @@ grid <- grid %>%
     filter(lat_buffer == "in" | long_buffer == "in")
 
 g2 <- ggplot() + 
-   geom_polygon(aes(x = long, y = lat, group = interaction(sa2_name_2011, polygon)), data = fort_tas, fill = "#D3D3D3", colour = "white", size = 0.01) +  
+   geom_polygon(aes(x = long, y = lat, group = interaction(sa2_name_2011, polygon)), data = fort_tas, fill = "#D3D3D3", colour = "white", size = 0.1) +  
   theme_void() + coord_equal() +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#55b56c", data = full_grid, size = 0.5) +
   geom_point(aes(x = hex_long, y = hex_lat), colour = "#09661f", data = grid, size = 1)
@@ -562,13 +576,12 @@ g2 <- ggplot() +
 
 #### Centroid to focal point distance
 
-The distance is calculated between each centroid in the set, and each of the focal points provided. The distance and angle from the closest focal point to polygon centroid is used in the allocation process as the order for allocation is determined by the distance between the polygon centroid and it's closest focal point. For this example, this distance is only calculated for the capital city of Hobart.
+The distance is calculated between each centroid in the set, and each of the focal points provided. The order for allocation is determined by the distance between the polygon centroid and it's closest focal point. For this example, this distance is only calculated for the capital city of Hobart, represented in Figure \ref{fig:filterprocess}c and d as a white cross.
 
 ### Step 3: Allocate each centroid to a hexagon grid point
 
-Allocation of all centroids takes place using the set of polygon centroids and the hexagon map grid. The points are arranged from the centroid closest to the focal point(s), to the furthest. Centroid allocation begins with the closest centroid to a focal point. This will preserve spatial relationships with the focal point, as the inner city areas are allocated first, they will be placed closest to the capital, and the areas that are further will then be accommodated. The set of possible hexagon grid points reduces by one after each centroid is allocated, then only the grid points that have not yet been selected are considered.
+Allocation of all centroids requires the set of polygon centroids and the hexagon map grid. The polygon centroids are ordered from the centroid closest to the focal point(s), to the furthest. This will preserve spatial relationships with the focal point, as the inner city areas are allocated first and placed closest to the capital, the areas that are further will then be accommodated. The following example considers the first of the Statistical Areas at Level 2. Within the algorithm, these steps are repeated for each polygon.
 
-The possible hexagon locations to consider for a centroid are determined by the `hex_filter`. This is the maximum amount of hexagons between the centroid and the furthest considered hexagon. It is used to subset possible grid points to only those surrounding the polygon centroid within an appropriate range. A smaller distance will increase speed, but can decrease accuracy when width of the angle increases.
 
 ```{r centroids, eval = FALSE}
 hexmap_allocation <- allocate(
@@ -582,15 +595,14 @@ hexmap_allocation <- allocate(
   verbose = TRUE)
 ```
 
-The following example considers the first of the Statistical Areas at Level 2. Within the algorithm, these steps are repeated for each polygon.
 
 #### Filter the grid for unassigned hexagon points
 
-Keeping only the available hexagon points prevents multiple geographic units from being allocated to the same hexagon.
+The set of possible hexagon grid points reduces by one after each centroid is allocated, then only the grid points that have not yet been selected are considered. Keeping only the available hexagon points prevents multiple geographic units from being allocated to the same hexagon. This is demonstrated in Figure \ref{fig:filterprocess}c and d by the black hexagons that represent the seven closest polygons to the capital city of Hobart. As the allocation process begins for the eighth closest centroid there are seven unavailable hexagon locations.
 
 #### Filter the grid points for those closest to the centroid
 
-A box of possible hexagon locations around the centroid allows only the closest points that are not yet assigned to be considered. The corners of the box may not appear square if the buffer step has already removed unnecessary points from over the ocean.
+A selection of possible hexagon locations around the centroid allows only the closest points that are not yet assigned to be considered. The number of possible hexagon locations to consider for a centroid is determined by the `hex_filter`. This is the maximum amount of hexagons between the centroid and the furthest considered hexagon. It is used to subset possible grid points to only those surrounding the polygon centroid within an appropriate range. A smaller distance will increase speed, but can decrease accuracy when width of the angle increases.
 
 The algorithm creates a circle of points, by only keeping points within a certain radial distance around the original centroid location.
 
@@ -634,6 +646,7 @@ f_angle <- f_centroid %>%
         angle = (atan * 180 / pi),
         pangle = ifelse(angle < 0, angle + 360, angle)) %>%
       pull(pangle)
+
 f_grid <- f_grid %>%
   # create circle of radius: f_dist
   filter(hyp < f_dist) %>%
@@ -646,20 +659,14 @@ f_grid <- f_grid %>%
     hex_angle = (atan * 180 / pi),
     hex_angle = ifelse(hex_angle < 0, hex_angle + 360, hex_angle))
 
-f1 <- ggplot() + 
-  geom_polygon(aes(x = long, y = lat, group = interaction(sa2_name_2011, polygon)), data = fort_tas, fill = "#D3D3D3", colour = "white", size = 0.01) +
-  theme_void() + coord_equal() +
-  geom_point(aes(x = hex_long, y = hex_lat), colour = "#55b56c", data = grid, size = 0.5) +
-  geom_point(aes(x = hex_long, y = hex_lat), colour = "#09661f", data = f_grid, size = 1) + 
-  geom_point(aes(x=longitude, y = latitude), data = f_centroid, fill = "#ede187", shape = 25) + 
-#Hobart
-  geom_point(aes(x = focal_longitude, y = focal_latitude), data = f_centroid, colour = "#e9f2ed", size = 2, shape = 4)
+allocated_list <- aus_hexmap %>% 
+                  filter(points == "Hobart") %>% 
+                  slice_min(rownumber, n = 7)
 
-```
+fort_allocated <- allocated_list %>% 
+  fortify_hexagon(., sf_id = "sa2_name_2011", hex_size = 0.2)
 
-The `width` parameter is used to take a slice of the remaining points. The width is the amount of degrees used on either side of the angle from the focal point to centroid location. This uses the angle from the closest capital city, to the current centroid as seen in Figure \ref{fig:filterprocess} . This allows the spatial relationship to be preserved, even when it is allocated to a hexagon that is further from the focal point then the original centroid location.
 
-```{r filterprocess, fig.cap = "Filter for grid points within a square, then circular, distance for those closest to the centroid.", echo = FALSE, height = 12}
 full_grid <- full_grid %>% filter(hex_long > bbox$min[1], hex_long < bbox$max[1],
                                   hex_lat > bbox$min[2], hex_lat < bbox$max[2])
 
@@ -669,11 +676,29 @@ allocated_list <- aus_hexmap %>%
 
 fort_allocated <- allocated_list %>% 
   fortify_hexagon(., sf_id = "sa2_name_2011", hex_size = 0.2)
-
+  
 # Check that there were available points within hyp distance
 f_grid <- f_grid %>%
         # create slice of width *2 degrees from centroid
         filter(angle_minus < hex_angle & hex_angle < angle_plus)
+
+
+f1 <- ggplot() + 
+  geom_polygon(aes(x = long, y = lat, group = interaction(sa2_name_2011, polygon)), data = fort_tas, fill = "#D3D3D3", colour = "white", size = 0.1) +
+  theme_void() + coord_equal(ylim = c(-44, -40.1), xlim = c(144.5, 149)) +
+  geom_point(aes(x = hex_long, y = hex_lat), colour = "#55b56c", data = grid, size = 0.5) +
+  geom_point(aes(x = hex_long, y = hex_lat), colour = "#09661f", data = f_grid, size = 1) +
+  # allocated areas
+    geom_polygon(aes(x = long, y = lat, group = interaction(sa2_name_2011)), data = fort_allocated, fill = "#353b38", colour = "black", size = 0.01, alpha = 0.7) +
+  #Hobart
+  geom_point(aes(x = focal_longitude, y = focal_latitude), data = f_centroid, colour = "#e9f2ed", size = 4, shape = 3) + 
+  geom_point(aes(x=longitude, y = latitude), data = f_centroid, fill = "#beaed4", shape = 25) 
+
+```
+
+The `width` parameter is used to take a slice of the remaining points. The width is the amount of degrees used on either side of the angle from the focal point to centroid location. This uses the angle from the closest capital city, to the current centroid as seen in Figure \ref{fig:filterprocess}c. This allows the spatial relationship to be preserved, even when it is allocated to a hexagon that is further from the focal point then the original centroid location.
+
+```{r filterprocess, fig.cap = "Filter for grid points within a square, then circular, distance for those closest to the centroid.", dpi = 600, echo = FALSE, height = 12}
 
 hex <- f_grid %>%
         ungroup() %>%
@@ -681,16 +706,16 @@ hex <- f_grid %>%
         select(hex_long, hex_lat, hex_id = id)
 
 f2 <- ggplot() + 
-  geom_polygon(aes(x = long, y = lat, group = interaction(sa2_name_2011, polygon)), data = fort_tas %>% filter(lat < -40.3), fill = "#D3D3D3", colour = "white", size = 0.01) +
-  geom_polygon(aes(x = long, y = lat, group = interaction(sa2_name_2011)), data = fort_allocated, fill = "#353b38", colour = "black", size = 0.01) +
+  geom_polygon(aes(x = long, y = lat, group = interaction(sa2_name_2011, polygon)), data = fort_tas %>% filter(lat < -40.3), fill = "#D3D3D3", colour = "white", size = 0.1) +
+  geom_polygon(aes(x = long, y = lat, group = interaction(sa2_name_2011)), data = fort_allocated, fill = "#353b38", colour = "black", size = 0.01, alpha = 0.7) +
   #Hobart
-  geom_point(aes(x = focal_longitude, y = focal_latitude), data = f_centroid, colour = "#e9f2ed", size = 3, shape = 4) + 
-  geom_point(aes(x=longitude, y = latitude), data = f_centroid, fill = "#ede187", shape = 25, size = 2) + 
- # theme_void() + coord_equal() +
+  geom_point(aes(x = focal_longitude, y = focal_latitude), data = f_centroid, colour = "#e9f2ed", size = 4, shape = 3) + 
+  geom_point(aes(x=longitude, y = latitude), data = f_centroid, fill = "#beaed4", shape = 25, size = 2) + 
+  theme_void() + coord_equal(xlim = c(146.9, 147.8), ylim = c(-43.35, -42.5)) +
   # possible choices to select
-  geom_point(aes(x = hex_long, y = hex_lat), colour = "#09661f", data = f_grid, size = 1.5) +
+  geom_point(aes(x = hex_long, y = hex_lat), colour = "#09661f", data = f_grid, size = 2.5) +
   # selected hexagon
-  geom_point(aes(x = hex_long, y = hex_lat), colour = "#09661f", fill = "#ede187", data = hex, size = 2.5, shape = 21)
+  geom_point(aes(x = hex_long, y = hex_lat), colour = "#09661f", fill = "#beaed4", data = hex, size = 3.5, shape = 21)
  
 # gridExtra::grid.arrange(g1, g2,
 #                         f1, f2)
@@ -701,16 +726,13 @@ cowplot::plot_grid(g1, g2,
 
 
 
+If no available hexagon grid point is found within the original filter distance and angle, the distance is expanded, only when a maximum distance is reached will the angle expand to accommodate more possible grid points.
+By default the angle filter for the hexagon grid points create plus and minus 30 degrees bounds of the angle from the focal point to the geographic centroid. This will increase if no points can be found within the `hex_filter` distance. The default angle of 30 was chosen to allow the algorithm to find hexagons that best maintained the spatial relationship between the focal point and geographic centroid.
 
-If no available hexagon grid point is found within the original filter distance and angle, the distance is expanded, only when a maximum distance is reached will the angle expand to accommodate more possible grid points.\
-By default the angle filter to hexagon grid points that fall within the bounds of the angle from the focal point to the geographic centroid, plus and minus 30 degrees. This will increase if no points can be found within the `hex_filter` distance. The default angle of 30 was chosen to allow the algorithm to choose hexagons that best maintained the spatial relationship between the focal point and geographic centroid.
+<!-- Tasmania example has been removed -->
+<!-- A complete hexagon tile map of Australia is created by applying the algorithm steps to each centroid. The hexagon tile map is used to visualise the Australian Cancer Atlas data [@TACA]. Two views of the same data are produced by filling according to the thyroid Cancer Standardised Incidence Rates (SIRs) downloaded from the Australian Cancer Atlas site. This small example in Figure \ref{fig:hexmap} shows the group of blue areas in the Hobart CBD more prominently in the hexagon tile map. The small red areas visible in the choropleth map (a) along the north coast are much larger in the hexagon tile maps. The hexagon tile map shows less yellow, this no longer overwhelms the map space with the information regarding the rural areas. -->
 
 
-A complete hexagon tile map of Tasmania is created by applying the algorithm steps to each centroid. The hexagon tile map is used to visualise the Australian Cancer Atlas data [@TACA]. Two views of the same data are produced by filling according to the thyroid Cancer Standardised Incidence Rates (SIRs) downloaded from the Australian Cancer Atlas site. This small example in Figure \ref{fig:filterprocess} shows the group of blue areas in the Hobart CBD more prominently in the hexagon tile map (b). The small red areas visible in the choropleth map (a) along the north coast are much larger in the hexagon tile maps. The hexagon tile map shows less yellow, this no longer overwhelms the map space with the information regarding the rural areas.
-
-When the algorithm is applied to the complete set of all Australian Statistical Areas at Level 2 it results in the hexagon tile map display shown in Figure \ref{fig:hexmap}. This display highlights the density of Australian capital cities, as it draws attention to the many communities in Sydney, Melbourne and Hobart. This display also highlights the disparity in the burden of thyroid cancer for females in the communities of these cities. There are several collections of red hexagons in Sydney that represent the communities with much higher rates of diagnosis than the Australian average. Brisbane also experiences higher than average rates of diagnosis, but has more orange than red, which represents much higher rates. The females in the cities of Adelaide and Perth  show much lower rates of diagnosis.
-
-Compared to the choropleth map display, the low rates in the rural Australian communities are no longer dominating the display. While the representative hexagons are still visible against the black background, the much lower than average rates in the Northern Territory are less noticeable.
 
 ## Animation
 
