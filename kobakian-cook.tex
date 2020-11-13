@@ -53,7 +53,7 @@ capital cities.
 
 \begin{Schunk}
 \begin{figure}
-\includegraphics[width=0.95\linewidth]{kobakian-cook_files/figure-latex/choro-1} \caption[A choropleth map of the Statistical Areas of Australia at Level 2]{A choropleth map of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated SIR of Thyroid cancer for females, ranging from much lower than average (blue) to much higher than average (red)}\label{fig:choro}
+\includegraphics[width=0.95\linewidth]{kobakian-cook_files/figure-latex/choro-1} \caption[A choropleth map of thyroid incidence among females across the Statistical Areas of Australia at Level 2]{A choropleth map of thyroid incidence among females across the Statistical Areas of Australia at Level 2. Blue indicates lower than average and red indicates higher than average incidence. A cluster of high incidence is visible on the east coast.}\label{fig:choro}
 \end{figure}
 \end{Schunk}
 
@@ -111,7 +111,7 @@ and c) a Dorling cartogram.
 
 \begin{Schunk}
 \begin{figure}
-\includegraphics[width=0.95\linewidth]{kobakian-cook_files/figure-latex/tas_displays-1} \caption[The three displays show alternative maps of the Statistical Areas at Level 2 in the Australian state of Tasmania]{The three displays show alternative maps of the Statistical Areas at Level 2 in the Australian state of Tasmania. These alternatives show the (a) contiguous cartogram, (b) non-contiguous cartogram and (c) Dorling cartogram of Tasmania.}\label{fig:tas_displays}
+\includegraphics[width=0.95\linewidth]{kobakian-cook_files/figure-latex/tas_displays-1} \caption[The three displays show alternative maps of the Australian state of Tasmania at SA2 level]{The three displays show alternative maps of the Australian state of Tasmania at SA2 level: (a) contiguous cartogram, (b) non-contiguous cartogram and (c) Dorling cartogram of Tasmania. The contiguous cartogram looks like the state has an hourglass figure, while the non-contiguous cartogram shrinks areas into invisibility. The Dorling expands the metropolitan regions.}\label{fig:tas_displays}
 \end{figure}
 \end{Schunk}
 
@@ -205,7 +205,7 @@ noticeable.
 
 \begin{Schunk}
 \begin{figure}
-\includegraphics[width=0.95\linewidth]{kobakian-cook_files/figure-latex/hexmap-1} \caption[A hexagon tile map of the Statistical Areas of Australia at Level 2]{A hexagon tile map of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated SIR of thyroid for females, they range from much lower than average (blue) to much higher than average (red).}\label{fig:hexmap}
+\includegraphics[width=0.95\linewidth]{kobakian-cook_files/figure-latex/hexmap-1} \caption[A hexagon tile map of female tyroid cancer incidence in Australia, the same data as shown in the choropleth map in Figure 1]{A hexagon tile map of female tyroid cancer incidence in Australia, the same data as shown in the choropleth map in Figure 1. The high incidence in several of the metropolitan regions (Brisbane, Sydney and Perth) can now be seen, along with numerous isolated spots.}\label{fig:hexmap}
 \end{figure}
 \end{Schunk}
 
@@ -223,7 +223,7 @@ the point locations are converted into hexagon shapes.
 
 \begin{figure}
 \includegraphics[width=14cm]{figs/sugarbag flow.png}
-\caption{\label{fig:sugarbag_flow}A flow diagram detailing the necessary steps to create a hexagon tile map.}
+\caption{\label{fig:sugarbag_flow}A flow diagram detailing the steps taken to create a hexagon tile map. There are two basic processes, one to make the grid, and the other to allocate centroids to grid points.}
 \end{figure}
 
 \hypertarget{user-choices}{%
@@ -470,7 +470,7 @@ the focal point then the original centroid location.
 
 \begin{Schunk}
 \begin{figure}
-\includegraphics[width=0.95\linewidth]{kobakian-cook_files/figure-latex/filterprocess-1} \caption[Filter for grid points within a square, then circular, distance for those closest to the centroid]{Filter for grid points within a square, then circular, distance for those closest to the centroid.}\label{fig:filterprocess}
+\includegraphics[width=0.95\linewidth]{kobakian-cook_files/figure-latex/filterprocess-1} \caption[Illustration of several steps of the algorithm]{Illustration of several steps of the algorithm: (a) ... (b) ... (c) ... (d). }\label{fig:filterprocess}
 \end{figure}
 \end{Schunk}
 
@@ -504,6 +504,10 @@ expand to the chosen hexagon size.
 \hypertarget{conclusion-03}{%
 \subsection{Conclusion}\label{conclusion-03}}
 
+This paper has described a new algorithm for creating an alternative
+display. This paper provides an algorithm for Australia called the
+hexagon tile map.
+
 A choropleth map display is the current common practice for spatial data
 visualisation. As the choropleth map display relies on the geographic
 shapes, it does not effectively present the density of the population in
@@ -513,8 +517,7 @@ cartogram or another alternative map display. Many alternative map
 displays do not work well for Australia due to the large rural
 geographic space between the densely populated capital cities. The
 administrative boundaries may also distract from the statistics
-communicated using colour due to the small size of some areas. This
-paper provides an algorithm for Australia called the hexagon tile map.
+communicated using colour due to the small size of some areas.
 
 Alternative maps highlight the value of the statistics across the
 geographic units. These methods allow increased understanding of the
@@ -543,13 +546,11 @@ colour is still noticeably below average when contrasted with the
 hexagons in New South Wales.
 
 This algorithm should be general enough to apply to other countries and
-problems
-
-This algorithm has only been tested using single countries, and does not
-consider definite borders of countries. While the buffer allows
-extension beyond the furthest centroids, there is no mechanism to
-protect the borders and ensure centroids are placed within the
-geographic borders of a country.
+problems. XXX This algorithm has only been tested using single
+countries, and does not consider definite borders of countries. While
+the buffer allows extension beyond the furthest centroids, there is no
+mechanism to protect the borders and ensure centroids are placed within
+the geographic borders of a country.
 
 It would be also possible to take a logarithmic function in the filter
 steps for selection of a hexagon grid point. A direct angle is currently

@@ -121,7 +121,7 @@ sa2thyroid_ERP <- sa2thyroid_ERP %>%
   st_as_sf() 
 ```
 
-```{r choro, fig.cap = "A choropleth map of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated SIR of Thyroid cancer for females, ranging from much lower than average (blue) to much higher than average (red)"}
+```{r choro, fig.cap = "A choropleth map of thyroid incidence among females across the Statistical Areas of Australia at Level 2. Blue indicates lower than average and red indicates higher than average incidence. A cluster of high incidence is visible on the east coast."}
 aus_ggchoro <- ggplot(sa2thyroid_ERP) + 
   geom_sf(aes(fill = SIR), size = 0.1) + 
   scale_fill_identity() + invthm
@@ -144,7 +144,7 @@ The familiar choropleth map display is often used to allow the user to orient th
 There are several established alternative visualisation methods. Tile maps, Rectangular cartograms [@ORC] and Dorling cartograms [@ACTUC] all use one simple shape to represent each geographic unit. They all minimise the emphasis on the size or shape of the geographic areas. These alternative map displays focus on the relationship between neighbours, attempting to preserve connections, and disregard the unique shapes of the administrative boundaries. Figure \ref{fig:tas_displays} shows a collection of alternative map displays, this includes a) a contiguous cartogram, b) a non-contiguous cartogram, and c) a Dorling cartogram. 
 
 
-```{r fullhexmap, fig.cap = "A hexagon tile map of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated SIR of thyroid cancer for females, ranging from much lower than average (blue) to much higher than average (red)"}
+```{r fullhexmap, fig.cap = "A hexagon tile map of Australia at SA2 level. The colours communicate the value of the estimated SIR of thyroid cancer for females, ranging from much lower than average (blue) to much higher than average (red)"}
 if (!file.exists("data/aus_hexmap.rda")) {
   
 ## Create centroids set
@@ -251,7 +251,7 @@ tas_ggdorl <- ggplot(dorl) +
 ```
 
 
-```{r tas_displays, width = 10, height = 3, fig.cap = "The three displays show alternative maps of the Statistical Areas at Level 2 in the Australian state of Tasmania. These alternatives show the (a) contiguous cartogram, (b) non-contiguous cartogram and (c) Dorling cartogram of Tasmania."}
+```{r tas_displays, width = 10, height = 3, fig.cap = "The three displays show alternative maps of the Australian state of Tasmania at SA2 level: (a) contiguous cartogram, (b) non-contiguous cartogram and (c) Dorling cartogram of Tasmania. The contiguous cartogram looks like the state has an hourglass figure, while the non-contiguous cartogram shrinks areas into invisibility. The Dorling expands the metropolitan regions."}
 library(gridExtra)
 grid.arrange(tas_ggcont, tas_ggncont, tas_ggdorl, ncol=3)
 ```
@@ -284,7 +284,7 @@ When the algorithm is applied to the complete set of all Australian Statistical 
 
 Compared to the choropleth map display, the low rates in the rural Australian communities are no longer dominating the display. While the representative hexagons are still visible against the black background, the much lower than average rates in the Northern Territory are less noticeable.
 
-```{r hexmap, fig.cap = "A hexagon tile map of the Statistical Areas of Australia at Level 2. The colours communicate the value of the estimated SIR of thyroid for females, they range from much lower than average (blue) to much higher than average (red)."}
+```{r hexmap, fig.cap = "A hexagon tile map of female tyroid cancer incidence in Australia, the same data as shown in the choropleth map in Figure 1. The high incidence in several of the metropolitan regions (Brisbane, Sydney and Perth) can now be seen, along with numerous isolated spots."}
 aus_hexmap_plot
 ```
 
@@ -292,7 +292,7 @@ There are several key steps needed to create the hexagon tile map as described i
 
 \begin{figure}
 \includegraphics[width=14cm]{figs/sugarbag flow.png}
-\caption{\label{fig:sugarbag_flow}A flow diagram detailing the necessary steps to create a hexagon tile map.}
+\caption{\label{fig:sugarbag_flow}A flow diagram detailing the steps taken to create a hexagon tile map. There are two basic processes, one to make the grid, and the other to allocate centroids to grid points.}
 \end{figure}
 
 ### User choices
@@ -698,7 +698,7 @@ f1 <- ggplot() +
 
 The `width` parameter is used to take a slice of the remaining points. The width is the amount of degrees used on either side of the angle from the focal point to centroid location. This uses the angle from the closest capital city, to the current centroid as seen in Figure \ref{fig:filterprocess}c. This allows the spatial relationship to be preserved, even when it is allocated to a hexagon that is further from the focal point then the original centroid location.
 
-```{r filterprocess, fig.cap = "Filter for grid points within a square, then circular, distance for those closest to the centroid.", dpi = 600, echo = FALSE, height = 12}
+```{r filterprocess, fig.cap = "Illustration of several steps of the algorithm: (a) ... (b) ... (c) ... (d). ", dpi = 600, echo = FALSE, height = 12}
 
 hex <- f_grid %>%
         ungroup() %>%
