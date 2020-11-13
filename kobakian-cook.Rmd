@@ -740,23 +740,28 @@ Creating an animation connecting these two displays can allow users t grasp the 
 
 ## Conclusion {#conclusion-03}
 
-<!-- Summarise paper, usability -->
-A choropleth map display is the current common practice for spatial data visualisation. As the choropleth map display relies on the geographic shapes, it does not effectively present the density of the population in small geographic areas. The common solution to enhance the communication of spatial distributions is to incorporate the population values as a cartogram or another alternative map display. Many alternative map displays do not work well for Australia due to the large rural geographic space between the densely populated capital cities. The administrative boundaries may also distract from the statistics communicated using colour due to the small size of some areas.
+This paper has described a new algorithm for creating an alternative display. 
 This paper provides an algorithm for Australia called the hexagon tile map.
+
+
+<!-- Summarise paper, usability, sound like a summary, not introduction -->
+A choropleth map display is the current common practice for spatial data visualisation. As the choropleth map display relies on the geographic shapes, it does not effectively present the density of the population in small geographic areas. The common solution to enhance the communication of spatial distributions is to incorporate the population values as a cartogram or another alternative map display. Many alternative map displays do not work well for Australia due to the large rural geographic space between the densely populated capital cities. The administrative boundaries may also distract from the statistics communicated using colour due to the small size of some areas.
 
 <!-- implementation -->
 Alternative maps highlight the value of the statistics across the geographic units. These methods allow increased understanding of the spatial distribution of a variable across the population, by fairly representing each administrative area. This acknowledges that the amount of residents can be different but recognises that each population area is equally important. The solution to this visualisation problem can be using equally sized areas, with neighbourhood boundary connections. The `sugarbag` package for `R` creates tessellated hexagon tile maps by automating an algorithm to design these displays. The Australian application preserves the spatial relationships, emphasising capital cities. 
 
 These hexagons equally represent each area. However, similar to the choropleth map display the tessellation does not allow the size of the hexagons to represent another variable. The algorithm is heavily dependent on the focal points used, as this determines the order of allocation. It works on the assumption that viewers can identify their neighbourhoods using the relative directional relationships but this can be aided by the use of animation. With careful consideration of the choropleth map, the small geographic inner city areas may have been noticed by viewers, but the hexagon tile map display emphasises them. The communities in northern Tasmania and the Northern territory do not draw attention because of their size as in the choropleth, but their colour is still noticeably below average when contrasted with the hexagons in New South Wales.
 
-This algorithm should  be general enough to apply to other countries and problems 
+
 
 <!-- why hexagon tile map addresses deficiencies -->
 
 <!-- The Dorling cartogram was the most influential alternative map display for the design of the hexagon tile map. The use of a hexagon shifts the focus of the visualisation from the shape of SA2s to the distribution effects of a disease on communities. It is not impeded by the irregular and unusual shapes created by a contiguous cartogram and the immense white space created on the non-contiguous cartogram. Hexagons can emphasise the relationship between neighbouring communities by allowing their sides to touch. The tessellation created by adjoining hexagons for densely populated areas is helpful as it shows that most communities are not islands onto themselves, but are intrinsically connected to those around them. As seen in the Dorling cartogram in figure \ref{fig:tas_displays}c), the tessellation that allows boundary connections was not imposed for rural communities, where centroid of the geographic unit was located far from others, a feature that allows distant but dense populations of the coastal towns of southern Tasmania to be recognised. -->
 
-<!-- , limitiations, where it might not work -->
+<!-- limitiations, where it might not work -->
 
+This algorithm should  be general enough to apply to other countries and problems.
+XXX 
 This algorithm has only been tested using single countries, and does not consider definite borders of countries. While the buffer allows extension beyond the furthest centroids, there is no mechanism to protect the borders and ensure centroids are placed within the geographic borders of a country.
 
 <!-- future -->
