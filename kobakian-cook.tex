@@ -5,19 +5,19 @@
 \maketitle
 
 \abstract{%
-The algorithm presented creates a display that uses tessellated hexagons
-to represent a set of spatial polygons. It allocates these hexagon in a
-manner that preserves the spatial relationship of the geographic units,
-in light of their positions to points of interest. The display showcases
-spatial distributions, by emphasising the small geographical regions
-that are often difficult to locate on geographic maps. Spatial
-distributions have been presented on alternative representations of
-geography for many years. In modern times, interactivity and animation
-have allowed alternative displays to play a larger role. Alternative
-representations have been popularised by online news sites, and atlas
-websites with a focus on public consumption. Applications are
+Spatial distributions have been presented on alternative representations
+of geography for many years. In modern times, interactivity and
+animation have allowed alternative displays to play a larger role.
+Alternative representations have been popularised by online news sites,
+and digital atlases with a focus on public consumption. Applications are
 increasingly widespread, especially in the areas of disease mapping, and
-election results.
+election results. The algorithm presented creates a display that uses
+tessellated hexagons to represent a set of spatial polygons. It
+allocates these hexagon in a manner that preserves the spatial
+relationship of the geographic units, in light of their positions to
+points of interest. The display showcases spatial distributions, by
+emphasising the small geographical regions that are often difficult to
+locate on geographic maps.
 }
 
 \hypertarget{introduction}{%
@@ -31,25 +31,24 @@ administrative boundaries. This choropleth display can highlight the
 geographic patterns in geospatially related cancer statistics
 \citep{SAMGIS}.
 
-Over time the density of living in major cities has increased as
+Over time, the density of living in major cities has increased as
 residents have gathered to live near urban areas \citep{ACTUC}. The
-division of these resident into approximately equal population areas
+division of these residents into approximately equal population areas
 results in dramatically different square meterage of administrative
 geographic units, such as states or electorates. In a choropleth map
-display the geographic units are filled with colour to represent the
-value of the statistic for each unit \citep{EI}. This can allow unequal
-emphasis on the statistical value of each of the geographic units. This
-allows choropleth map displays to misrepresent the spatial distributions
-of human related statistics due to area-size bias \citep{BCM}. Figure
-\ref{fig:choro} is a choropleth map that uses colour to display the
-estimated Standardised Incidence Ratios (SIRs) of thyroid cancer for
-females, in each of the Statistical Areas at Level 2 (SA2) used by the
-\citet{abs2011}. The Australian choropleth map display draws attention
-to the expanse of dark and light blue areas across the rural communities
-in all states. The SA2s around Brisbane and in northern New South Wales
-stand out as more orange and red. However, this display neglects the
-vast amount of Australia residents living in the densely populated
-capital cities.
+display, the geographic units are coloured to represent the value of the
+statistic for each unit \citep{EI}. This can cause some values to be
+emphasised over others, and allows choropleth map displays to
+misrepresent the spatial distributions of human related statistics due
+to area-size bias \citep{BCM}. Figure \ref{fig:choro} is a choropleth
+map that uses colour to display the estimated standardised incidence
+ratios (SIRs) of thyroid cancer for females, in each of the Statistical
+Areas at Level 2 (SA2) used by the \citet{abs2011}. The Australian
+choropleth map display draws attention to the expanse of dark and light
+blue areas across the rural communities in all states. The SA2s on the
+east coast around Brisbane and in northern New South Wales stand out as
+more orange and red. However, this display neglects the vast amount of
+Australia residents living in the densely populated capital cities.
 
 \begin{Schunk}
 \begin{figure}
@@ -58,25 +57,24 @@ capital cities.
 \end{Schunk}
 
 The solutions to this visualisation problem begin with the geography.
-Alternative maps shift the focus from land area and shape, to the value
-of the statistics in a collection of areas \citep{ACCAC}. Each style of
+Alternative maps can be created to shift the focus from land area and
+shape to the value of the statistics \citep{ACCAC}. Each style of
 cartogram applies a different transformation to the geographic areas, to
-highlight the values of the statistic of interest. These displays result
-in a distortion of the map space to represent features of the
+highlight the values of the statistic of interest. Alternative maps can
+result in a distortion of the map space to represent features of the
 distribution across the areas \citep{ACCAC} as the statistic of interest
 is used to determine the cartogram layout.
 
 Alternative mapping methods allow increased understanding of the spatial
 distribution of a variable across the population, by fairly representing
 the population in each administrative area \citep{TAAM}. This
-acknowledges that the number of residents can be different but
+acknowledges that the number of residents can be different and also
 recognises that each area, or person within it is equally important.
 
-This paper contains a discussion of Existing Mapping Practices in
-Section 2. This is followed by details of the Algorithm in Section 3.
-Section 4 describes the implementation of the algorithm in the
-\texttt{sugarbag} package. Section 5 outlines the use and benefits of
-animation.
+This paper contains a discussion of Existing Mapping Practices. This is
+followed by details of the Algorithm. The implementation section
+discusses the algorithm in the \texttt{sugarbag} package. Finally, the
+use and benefits of animation are presented.
 
 \hypertarget{existing-mapping-practices}{%
 \subsection{Existing Mapping
@@ -504,60 +502,46 @@ expand to the chosen hexagon size.
 \hypertarget{conclusion-03}{%
 \subsection{Conclusion}\label{conclusion-03}}
 
-A choropleth map display is the current common practice for spatial data
-visualisation. As the choropleth map display relies on the geographic
-shapes, it does not effectively present the density of the population in
-small geographic areas. The common solution to enhance the communication
-of spatial distributions is to incorporate the population values as a
-cartogram or another alternative map display. Many alternative map
-displays do not work well for Australia due to the large rural
-geographic space between the densely populated capital cities. The
-administrative boundaries may also distract from the statistics
-communicated using colour due to the small size of some areas. This
-paper provides an algorithm for Australia called the hexagon tile map.
+This paper provides an algorithm for Australia called the hexagon tile
+map. It also describes how this algorithm addresses the potential issues
+found with contiguous, non-contiguous and Dorling cartograms when
+applied to Australia. It achieves a display that effectively presents
+the density of the population in small geographic areas and de
+emphasises the large rural geographic space between the densely
+populated capital cities.
 
-Alternative maps highlight the value of the statistics across the
-geographic units. These methods allow increased understanding of the
-spatial distribution of a variable across the population, by fairly
-representing each administrative area. This acknowledges that the amount
-of residents can be different but recognises that each population area
-is equally important. The solution to this visualisation problem can be
-using equally sized areas, with neighbourhood boundary connections. The
-\texttt{sugarbag} package for \texttt{R} creates tessellated hexagon
-tile maps by automating an algorithm to design these displays. The
-Australian application preserves the spatial relationships, emphasising
-capital cities.
-
-These hexagons equally represent each area. However, similar to the
+The hexagon tile map display acknowledges that the amount of residents
+can differ but each administrative area is equally important. This
+solution uses equally sized areas, and maintain neighbourhood boundary
+connections. The \texttt{sugarbag} package for \texttt{R} automates the
+creation of tessellated hexagon tile maps by providing an algorithm to
+design these displays. The Australian application preserves spatial
+relationships, and emphasises capital cities. However, similar to the
 choropleth map display the tessellation does not allow the size of the
 hexagons to represent another variable. The algorithm is heavily
 dependent on the focal points used, as this determines the order of
-allocation. It works on the assumption that viewers can identify their
-neighbourhoods using the relative directional relationships but this can
-be aided by the use of animation. With careful consideration of the
-choropleth map, the small geographic inner city areas may have been
-noticed by viewers, but the hexagon tile map display emphasises them.
-The communities in northern Tasmania and the Northern territory do not
-draw attention because of their size as in the choropleth, but their
-colour is still noticeably below average when contrasted with the
-hexagons in New South Wales.
+allocation. With careful consideration of the choropleth map, the small
+geographic inner city areas may have been noticed by viewers, but the
+hexagon tile map display emphasises them. The communities in northern
+Tasmania and the Northern territory do not draw attention because of
+their size as in the choropleth, but their colour is still noticeably
+below average when contrasted with the hexagons in New South Wales.
 
 This algorithm should be general enough to apply to other countries and
-problems
-
-This algorithm has only been tested using single countries, and does not
-consider definite borders of countries. While the buffer allows
-extension beyond the furthest centroids, there is no mechanism to
-protect the borders and ensure centroids are placed within the
-geographic borders of a country.
-
-It would be also possible to take a logarithmic function in the filter
-steps for selection of a hexagon grid point. A direct angle is currently
-used, but this may narrowly miss appropriate hexagons, a logarithmic
+related problems. The algorithm has only been tested using single
+countries. While the buffer allows extension beyond the furthest
+centroids, there is no mechanism implemented to protect the borders and
+ensure centroids are placed within the geographic borders of a country.
+The algorithm is also currently limited to representing each geographic
+area with only one hexagon. Future developments may address these
+limitations, and refine the filter steps for final selection of a
+hexagon grid point for each centroid. A direct angle is currently
+implemented, but may narrowly miss appropriate hexagons, a logarithmic
 function may help to choose a closer hexagon to the original centroid
-location, before increasing the width of the angle used to filter the
-hexagons. This algorithm is an effective start to creating hexagon tile
-maps for many geographic units.
+location. This algorithm is an effective start to creating hexagon tile
+maps for many geographic units. This contributes to an extensive body of
+work that encourages the use of alternative map displays for statistical
+displays of spatial data.
 
 \bibliography{kobakian-cook.bib}
 
@@ -590,3 +574,4 @@ School of Mathematical Sciences\\
 %
 \\\href{mailto:earl.duncan@qut.edu.au}{\nolinkurl{earl.duncan@qut.edu.au}}
 }
+
