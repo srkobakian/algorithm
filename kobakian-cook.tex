@@ -165,42 +165,41 @@ the relationship between each unit and the closest focal point. The
 algorithm allocates geographic units to a representative hexagon, in
 order of their proximity to the closest focal point.
 
-The algorithm is implemented in the \texttt{sugarbag} package for R,
-this is the common name for the \emph{Trigona carbonaria} bee species.
-Native to northern and eastern Australia this stingless species builds
-flat layers of hexagonal brood cells, spiralling out from a central
-point \citep{PH}. This hive design inspired the use of multiple focal
-points in the algorithm, individual spirals are constructed by building
-out from various points on the geographic map base.
+The algorithm is implemented in the \texttt{sugarbag} package for
+\texttt{R}, named after the common name for the \emph{Trigona
+carbonaria} bee -- a species which builds flat layers of hexagonal brood
+cells, spiralling out from a central point \citep{PH}. This unusual
+pattern also provided the inspiration for the algorithm, where the maps
+are constructed by building out from multiple focal points on the
+geographic map base in a spiral fashion.
 
-The result of the algorithm on rates of thyroid cancer for females in
-each of the SA2 areas of Australia is shown in figure \ref{fig:hexmap}.
+The result of the algorithm applied to the same data represented in
+figure \ref{fig:choro} shows rates of thyroid cancer for females in each
+of the SA2 areas of Australia as hexagons in figure \ref{fig:hexmap}.
 The difference to the choropleth map in figure \ref{fig:choro} are
-clear. Now the thyroid cancer incidence in the densely populated areas
-in Sydney, Brisbane and Perth are visible. Interestingly there is no
-clear divide between rural and urban SA2 areas as many rural areas, and
-the cities of Melbourne, Darwin, Adelaide and Hobart have low rates of
-thyroid cancer diagnosis for females. The hexagon tile map display
-provides a more accurate representation of the spatial distribution of
-thyroid cancer incidence across Australia.
+clear. Now the higher thyroid cancer incidence in the densely populated
+areas in Sydney, Brisbane and Perth are visible. Interestingly, there is
+no clear divide between rural and urban SA2 areas, as many rural areas
+and the cities of Melbourne, Darwin, Adelaide and Hobart have low rates
+of thyroid incidence for females. The hexagon tile map display provides
+a more accurate representation of the spatial distribution of thyroid
+cancer incidence across Australia.
 
-When the algorithm is applied to the complete set of all Australian
-Statistical Areas at Level 2 it results in the hexagon tile map display
-shown in figure \ref{fig:hexmap}. This display highlights the density of
-Australian capital cities, as it draws attention to the many communities
-in Sydney, Melbourne and Hobart. This display also highlights the
-disparity in the burden of thyroid cancer for females in the communities
-of these cities. There are several collections of red hexagons in Sydney
-that represent the communities with much higher rates of diagnosis than
-the Australian average. Brisbane also experiences higher than average
-rates of diagnosis, but has more orange than red. The females in the
-cities of Adelaide and Perth show much lower rates of diagnosis.
+Figure \ref{fig:hexmap} highlights the density of Australian capital
+cities, as it draws attention to the many communities in Sydney,
+Melbourne and Hobart. This display also highlights the disparity in the
+burden of thyroid cancer for females in the communities of these cities.
+There are several collections of red hexagons in Sydney that represent
+the communities with much higher rates of diagnosis than the Australian
+average. Brisbane also experiences higher than average rates of
+diagnosis, but has more orange than red. The females in the cities of
+Adelaide and Perth show much lower rates of diagnosis.
 
-Compared to the choropleth map display, the low rates in the rural
-Australian communities are no longer dominating the display. While the
-representative hexagons are still visible against the black background,
-the much lower than average rates in the Northern Territory are less
-noticeable.
+Compared to the choropleth map display in figure \ref{fig:choro}, the
+low rates in the rural Australian communities are no longer dominating
+the display. While the representative hexagons are still visible against
+the black background, the much lower than average rates in rural
+Australia are less noticeable.
 
 \begin{Schunk}
 \begin{figure}
@@ -208,7 +207,7 @@ noticeable.
 \end{figure}
 \end{Schunk}
 
-There are several key steps needed to create the hexagon tile map as
+There are several key steps in the creation of the hexagon tile map as
 described in the flow chart in figure \ref{fig:sugarbag_flow}. First,
 derive the set of centroids from the polygons provided, then create the
 grid of hexagon locations. These two processes are defined in the blue
@@ -228,11 +227,11 @@ the point locations are converted into hexagon shapes.
 \hypertarget{user-choices}{%
 \subsubsection{User choices}\label{user-choices}}
 
-Only two inputs are necessary to begin the algorithm; the shape file,
-and the id variable. The id variable should uniquely identify each
-geographic unit in the shape file.
+Only two inputs are necessary to begin the algorithm; the shapefile, and
+the ID variable. The ID variable should uniquely identify each
+geographic unit in the shapefile.
 
-The centroids are derived from the shape file. The amount of centroids
+The centroids are derived from the shapefile. The amount of centroids
 within the geographic map is used to determine an appropriate hexagon
 size if one is not provided. The derived centroids are a necessary input
 for an appropriate grid to be constructed. Each grid point is located a
@@ -240,16 +239,16 @@ hexagon size distance from the next closest point in all six directions.
 The grid will initially cover the entire map space, encompassing all the
 centroid locations and will extend in all directions to the extent of
 the buffer distance. This buffer distance can be helpful to account for
-densely populated coastal areas, allowing the use of the sea for hexagon
-locations.
+densely populated coastal areas, allowing the hexagon locations to
+spread beyond the coastline, over the sea.
 
 The centroid set and hexagon tile map grid are necessary for the
 allocation process. Additionally, a set of reference locations can be
-provided as focal points, such as the capital cities of states or
-countries. The algorithm will use the focal points to create the order
-of allocation, prioritising the closest centroid locations to the focal
-points. Alternatively, a user can specify the variable that should be
-used to determine the order for the allocation.
+provided as focal points, typically compact and/or densely populated
+areas such as major cities. The algorithm will use the focal points to
+create the order of allocation, prioritising the closest centroid
+locations to the focal points. The user can also specify the variable
+that should be used to determine the order for the allocation.
 
 When allocating representative hexagons, the width parameter can be used
 to determine the flexibility of positioning. Using the relationship with
@@ -267,26 +266,26 @@ collection of geographic areas. However, these maps are not easy to
 create manually, especially as the number of areas increases. This
 algorithm was created to automate this process, and reduce the manual
 load involved in creating and implementing alternative displays. This
-allows map makers and data communicators to spend their time to choosing
+allows map makers and data communicators to spend their time choosing
 the most effective display.
 
-The \texttt{sugarbag} package has been written for R software, it
-contains a set of functions that help R users to create a hexagon tile
-map. The algorithm presented in the \texttt{sugarbag} package operates
-on a set of simple feature geometry objects \citep{sf}, this package
-allows R users to create \texttt{sf} objects by importing polygons
-stored in various formats. Users should provide a set of polygons that
-define geographic units by their administrative boundaries. The
-functions arrange the geographic units in order of proximity to a set of
-locations provided, such as the centre of capital cities. The centroid
-location of each geographic unit is used to measure the proximity. It
-emphasises the capital cities as population hubs, rather than
-emphasizing the size of large, rural geographic units.
+The \texttt{sugarbag} package contains a set of functions that help R
+users to create a hexagon tile map. The algorithm presented in the
+\texttt{sugarbag} package operates on a set of simple feature geometry
+objects , known as \texttt{sf} objects\citep{sf}. This package allows R
+users to create \texttt{sf} objects by importing polygons stored in
+various formats. Users should provide a set of polygons that define
+geographic units by their administrative boundaries. The functions
+arrange the geographic units in order of proximity to a set of locations
+provided, such as the centre of major cities. The centroid location of
+each geographic unit is used to measure the proximity. It emphasises the
+major cities as population hubs, rather than emphasizing the size of
+large, rural geographic units.
 
 A user can tweak the parameters of the hexagon map using the additional
-arguments to the \texttt{create\_hexmap} function, these options may
-affect the speed of the creation. The hexagon size may need adjustments
-depending on the density of the population, users can provide an
+arguments to the \texttt{create\_hexmap} function, but these options may
+affect the speed of the algorithm. The hexagon size may need adjustments
+depending on the density of the population; users can provide an
 appropriate hexagon size and re-run the algorithm. The buffer distance
 may need to be increased if the coastal cities need to extend beyond the
 geographic land mass.
@@ -302,7 +301,7 @@ install.packages("sugarbag")
 \end{Sinput}
 \end{Schunk}
 
-and the development version can be install from the GitHub repository:
+and the development version can be installed from the GitHub repository:
 
 \begin{Schunk}
 \begin{Sinput}
@@ -320,10 +319,10 @@ themselves, the necessary inputs will change for each function. For
 example, the \texttt{allocate} function can be used directly when a user
 wishes to use a set of centroids, rather than polygons.
 
-The polygon set of Tasmania in 2011 is accessed from the
-\texttt{absmapsdata} package. A single column of the data set is used to
-identify the unique areas. In this case, the unique SA2 names for each
-SA2 have been used.
+The set of SA2 polygons for Tasmania, using the 2011 definition of SA2s,
+is accessed from the \texttt{absmapsdata} package. A single column of
+the data set is used to identify the unique areas. In this case, the
+unique SA2 names for each SA2 have been used.
 
 The Australian capital cities are used as focal points to allocate each
 geographic area around the closest capital city. Hobart will be the
@@ -385,7 +384,7 @@ for allocation, the \texttt{create\_grid} function will call the
 \texttt{create\_buffer} function. It finds the grid points needed to
 best capture the set of centroids on a hexagon tile map. Reducing the
 buffer can help to decrease the amount of time taken, as there will be
-less points in the water to consider for each centroid allocation.
+less points over the water to consider for each centroid allocation.
 
 The closest latitude row and longitude column are found for each
 centroid location. Then rows and columns of centroids are divided into
@@ -474,34 +473,32 @@ the focal point then the original centroid location.
 \end{Schunk}
 
 If no available hexagon grid point is found within the original filter
-distance and angle, the distance is expanded, only when a maximum
+distance and angle, the distance is expanded and only when a maximum
 distance is reached will the angle expand to accommodate more possible
 grid points. By default the angle filter for the hexagon grid points
-create plus and minus 30 degrees bounds of the angle from the focal
-point to the geographic centroid. This will increase if no points can be
-found within the \texttt{hex\_filter} distance. The default angle of 30
-was chosen to allow the algorithm to find hexagons that best maintained
-the spatial relationship between the focal point and geographic
-centroid.
+create plus and minus 30 degree bounds of the angle from the focal point
+to the geographic centroid. This will increase if no points can be found
+within the \texttt{hex\_filter} distance. The default angle of 30 was
+chosen to allow the algorithm to find hexagons that best maintained the
+spatial relationship between the focal point and geographic centroid.
 
 \hypertarget{animation}{%
 \subsection{Animation}\label{animation}}
 
-Creating an animation connecting these two displays can allow users t
+Creating an animation connecting these two displays can allow users to
 grasp the meaning of the connected hexagons. It will also highlight the
 density of the communities using the rapid expansion of the inner-city
 areas, these hexagons will move the furthest and will move rapidly in
 the animation from their geographic locations. The rapid decrease in
-size of the large rural areas can show how large the landmass of
-Statistical Areas can be, and how few people occupy rural areas. The
-\texttt{gganimate} \citep{gganimate} package can be used to make an
-animation. It connects the polygons for each area in the two displays
-using the \texttt{sf\_id} variable, the names of the statistical areas,
-and creates intermediate displays as they geographic areas shrink or
-expand to the chosen hexagon size.
+size of the large rural areas can show the large size of their
+collective landmass. The \texttt{gganimate} \citep{gganimate} package
+can be used to make an animation. It connects the polygons for each area
+in the two displays using the \texttt{sf\_id} variable, the names of the
+statistical areas, and creates intermediate displays as they geographic
+areas shrink or expand to the chosen hexagon size.
 
 \hypertarget{conclusion-03}{%
-\subsection{Conclusion}\label{conclusion-03}}
+\subsection{Discussion and Conclusion}\label{conclusion-03}}
 
 This paper provides an algorithm for Australia called the hexagon tile
 map. It also describes how this algorithm addresses the potential issues
@@ -522,27 +519,27 @@ choropleth map display the tessellation does not allow the size of the
 hexagons to represent another variable. The algorithm is heavily
 dependent on the focal points used, as this determines the order of
 allocation. With careful consideration of the choropleth map, the small
-geographic inner city areas may have been noticed by viewers, but the
-hexagon tile map display emphasises them. The communities in northern
-Tasmania and the Northern territory do not draw attention because of
-their size as in the choropleth, but their colour is still noticeably
-below average when contrasted with the hexagons in New South Wales.
+geographic inner city areas may not have been noticed by viewers, but
+the hexagon tile map display emphasises them. The communities in
+northern Tasmania and the Northern territory do not draw attention
+because of their size as in the choropleth, but their colour is still
+noticeably below average when contrasted with the hexagons in New South
+Wales.
 
-This algorithm should be general enough to apply to other countries and
-related problems. The algorithm has only been tested using single
-countries. While the buffer allows extension beyond the furthest
-centroids, there is no mechanism implemented to protect the borders and
-ensure centroids are placed within the geographic borders of a country.
-The algorithm is also currently limited to representing each geographic
-area with only one hexagon. Future developments may address these
-limitations, and refine the filter steps for final selection of a
-hexagon grid point for each centroid. A direct angle is currently
-implemented, but may narrowly miss appropriate hexagons, a logarithmic
-function may help to choose a closer hexagon to the original centroid
-location. This algorithm is an effective start to creating hexagon tile
-maps for many geographic units. This contributes to an extensive body of
-work that encourages the use of alternative map displays for statistical
-displays of spatial data.
+This algorithm should be general enough to apply to other study regions
+and contexts. The algorithm has only been tested using single countries.
+While the buffer allows extension beyond the furthest centroids, there
+is no mechanism implemented to protect the borders and ensure centroids
+are placed within the geographic borders of a country. The algorithm is
+also currently limited to representing each geographic area with only
+one hexagon. Future developments may address these limitations, and
+refine the filter steps for final selection of a hexagon grid point for
+each centroid. A direct angle is currently implemented, but may narrowly
+miss appropriate hexagons, a logarithmic function may help to choose a
+closer hexagon to the original centroid location. This algorithm is an
+effective start to creating hexagon tile maps for many geographic units.
+This contributes to an extensive body of work that encourages the use of
+alternative map displays for statistical displays of spatial data.
 
 \bibliography{kobakian-cook.bib}
 
