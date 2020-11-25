@@ -352,7 +352,7 @@ The Australian capital cities are used as focal points to allocate each geograph
 data(capital_cities)
 ```
 
-The buffer distance, hexagon size, hexagon amount to filter and width of angle are parameters that will be determined within \code{create_hexmap()}, if they are not provided. They are created as they are needed throughout the following example.
+The buffer distance, hexagon size, hexagon amount to filter and width of angle are parameters that will be determined within `create_hexmap()`, if they are not provided. They are created as they are needed throughout the following example.
 
 
 The results from various steps in the process are illustrated in Figure 5.

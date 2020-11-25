@@ -178,7 +178,7 @@ the relationship between each unit and the closest focal point. The
 algorithm allocates geographic units to a representative hexagon, in
 order of their proximity to the closest focal point.
 
-The algorithm is implemented in the \texttt{sugarbag} package for
+The algorithm is implemented in the \CRANpkg{sugarbag} package for
 \texttt{R}, named after the common name for the \emph{Trigona
 carbonaria} bee -- a species which builds flat layers of hexagonal brood
 cells, spiralling out from a central point \citep{PH}. This unusual
@@ -282,16 +282,16 @@ load involved in creating and implementing alternative displays. This
 allows map makers and data communicators to spend their time choosing
 the most effective display.
 
-The \texttt{sugarbag} package contains a set of functions that help R
-users to create a hexagon tile map. The algorithm presented in the
-\texttt{sugarbag} package operates on a set of simple feature geometry
-objects , known as \texttt{sf} objects\citep{sf}. This package allows R
-users to create \texttt{sf} objects by importing polygons stored in
-various formats. Users should provide a set of polygons that define
-geographic units by their administrative boundaries. The functions
-arrange the geographic units in order of proximity to a set of locations
-provided, such as the centre of major cities. The centroid location of
-each geographic unit is used to measure the proximity. It emphasises the
+The \pkg{sugarbag} package contains a set of functions that help R users
+to create a hexagon tile map. The algorithm presented in the
+\pkg{sugarbag} package operates on a set of simple feature geometry
+objects , known as \CRANpkg{sf} objects\citep{sf}. This package allows R
+users to create \pkg{sf} objects by importing polygons stored in various
+formats. Users should provide a set of polygons that define geographic
+units by their administrative boundaries. The functions arrange the
+geographic units in order of proximity to a set of locations provided,
+such as the centre of major cities. The centroid location of each
+geographic unit is used to measure the proximity. It emphasises the
 major cities as population hubs, rather than emphasizing the size of
 large, rural geographic units.
 
@@ -314,7 +314,8 @@ install.packages("sugarbag")
 \end{Sinput}
 \end{Schunk}
 
-and the development version can be installed from the GitHub repository:
+\noindent and the development version can be installed from the GitHub
+repository:
 
 \begin{Schunk}
 \begin{Sinput}
@@ -333,9 +334,9 @@ example, the \texttt{allocate} function can be used directly when a user
 wishes to use a set of centroids, rather than polygons.
 
 The set of SA2 polygons for Tasmania, using the 2011 definition of SA2s,
-is accessed from the \texttt{absmapsdata} package. A single column of
-the data set is used to identify the unique areas. In this case, the
-unique SA2 names for each SA2 have been used.
+is accessed from the \pkg{absmapsdata} package. A single column of the
+data set is used to identify the unique areas. In this case, the unique
+SA2 names for each SA2 have been used.
 
 The Australian capital cities are used as focal points to allocate each
 geographic area around the closest capital city. Hobart will be the
@@ -481,7 +482,7 @@ the focal point then the original centroid location.
 
 \begin{Schunk}
 \begin{figure}
-\includegraphics[width=0.95\linewidth]{kobakian-cook_files/figure-latex/filterprocess-1} \caption[Illustration of several steps of the algorithm]{Illustration of several steps of the algorithm: (a) ... (b) ... (c) ... (d). }\label{fig:filterprocess}
+\includegraphics[width=0.95\linewidth]{kobakian-cook_files/figure-latex/filterprocess-1} \caption[Illustration of key steps of the algorithm]{Illustration of key steps of the algorithm: (a) full hexagon grid is created first; (b) buffer is applied, shown as dark green circles, to accommodate irregularly shaped regions; (c, d) allocation process, relative the center of Hobart, showing the 8th centroid to be allocated. The relationship between Hobart (the cross) and the centroid (the purple triangle) is used to filter the potential locations from the grid within a wedge. Hexagons already allocated are shown in black, and the purple circle indicates the hexagon to be assigned to the 8th centroid.}\label{fig:filterprocess}
 \end{figure}
 \end{Schunk}
 
