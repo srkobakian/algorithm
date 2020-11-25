@@ -743,18 +743,16 @@ Creating an animation connecting these two displays can allow users to grasp the
 
 ## Discussion and Conclusion {#conclusion-03}
 
-This paper provides an algorithm for Australia called the hexagon tile map.
-It also describes how this algorithm addresses the potential issues found with contiguous, non-contiguous and Dorling cartograms when applied to Australia. It achieves a display that effectively presents the density of the population in small geographic areas and de emphasises the large rural geographic space between the densely populated capital cities.
-
+This work provides an algorithm called the hexagon tile map.
+It also describes how this algorithm addresses the potential issues found with contiguous, non-contiguous and Dorling cartograms when applied to Australia. It achieves a display that effectively presents the density of the population in small geographic areas and de-emphasises the large rural geographic space between the densely populated capital cities. The hexagon tile map display acknowledges that the amount of residents can differ but each administrative area is equally important. This solution uses equally sized areas, and maintain neighbourhood boundary connections.
 
 <!-- implementation -->
-The hexagon tile map display acknowledges that the amount of residents can differ but each administrative area is equally important. This solution uses equally sized areas, and maintain neighbourhood boundary connections. The `sugarbag` package for `R` automates the creation of tessellated hexagon tile maps by providing an algorithm to design these displays. The Australian application preserves spatial relationships, and emphasises capital cities. 
-However, similar to the choropleth map display the tessellation does not allow the size of the hexagons to represent another variable. The algorithm is heavily dependent on the focal points used, as this determines the order of allocation. With careful consideration of the choropleth map, the small geographic inner city areas may not have been noticed by viewers, but the hexagon tile map display emphasises them. The communities in northern Tasmania and the Northern territory do not draw attention because of their size as in the choropleth, but their colour is still noticeably below average when contrasted with the hexagons in New South Wales.
+ The `sugarbag` package for `R` automates the creation of tessellated hexagon tile maps by providing an algorithm to design these displays. The Australian application preserves spatial relationships, and emphasises capital cities. However, similar to the choropleth map display the tessellation does not allow the size of the hexagons to represent another variable. The algorithm uses focal points, which are the centers of capital cities for Australia, to determine the order and direction of allocation. After careful consideration of the choropleth map, the small geographic inner city areas with high thyroid cancer prevalence may have been missed by viewers, but the hexagon tile map display reveals them. The communities in northern Tasmania and the Northern Territory draw less attention because they are smaller and more isolated in the hexagon tile map, but their colour is still comparable with the hexagons in other regions.
 
 
-<!-- limitiations, where it might not work -->
+<!-- limitations, where it might not work -->
 
 This algorithm should be general enough to apply to other study regions and contexts. The algorithm has only been tested using single countries. While the buffer allows extension beyond the furthest centroids, there is no mechanism implemented to protect the borders and ensure centroids are placed within the geographic borders of a country.
 The algorithm is also currently limited to representing each geographic area with only one hexagon. Future developments may address these limitations, and refine the filter steps for final selection of a hexagon grid point for each centroid. A direct angle is currently implemented, but may narrowly miss appropriate hexagons, a logarithmic function may help to choose a closer hexagon to the original centroid location.
-This algorithm is an effective start to creating hexagon tile maps for many geographic units. This contributes to an extensive body of work that encourages the use of alternative map displays for statistical displays of spatial data.
+This algorithm is an effective start to automatically creating hexagon tile maps for many geographic units. This contributes to an extensive body of work that encourages the use of alternative map displays for statistical displays of spatial data.
 

@@ -95,7 +95,7 @@ understand demographics within communities of the Australian population.
 Each SA2 \citep{abs2011} was designed to represent a community. This
 collection of communities presents an opportunity for explicit map
 transformations to improve communication of spatial distributions
-\citep{CBATCC}. In figure \ref{fig:tas_displays} the choropleth map can
+\citep{CBATCC}. In Figure \ref{fig:tas_displays} the choropleth map can
 be seen underneath each alternative map display to allow for comparisons
 to be made.
 
@@ -120,7 +120,7 @@ When communicating information that is relevant to the population, each
 member of the population can be given equal representation by
 transforming the map \citep{TVSSS}. The connected communities can be
 recognised by allowing the boundaries to maintain connection in the
-transformed display. The contiguous cartogram displayed in figure
+transformed display. The contiguous cartogram displayed in Figure
 \ref{fig:tas_displays}a) draws attention to smaller geographic units
 when they are rescaled according to the population \citep{DMAHP}. These
 new shapes can now be coloured to represent a second variable. The
@@ -131,7 +131,7 @@ algorithms must satisfy the topology conditions, especially when there
 are communities located geographically far from their neighbours
 \citep{TVSSS}.
 
-The non-contiguous cartogram in figure \ref{fig:tas_displays}b) also
+The non-contiguous cartogram in Figure \ref{fig:tas_displays}b) also
 uses the population to rescale the geographic units. Unlike the
 contiguous cartogram, the SA2 areas maintain their geographic shape, but
 they may not retain the connection with their neighbours. The population
@@ -176,9 +176,9 @@ are constructed by building out from multiple focal points on the
 geographic map base in a spiral fashion.
 
 The result of the algorithm applied to the same data represented in
-figure \ref{fig:choro} shows rates of thyroid cancer for females in each
-of the SA2 areas of Australia as hexagons in figure \ref{fig:hexmap}.
-The difference to the choropleth map in figure \ref{fig:choro} are
+Figure \ref{fig:choro} shows rates of thyroid cancer for females in each
+of the SA2 areas of Australia as hexagons in Figure \ref{fig:hexmap}.
+The difference to the choropleth map in Figure \ref{fig:choro} are
 clear. Now the higher thyroid cancer incidence in the densely populated
 areas in Sydney, Brisbane and Perth are visible. Interestingly, there is
 no clear divide between rural and urban SA2 areas, as many rural areas
@@ -197,7 +197,7 @@ average. Brisbane also experiences higher than average rates of
 diagnosis, but has more orange than red. The females in the cities of
 Adelaide and Perth show much lower rates of diagnosis.
 
-Compared to the choropleth map display in figure \ref{fig:choro}, the
+Compared to the choropleth map display in Figure \ref{fig:choro}, the
 low rates in the rural Australian communities are no longer dominating
 the display. While the representative hexagons are still visible against
 the black background, the much lower than average rates in rural
@@ -210,13 +210,13 @@ Australia are less noticeable.
 \end{Schunk}
 
 There are several key steps in the creation of the hexagon tile map as
-described in the flow chart in figure \ref{fig:sugarbag_flow}. First,
+described in the flow chart in Figure \ref{fig:sugarbag_flow}. First,
 derive the set of centroids from the polygons provided, then create the
 grid of hexagon locations. These two processes are defined in the blue
-left column of the flow chart in figure \ref{fig:sugarbag_flow}. Each
+left column of the flow chart in Figure \ref{fig:sugarbag_flow}. Each
 centroid can then be allocated to an available hexagon location. The
 steps for the allocation process are detailed in the right column of
-figure \ref{fig:sugarbag_flow}. There are several filter steps to speed
+Figure \ref{fig:sugarbag_flow}. There are several filter steps to speed
 the process of selecting an appropriate hexagon to represent each
 geographic unit. To make tessellated plots with the hexagon allocations,
 the point locations are converted into hexagon shapes.
@@ -414,7 +414,7 @@ The distance is calculated between each centroid in the set, and each of
 the focal points provided. The order for allocation is determined by the
 distance between the polygon centroid and it's closest focal point. For
 this example, this distance is only calculated for the capital city of
-Hobart, represented in figure \ref{fig:filterprocess}c and d as a white
+Hobart, represented in Figure \ref{fig:filterprocess}c and d as a white
 cross.
 
 \hypertarget{step-3-allocate-each-centroid-to-a-hexagon-grid-point}{%
@@ -438,7 +438,7 @@ The set of possible hexagon grid points reduces by one after each
 centroid is allocated, then only the grid points that have not yet been
 selected are considered. Keeping only the available hexagon points
 prevents multiple geographic units from being allocated to the same
-hexagon. This is demonstrated in figure \ref{fig:filterprocess}c and d
+hexagon. This is demonstrated in Figure \ref{fig:filterprocess}c and d
 by the black hexagons that represent the seven closest polygons to the
 capital city of Hobart. As the allocation process begins for the eighth
 closest centroid there are seven unavailable hexagon locations.
@@ -463,7 +463,7 @@ a certain radial distance around the original centroid location.
 The \texttt{width} parameter is used to take a slice of the remaining
 points. The width is the amount of degrees used on either side of the
 angle from the focal point to centroid location. This uses the angle
-from the closest capital city, to the current centroid as seen in figure
+from the closest capital city, to the current centroid as seen in Figure
 \ref{fig:filterprocess}c.~This allows the spatial relationship to be
 preserved, even when it is allocated to a hexagon that is further from
 the focal point then the original centroid location.
@@ -502,31 +502,31 @@ areas shrink or expand to the chosen hexagon size.
 \hypertarget{conclusion-03}{%
 \subsection{Discussion and Conclusion}\label{conclusion-03}}
 
-This paper provides an algorithm for Australia called the hexagon tile
-map. It also describes how this algorithm addresses the potential issues
-found with contiguous, non-contiguous and Dorling cartograms when
-applied to Australia. It achieves a display that effectively presents
-the density of the population in small geographic areas and de
-emphasises the large rural geographic space between the densely
-populated capital cities.
+This work provides an algorithm called the hexagon tile map. It also
+describes how this algorithm addresses the potential issues found with
+contiguous, non-contiguous and Dorling cartograms when applied to
+Australia. It achieves a display that effectively presents the density
+of the population in small geographic areas and de-emphasises the large
+rural geographic space between the densely populated capital cities. The
+hexagon tile map display acknowledges that the amount of residents can
+differ but each administrative area is equally important. This solution
+uses equally sized areas, and maintain neighbourhood boundary
+connections.
 
-The hexagon tile map display acknowledges that the amount of residents
-can differ but each administrative area is equally important. This
-solution uses equally sized areas, and maintain neighbourhood boundary
-connections. The \texttt{sugarbag} package for \texttt{R} automates the
-creation of tessellated hexagon tile maps by providing an algorithm to
-design these displays. The Australian application preserves spatial
-relationships, and emphasises capital cities. However, similar to the
-choropleth map display the tessellation does not allow the size of the
-hexagons to represent another variable. The algorithm is heavily
-dependent on the focal points used, as this determines the order of
-allocation. With careful consideration of the choropleth map, the small
-geographic inner city areas may not have been noticed by viewers, but
-the hexagon tile map display emphasises them. The communities in
-northern Tasmania and the Northern territory do not draw attention
-because of their size as in the choropleth, but their colour is still
-noticeably below average when contrasted with the hexagons in New South
-Wales.
+The \texttt{sugarbag} package for \texttt{R} automates the creation of
+tessellated hexagon tile maps by providing an algorithm to design these
+displays. The Australian application preserves spatial relationships,
+and emphasises capital cities. However, similar to the choropleth map
+display the tessellation does not allow the size of the hexagons to
+represent another variable. The algorithm uses focal points, which are
+the centers of capital cities for Australia, to determine the order and
+direction of allocation. After careful consideration of the choropleth
+map, the small geographic inner city areas with high thyroid cancer
+prevalence may have been missed by viewers, but the hexagon tile map
+display reveals them. The communities in northern Tasmania and the
+Northern Territory draw less attention because they are smaller and more
+isolated in the hexagon tile map, but their colour is still comparable
+with the hexagons in other regions.
 
 This algorithm should be general enough to apply to other study regions
 and contexts. The algorithm has only been tested using single countries.
