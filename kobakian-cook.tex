@@ -155,6 +155,17 @@ of coastal cities in Tasmania that were not apparent in Figure
 approximation of equal population is not easy to fulfil, as there is
 some disparity in the sizes of the circles.
 
+It is also common to treat all geographic units as equal, so that
+regardless of the population or other information, to generate equal
+size spatial polygons. The Dorling algorithm can beinduced to do this,
+to make equallly sized circles. \citet{MDAC} describes a group of
+alternative maps called ``mosaic cartograms'' for tile displays. The
+geography of the USA has been transformed into a square-binned tile map
+manually and made available in the R package \CRANpkg{statebins}
+\citep{statebins}.The algorithm described below is an automatic layout
+of hexagon tiles, where a continguity constraint is relaxed. This gives
+equal weight to each geographic area even if the population differs.
+
 \hypertarget{algorithm}{%
 \subsection{Algorithm}\label{algorithm}}
 
