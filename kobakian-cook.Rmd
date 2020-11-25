@@ -132,9 +132,9 @@ aus_ggchoro
 
 The solutions to this visualisation problem begin with the geography. Alternative maps can be created to shift the focus from land area and shape to the value of the statistics [@ACCAC]. Each style of cartogram applies a different transformation to the geographic areas, to highlight the values of the statistic of interest. Alternative maps can result in a distortion of the map space to represent features of the distribution across the areas [@ACCAC] as the statistic of interest is used to determine the cartogram layout.
 
-Alternative mapping methods allow increased understanding of the spatial distribution of a variable across the population, by fairly representing the population in each administrative area [@TAAM]. This acknowledges that the number of residents can be different and also recognises that each area, or person within it is equally important.
+Alternative mapping methods, like cartograms, allow increased understanding of the spatial distribution of a variable across the population, by fairly representing the population in each administrative area [@TAAM]. This acknowledges that the number of residents can be different and also recognises that each area, or person within it is equally important.
 
-This paper contains a discussion of Existing Mapping Practices. This is followed by details of the Algorithm. The implementation section discusses the algorithm in the `sugarbag` package. Finally, the use and benefits of animation are presented.
+This paper contains a discussion of existing mapping practices. This is followed by details of the algorithm. The implementation section discusses the algorithm in the `sugarbag` package. Finally, the use and benefits of animation are presented.
 
 ## Existing Mapping Practices
 
