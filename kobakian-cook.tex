@@ -73,10 +73,10 @@ area \citep{TAAM}. This acknowledges that the number of residents can be
 different and also recognises that each area, or person within it is
 equally important.
 
-This paper contains a discussion of existing mapping practices. This is
-followed by details of the algorithm. The implementation section
-discusses the algorithm in the \texttt{sugarbag} package. Finally, the
-use and benefits of animation are presented.
+This paper contains a discussion of Existing Mapping Practices. This is
+followed by details of the Algorithm. The implementation section
+discusses the algorithm in the \pkg{sugarbag} package. Finally, the use
+and benefits of animation are presented.
 
 \hypertarget{existing-mapping-practices}{%
 \subsection{Existing Mapping
@@ -224,7 +224,7 @@ There are several key steps in the creation of the hexagon tile map as
 described in the flow chart in Figure \ref{fig:sugarbag_flow}. First,
 derive the set of centroids from the polygons provided, then create the
 grid of hexagon locations. These two processes are defined in the blue
-left column of the flow chart in Figure \ref{fig:sugarbag_flow}. Each
+left column of the flow chart in figure \ref{fig:sugarbag_flow}. Each
 centroid can then be allocated to an available hexagon location. The
 steps for the allocation process are detailed in the right column of
 Figure \ref{fig:sugarbag_flow}. There are several filter steps to speed
@@ -296,7 +296,7 @@ major cities as population hubs, rather than emphasizing the size of
 large, rural geographic units.
 
 A user can tweak the parameters of the hexagon map using the additional
-arguments to the \texttt{create\_hexmap} function, but these options may
+arguments to the \code{create\_hexmap} function, but these options may
 affect the speed of the algorithm. The hexagon size may need adjustments
 depending on the density of the population; users can provide an
 appropriate hexagon size and re-run the algorithm. The buffer distance
@@ -325,12 +325,12 @@ devtools::install_github("srkobakian","sugarbag")
 
 The following steps create the hexagon tile map for all the Statistical
 Areas at Level 2 in Tasmania. These steps can be executed by the main
-function, \texttt{create\_hexmap}, or can be run separately for more
+function, \code{create\_hexmap}, or can be run separately for more
 flexibility.
 
 If a user would like to perform each of the steps of the algorithm
 themselves, the necessary inputs will change for each function. For
-example, the \texttt{allocate} function can be used directly when a user
+example, the \code{allocate} function can be used directly when a user
 wishes to use a set of centroids, rather than polygons.
 
 The set of SA2 polygons for Tasmania, using the 2011 definition of SA2s,
@@ -345,52 +345,59 @@ processed.
 
 The buffer distance, hexagon size, hexagon amount to filter and width of
 angle are parameters that will be determined within
-\texttt{create\_hexmap()}, if they are not provided. They are created as
+\code{create\_hexmap}, if they are not provided. They are created as
 they are needed throughout the following example.
 
 The results from various steps in the process are illustrated in Figure
 5.
 
-\hypertarget{step-1-derive-the-set-of-centroid-points}{%
-\subsubsection{Step 1: Derive the set of centroid
-points}\label{step-1-derive-the-set-of-centroid-points}}
+\hypertarget{derive-the-set-of-centroid-points}{%
+\subsubsection{Derive the set of centroid
+points}\label{derive-the-set-of-centroid-points}}
 
-The set of polygons should be provided as an \texttt{sf} object, this is
-a data frame containing a \texttt{geometry} column. The
-\texttt{read\_shape()} function can assist in creating this object for
-use in \texttt{R}.
+The set of polygons should be provided as an \pkg{sf} object, this is a
+data frame containing a \code{geometry} column. The \code{read\_shape}
+function can assist in creating this object for use in R.
 
-The centroids can be derived from an \texttt{sf} object using the
-\texttt{create\_centroids()} function:
+The centroids can be derived from an \pkg{sf} object using the
+\code{create\_centroids} function:
 
-\hypertarget{step-2-create-the-hexagon-grid-points}{%
-\subsubsection{Step 2: Create the hexagon grid
-points}\label{step-2-create-the-hexagon-grid-points}}
+\hypertarget{step-1-create-the-hexagon-grid-points}{%
+\subsubsection{Step 1: Create the hexagon grid
+points}\label{step-1-create-the-hexagon-grid-points}}
 
 A grid is created to allow tessellation of the hexagons that represent
 the geographic units. For a hexagon tile map, the grid of possible
-hexagon locations is made using the \texttt{create\_grid()} function. It
+hexagon locations is made using the \code{create\_grid} function. It
 uses the centroids, the hexagon size and the buffer distance. Figure
-\ref{fig:filterprocess}a) shows the initial locations of grid points
+\ref{fig:filterprocess} 1a) shows the initial locations of grid points
 created for Tasmania.
 
-\hypertarget{creating-a-tessellated-grid}{%
-\paragraph{Creating a tessellated
-grid}\label{creating-a-tessellated-grid}}
+\hypertarget{a-creating-a-tessellated-grid}{%
+\paragraph{(a) Creating a tessellated
+grid}\label{a-creating-a-tessellated-grid}}
 
 A set of longitude columns, and latitude rows are created to define the
 locations of the hexagons. The distance between each row and column is
-the size specified by \texttt{hex\_size}. Equally spaced columns are
+the size specified by \code{hex\_size}. Equally spaced columns are
 created from the minimum longitude minus the buffer distance, up to the
 maximum longitude plus the buffer distance. Similarly, the rows are
 created from the latitude values and the buffer distance. A unique
 hexagon location is created from all intersections of the longitude
-columns and latitude rows. Figure \ref{fig:filterprocess}a shows the
+columns and latitude rows. Figure \ref{fig:filterprocess} 1a) shows the
 hexagon grid after every second latitude row on the grid is shifted
 right, by half of the hexagon size.
 
-\hypertarget{filtering-the-grid}{%
-\paragraph{Filtering the grid}\label{filtering-the-grid}}
+\hypertarget{b-filtering-the-grid}{%
+\paragraph{(b) Filtering the grid}\label{b-filtering-the-grid}}
+
+Not all of the grid points will be used, especially if islands result in
+a large grid space. To filter the grid for appropriate hexagon locations
+for allocation, the \code{create\_grid} function will call the
+\code{create\_buffer} function. It finds the grid points needed to best
+capture the set of centroids on a hexagon tile map. Reducing the buffer
+can help to decrease the amount of time taken, as there will be less
+points over the water to consider for each centroid allocation.
 
 Not all of the grid points will be used, especially if islands result in
 a large grid space. To filter the grid for appropriate hexagon locations
@@ -413,7 +420,7 @@ for the longitude columns and latitude rows.
 The hexagon grid points are kept only if they fall within the rolling
 average of the minimum and maximum centroid values after accounting for
 the buffer distance, for each row and column of the grid. Figure
-\ref{fig:filterprocess}b displays remaining hexagon grid points after
+\ref{fig:filterprocess} 1b) displays remaining hexagon grid points after
 applying the buffer filter. The sparsely populated South-West region of
 National Park has fewer points available in the water compared to the
 South-East region near the city of Hobart.
@@ -426,12 +433,12 @@ The distance is calculated between each centroid in the set, and each of
 the focal points provided. The order for allocation is determined by the
 distance between the polygon centroid and it's closest focal point. For
 this example, this distance is only calculated for the capital city of
-Hobart, represented in Figure \ref{fig:filterprocess}c and d as a white
-cross.
+Hobart, represented in figure \ref{fig:filterprocess} 2a) and 2b) as a
+white cross.
 
-\hypertarget{step-3-allocate-each-centroid-to-a-hexagon-grid-point}{%
-\subsubsection{Step 3: Allocate each centroid to a hexagon grid
-point}\label{step-3-allocate-each-centroid-to-a-hexagon-grid-point}}
+\hypertarget{step-2-allocate-each-centroid-to-a-hexagon-grid-point}{%
+\subsubsection{Step 2: Allocate each centroid to a hexagon grid
+point}\label{step-2-allocate-each-centroid-to-a-hexagon-grid-point}}
 
 Allocation of all centroids requires the set of polygon centroids and
 the hexagon map grid. The polygon centroids are ordered from the
@@ -442,41 +449,40 @@ that are further will then be accommodated. The following example
 considers the first of the Statistical Areas at Level 2. Within the
 algorithm, these steps are repeated for each polygon.
 
-\hypertarget{filter-the-grid-for-unassigned-hexagon-points}{%
-\paragraph{Filter the grid for unassigned hexagon
-points}\label{filter-the-grid-for-unassigned-hexagon-points}}
+\hypertarget{a-filter-the-grid-for-unassigned-hexagon-points}{%
+\paragraph{(a) Filter the grid for unassigned hexagon
+points}\label{a-filter-the-grid-for-unassigned-hexagon-points}}
 
 The set of possible hexagon grid points reduces by one after each
 centroid is allocated, then only the grid points that have not yet been
 selected are considered. Keeping only the available hexagon points
 prevents multiple geographic units from being allocated to the same
-hexagon. This is demonstrated in Figure \ref{fig:filterprocess}c and d
-by the black hexagons that represent the seven closest polygons to the
-capital city of Hobart. As the allocation process begins for the eighth
-closest centroid there are seven unavailable hexagon locations.
+hexagon. This is demonstrated in figure \ref{fig:filterprocess} 2a) and
+2b) by the black hexagons that represent the seven closest polygons to
+the capital city of Hobart. As the allocation process begins for the
+eighth closest centroid there are seven unavailable hexagon locations.
 
-\hypertarget{filter-the-grid-points-for-those-closest-to-the-centroid}{%
-\paragraph{Filter the grid points for those closest to the
-centroid}\label{filter-the-grid-points-for-those-closest-to-the-centroid}}
+\hypertarget{b-filter-the-grid-points-for-those-closest-to-the-centroid}{%
+\paragraph{(b) Filter the grid points for those closest to the
+centroid}\label{b-filter-the-grid-points-for-those-closest-to-the-centroid}}
 
 A selection of possible hexagon locations around the centroid allows
 only the closest points that are not yet assigned to be considered. The
 number of possible hexagon locations to consider for a centroid is
-determined by the \texttt{hex\_filter}. This is the maximum amount of
-hexagons between the centroid and the furthest considered hexagon. It is
-used to subset possible grid points to only those surrounding the
-polygon centroid within an appropriate range. A smaller distance will
-increase speed, but can decrease accuracy when width of the angle
-increases.
+determined by the hexagon filter. This is the maximum amount of hexagons
+between the centroid and the furthest considered hexagon. It is used to
+subset possible grid points to only those surrounding the polygon
+centroid within an appropriate range. A smaller distance will increase
+speed, but can decrease accuracy when width of the angle increases.
 
 The algorithm creates a circle of points, by only keeping points within
 a certain radial distance around the original centroid location.
 
-The \texttt{width} parameter is used to take a slice of the remaining
+The \code{width} parameter is used to take a slice of the remaining
 points. The width is the amount of degrees used on either side of the
 angle from the focal point to centroid location. This uses the angle
-from the closest capital city, to the current centroid as seen in Figure
-\ref{fig:filterprocess}c.~This allows the spatial relationship to be
+from the closest capital city, to the current centroid as seen in figure
+\ref{fig:filterprocess} 2a). This allows the spatial relationship to be
 preserved, even when it is allocated to a hexagon that is further from
 the focal point then the original centroid location.
 
@@ -492,7 +498,7 @@ distance is reached will the angle expand to accommodate more possible
 grid points. By default the angle filter for the hexagon grid points
 create plus and minus 30 degree bounds of the angle from the focal point
 to the geographic centroid. This will increase if no points can be found
-within the \texttt{hex\_filter} distance. The default angle of 30 was
+within the \code{hex\_filter} distance. The default angle of 30 was
 chosen to allow the algorithm to find hexagons that best maintained the
 spatial relationship between the focal point and geographic centroid.
 
@@ -505,9 +511,9 @@ density of the communities using the rapid expansion of the inner-city
 areas, these hexagons will move the furthest and will move rapidly in
 the animation from their geographic locations. The rapid decrease in
 size of the large rural areas can show the large size of their
-collective landmass. The \texttt{gganimate} \citep{gganimate} package
-can be used to make an animation. It connects the polygons for each area
-in the two displays using the \texttt{sf\_id} variable, the names of the
+collective landmass. The \pkg{gganimate} \citep{gganimate} package can
+be used to make an animation. It connects the polygons for each area in
+the two displays using the \code{sf\_id} variable, the names of the
 statistical areas, and creates intermediate displays as they geographic
 areas shrink or expand to the chosen hexagon size.
 
@@ -525,20 +531,22 @@ differ but each administrative area is equally important. This solution
 uses equally sized areas, and maintain neighbourhood boundary
 connections.
 
-The \texttt{sugarbag} package for \texttt{R} automates the creation of
+The hexagon tile map display acknowledges that the amount of residents
+can differ but each administrative area is equally important. This
+solution uses equally sized areas, and maintain neighbourhood boundary
+connections. The \pkg{sugarbag} package for R automates the creation of
 tessellated hexagon tile maps by providing an algorithm to design these
 displays. The Australian application preserves spatial relationships,
 and emphasises capital cities. However, similar to the choropleth map
 display the tessellation does not allow the size of the hexagons to
-represent another variable. The algorithm uses focal points, which are
-the centers of capital cities for Australia, to determine the order and
-direction of allocation. After careful consideration of the choropleth
-map, the small geographic inner city areas with high thyroid cancer
-prevalence may have been missed by viewers, but the hexagon tile map
-display reveals them. The communities in northern Tasmania and the
-Northern Territory draw less attention because they are smaller and more
-isolated in the hexagon tile map, but their colour is still comparable
-with the hexagons in other regions.
+represent another variable. The algorithm is heavily dependent on the
+focal points used, as this determines the order of allocation. With
+careful consideration of the choropleth map, the small geographic inner
+city areas may not have been noticed by viewers, but the hexagon tile
+map display emphasises them. The communities in northern Tasmania and
+the Northern territory do not draw attention because of their size as in
+the choropleth, but their colour is still noticeably below average when
+contrasted with the hexagons in New South Wales.
 
 This algorithm should be general enough to apply to other study regions
 and contexts. The algorithm has only been tested using single countries.
