@@ -1,0 +1,17 @@
+---
+from: Stephanie Kobakian
+fromqualifications: MSc
+fromemail: srkobakian@outlook.com
+fromsignature: sigfile.png
+toname: Michael Kane
+toaddress: R Journal Editor
+opening: Dear Mike,
+closing: Best wishes
+spacing: 1.4
+output: MonashEBSTemplates::letter
+---
+
+Please consider my article titled "A Hexagon Tile Map Algorithm for Displaying Spatial Data" for possible publication in the R Journal. The paper describes a new algorithm available in the R package sugarbag, to automatically create hexagon tile maps to display spatial data. 
+
+This work is important for making maps, especially for Australia, where displays like choropleth maps and cartograms are inadequate for examining population based statistics geographically. The algorithm has been tested on other countries also, and is generally applicable. Please find the Rmd, tex, pdf, R and data files in the submission zip file. 
+
