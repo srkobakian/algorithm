@@ -75,8 +75,8 @@ equally important.
 
 This paper contains a discussion of Existing Mapping Practices. This is
 followed by details of the Algorithm. The implementation section
-discusses the algorithm in the \pkg{sugarbag} package. Finally, the use
-and benefits of animation are presented.
+discusses the algorithm in the \CRANpkg{sugarbag} package. Finally, the
+use and benefits of animation are presented.
 
 \hypertarget{existing-mapping-practices}{%
 \subsection{Existing Mapping
@@ -178,7 +178,7 @@ the relationship between each unit and the closest focal point. The
 algorithm allocates geographic units to a representative hexagon, in
 order of their proximity to the closest focal point.
 
-The algorithm is implemented in the \CRANpkg{sugarbag} package for
+The algorithm is implemented in the \pkg{sugarbag} package for
 \texttt{R}, named after the common name for the \emph{Trigona
 carbonaria} bee -- a species which builds flat layers of hexagonal brood
 cells, spiralling out from a central point \citep{PH}. This unusual
@@ -349,7 +349,7 @@ angle are parameters that will be determined within
 they are needed throughout the following example.
 
 The results from various steps in the process are illustrated in Figure
-5.
+\ref{fig:filterprocess}.
 
 \hypertarget{derive-the-set-of-centroid-points}{%
 \subsubsection{Derive the set of centroid

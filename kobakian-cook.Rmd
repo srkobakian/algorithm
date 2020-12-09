@@ -134,7 +134,7 @@ The solutions to this visualisation problem begin with the geography. Alternativ
 
 Alternative mapping methods, like cartograms, allow increased understanding of the spatial distribution of a variable across the population, by fairly representing the population in each administrative area [@TAAM]. This acknowledges that the number of residents can be different and also recognises that each area, or person within it is equally important.
 
-This paper contains a discussion of Existing Mapping Practices. This is followed by details of the Algorithm. The implementation section discusses the algorithm in the \pkg{sugarbag} package. Finally, the use and benefits of animation are presented.
+This paper contains a discussion of Existing Mapping Practices. This is followed by details of the Algorithm. The implementation section discusses the algorithm in the \CRANpkg{sugarbag} package. Finally, the use and benefits of animation are presented.
 
 ## Existing Mapping Practices
 
@@ -277,7 +277,7 @@ It is also common to treat all geographic units as equal, so that regardless of 
 The purpose of this algorithm is to create an alternative map display that highlights the spatial distributions for populations. There has been an increasing need for displays that recognise the large number of people that live in dense urban environments. The algorithm intends to maintain the spatial relationships of a group of geographic units using the relationship between each unit and the closest focal point. The algorithm allocates geographic units to a representative hexagon, in order of their proximity to the closest focal point.
 
 
-The algorithm is implemented in the \CRANpkg{sugarbag} package for `R`, named after the common name for the *Trigona carbonaria* bee – a species which builds flat layers of hexagonal brood cells, spiralling out from a central point [@PH]. This unusual pattern also provided the inspiration for the algorithm, where the maps are constructed by building out from multiple focal points on the geographic map base in a spiral fashion.
+The algorithm is implemented in the \pkg{sugarbag} package for `R`, named after the common name for the *Trigona carbonaria* bee – a species which builds flat layers of hexagonal brood cells, spiralling out from a central point [@PH]. This unusual pattern also provided the inspiration for the algorithm, where the maps are constructed by building out from multiple focal points on the geographic map base in a spiral fashion.
 
 The result of the algorithm applied to the same data represented in Figure \ref{fig:choro} shows rates of thyroid cancer for females in each of the SA2 areas of Australia as hexagons in Figure \ref{fig:hexmap}.
 The difference to the choropleth map in Figure \ref{fig:choro} are clear. Now the higher thyroid cancer incidence in the densely populated areas in Sydney, Brisbane and Perth are visible. Interestingly, there is no clear divide between rural and urban SA2 areas, as many rural areas and the cities of Melbourne, Darwin, Adelaide and Hobart have low rates of thyroid incidence for females. The hexagon tile map display provides a more accurate representation of the spatial distribution of thyroid cancer incidence across Australia.
@@ -361,7 +361,7 @@ data(capital_cities)
 The buffer distance, hexagon size, hexagon amount to filter and width of angle are parameters that will be determined within \code{create\_hexmap}, if they are not provided. They are created as they are needed throughout the following example.
 
 
-The results from various steps in the process are illustrated in Figure 5.
+The results from various steps in the process are illustrated in Figure \ref{fig:filterprocess}.
 
 ### Derive the set of centroid points
 
