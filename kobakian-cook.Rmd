@@ -325,7 +325,6 @@ When allocating representative hexagons, the width parameter can be used to dete
 
 Hexagon tile maps can be useful to understand a distribution across a collection of geographic areas. However, these maps are not easy to create manually, especially as the number of areas increases. This algorithm was created to automate this process, and reduce the manual load involved in creating and implementing alternative displays. This allows map makers and data communicators to spend their time choosing the most effective display.
 
-
 The \pkg{sugarbag} package contains a set of functions that help R users to create a hexagon tile map. The algorithm presented in the \pkg{sugarbag} package operates on a set of simple feature geometry objects , known as \CRANpkg{sf} objects[@sf]. This package allows R users to create \pkg{sf} objects by importing polygons stored in various formats. Users should provide a set of polygons that define geographic units by their administrative boundaries. The functions arrange the geographic units in order of proximity to a set of locations provided, such as the centre of major cities. The centroid location of each geographic unit is used to measure the proximity. It emphasises the major cities as population hubs, rather than emphasizing the size of large, rural geographic units.
 
 A user can tweak the parameters of the hexagon map using the additional arguments to the \code{create\_hexmap} function, but these options may affect the speed of the algorithm. 
@@ -348,7 +347,6 @@ devtools::install_github("srkobakian","sugarbag")
 The following steps create the hexagon tile map for all the Statistical Areas at Level 2 in Tasmania. These steps can be executed by the main function, \code{create\_hexmap}, or can be run separately for more flexibility.
 
 If a user would like to perform each of the steps of the algorithm themselves, the necessary inputs will change for each function. For example, the \code{allocate} function can be used directly when a user wishes to use a set of centroids, rather than polygons.
-
 
 The set of SA2 polygons for Tasmania, using the 2011 definition of SA2s, is accessed from the \pkg{absmapsdata} package. A single column of the data set is used to identify the unique areas. In this case, the unique SA2 names for each SA2 have been used.
 
@@ -710,7 +708,7 @@ f1 <- ggplot() +
 
 The \code{width} parameter is used to take a slice of the remaining points. The width is the amount of degrees used on either side of the angle from the focal point to centroid location. This uses the angle from the closest capital city, to the current centroid as seen in figure \ref{fig:filterprocess} 2a). This allows the spatial relationship to be preserved, even when it is allocated to a hexagon that is further from the focal point then the original centroid location.
 
-```{r filterprocess, fig.cap = "Illustration of key steps of the algorithm: (a) full hexagon grid is created first; (b) buffer is applied, shown as dark green circles, to accommodate irregularly shaped regions; (c, d) allocation process, relative the center of Hobart, showing the 8th centroid to be allocated. The relationship between Hobart (the cross) and the centroid (the purple triangle) is used to filter the potential locations from the grid within a wedge. Hexagons already allocated are shown in black, and the purple circle indicates the hexagon to be assigned to the 8th centroid.", dpi = 600, echo = FALSE, height = 12}
+```{r filterprocess, fig.cap = "Illustration of key steps of the algorithm: (1a) full hexagon grid is created first; (1b) buffer is applied, shown as dark green circles, to accommodate irregularly shaped regions; (2a, 2b) allocation process, relative the center of Hobart, showing the 8th centroid to be allocated. The relationship between Hobart (the cross) and the centroid (the purple triangle) is used to filter the potential locations from the grid within a wedge. Hexagons already allocated are shown in black, and the purple circle indicates the hexagon to be assigned to the 8th centroid.", dpi = 600, echo = FALSE, height = 12}
 
 hex <- f_grid %>%
         ungroup() %>%
@@ -751,7 +749,7 @@ By default the angle filter for the hexagon grid points create plus and minus 30
 
 Creating an animation connecting these two displays can allow users to grasp the meaning of the connected hexagons. It will also highlight the density of the communities using the rapid expansion of the inner-city areas, these hexagons will move the furthest and will move rapidly in the animation from their geographic locations. The rapid decrease in size of the large rural areas can show the large size of their collective landmass. The \pkg{gganimate} [@gganimate] package can be used to make an animation. It connects the polygons for each area in the two displays using the \code{sf\_id} variable, the names of the statistical areas, and creates intermediate displays as they geographic areas shrink or expand to the chosen hexagon size.
 
-## Discussion and Conclusion {#conclusion-03}
+## Discussion
 
 This work provides an algorithm called the hexagon tile map.
 It also describes how this algorithm addresses the potential issues found with contiguous, non-contiguous and Dorling cartograms when applied to Australia. It achieves a display that effectively presents the density of the population in small geographic areas and de-emphasises the large rural geographic space between the densely populated capital cities. The hexagon tile map display acknowledges that the amount of residents can differ but each administrative area is equally important. This solution uses equally sized areas, and maintain neighbourhood boundary connections.
