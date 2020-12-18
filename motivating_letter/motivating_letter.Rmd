@@ -1,12 +1,13 @@
 ---
 from: Stephanie Kobakian
-fromqualifications: MSc
+fromqualifications: MPhil
+fromtitle: Research Assistant
 fromemail: srkobakian@outlook.com
 fromsignature: sigfile.png
 toname: Michael Kane
 toaddress: R Journal Editor
-opening: Dear Mike,
-closing: Best wishes
+opening: Dear Michael,
+closing: Warm regards
 spacing: 1.4
 output: MonashEBSTemplates::letter
 ---
