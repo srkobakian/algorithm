@@ -747,7 +747,7 @@ By default the angle filter for the hexagon grid points create plus and minus 30
 
 ## Animation
 
-Creating an animation connecting these two displays can allow users to grasp the meaning of the connected hexagons. It will also highlight the density of the communities using the rapid expansion of the inner-city areas, these hexagons will move the furthest and will move rapidly in the animation from their geographic locations. The rapid decrease in size of the large rural areas can show the large size of their collective landmass. The \pkg{gganimate} [@gganimate] package can be used to make an animation. It connects the polygons for each area in the two displays using the \code{sf\_id} variable, the names of the statistical areas, and creates intermediate displays as they geographic areas shrink or expand to the chosen hexagon size.
+Creating an animation connecting these two displays can allow users to grasp the meaning of the connected hexagons. It will also highlight the density of the communities using the rapid expansion of the inner-city areas, these hexagons will move the furthest and will move rapidly in the animation from their geographic locations. The rapid decrease in size of the large rural areas can show the large size of their collective landmass. The \CRANpkg{gganimate} [@gganimate] package can be used to make an animation. It connects the polygons for each area in the two displays using the \code{sf\_id} variable, the names of the statistical areas, and creates intermediate displays as they geographic areas shrink or expand to the chosen hexagon size.
 
 ## Discussion
 
