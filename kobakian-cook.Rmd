@@ -154,7 +154,7 @@ centroids <- sa2 %>%
   create_centroids(., "sa2_name_2011")
 ## Create hexagon grid
 grid <- create_grid(centroids = centroids,
-                    hex_size = 0.2,
+                    hex_size = 0.1,
                     buffer_dist = 5)
 ## Allocate polygon centroids to hexagon grid points
 aus_hexmap <- allocate(
@@ -169,7 +169,8 @@ aus_hexmap <- allocate(
   width = 35,
   verbose = FALSE
 )
-save(aus_hexmap, file = "data/aus_hexmap.rda") }
+save(aus_hexmap, file = "data/aus_hexmap.rda") 
+}
 
 load("data/aus_hexmap.rda")
 
@@ -195,22 +196,24 @@ aus_hexmap_plot <- ggplot() +
 sa2thyroid_ERP <- st_transform(sa2thyroid_ERP, 3112) %>% 
   filter(state_name_2011 == "Tasmania")
 sa2thyroid_ERP <- sa2thyroid_ERP %>% 
-  mutate(sva = sqrt(as.numeric(Population)/as.numeric(albers_sqkm)))
+  #mutate(sva = sqrt(as.numeric(Population)/as.numeric(albers_sqkm)))
+  mutate(sva = sqrt(as.numeric(Population)/as.numeric(areasqkm_2011)))
 
 # Contiguous Cartograms
 if (!file.exists("data/ncont.rda")) {
-cont <- sa2thyroid_ERP %>% 
-  mutate(Population = Population + 1) %>% 
-  cartogram_cont(., weight = "Population", itermax = 20) %>%
-  st_as_sf()
-save(cont, file = "data/cont.rda") }
+  cont <- sa2thyroid_ERP %>% 
+    mutate(Population = Population + 1) %>% 
+    cartogram_cont(., weight = "Population", itermax = 20) %>%
+    st_as_sf()
+  save(cont, file = "data/cont.rda") 
+}
 
 load("data/cont.rda")
 
 tas_ggcont <- ggplot(cont) + 
   geom_sf(fill = "#D3D3D3", colour = "white", data = sa2thyroid_ERP) +
   geom_sf(aes(fill = SIR), colour = "grey", size = 0.01) + 
-  scale_fill_identity() + guides(fill=FALSE) +
+  scale_fill_identity() + guides(fill = "none") +
   theme_map() + ggtitle("a")
 #tas_ggcont
 ```
@@ -219,10 +222,11 @@ tas_ggcont <- ggplot(cont) +
 ```{r ncontcart}
 # Non - Contiguous Cartograms
 if (!file.exists("data/ncont.rda")) {
-ncont <- cartogram_ncont(sa2thyroid_ERP, k = 1.5,
+  ncont <- cartogram_ncont(sa2thyroid_ERP, k = 1.5,
                          weight = "Population") %>% 
                           st_as_sf()
-save(ncont, file = "data/ncont.rda")}
+  save(ncont, file = "data/ncont.rda")
+}
 
 load("data/ncont.rda")
 
@@ -230,7 +234,7 @@ tas_ggncont <- ggplot(ncont %>% filter(state_name_2011 == "Tasmania")) +
   geom_sf(fill = "#D3D3D3", colour = "white",  data = sa2thyroid_ERP) +
   geom_sf(aes(fill = SIR), colour = NA) + 
   scale_fill_identity() + 
-  guides(fill=FALSE) +
+  guides(fill = "none") +
   theme_map() + ggtitle("b")
 #tas_ggncont
 ```
@@ -247,7 +251,7 @@ tas_ggdorl <- ggplot(dorl) +
   geom_sf(fill = "#D3D3D3", colour = "white",  data = sa2thyroid_ERP) + 
   geom_sf(aes(fill = SIR), colour = "grey", size = 0.01) + 
   scale_fill_identity() +
-  guides(fill = FALSE) +
+  guides(fill = "none") +
   theme_map() + ggtitle("c")
 #tas_ggdorl
 ```
