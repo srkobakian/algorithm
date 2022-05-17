@@ -22,7 +22,7 @@ abstract: >
 preamble: |
   % Any extra LaTeX you need in the preamble
 bibliography: kobakian-cook.bib
-output: rjtools::rjournal_web_article
+output: rticles::rjournal_article
 editor_options: 
   chunk_output_type: console
 ---
