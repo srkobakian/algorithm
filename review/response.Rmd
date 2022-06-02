@@ -22,14 +22,16 @@ References to the R package implementations of other Mapping Practice have now b
 
 > *Third, I might recommend putting the “implementation” section above the “user choices” section. Fourth, and this is probably a personal preference, the implementation section could be improved by adding a simple table listing the main functions in the package and a brief summary of what they do. This makes the information more easily accessible to the reader. Fifth, the implementation section provides a running example, but please include some sample code directly in the article. This makes the package more accessible to users. It is not necessary to include all code of course, but some of the more important functions that produce a core visualization should be provided directly in the text.*
 
+Done.
 
 > *There were also a few minor typos that should be fixed (e.g., “tyroid” in the caption of Figure 3 and the comma beginning the third line of the second paragraph of the “implementation” section). The last two sentences of the first paragraph of the discussion section are also identical to the next two sentences. Overall, these revisions to the article are relatively minor and manageable.*
 
+Fixed, and paper has been carefully proofread again.
+
 > *The package itself seems to be reasonably well-organized, the code is clean, and there is sufficient built-in documentation. The progress bars are also useful. I don’t have any major suggestions for improving the functionality of the package itself, other than the fact that I couldn’t reproduce the example maps in the implementation section because the data were not self-contained. The article says that the example is reproducible using data from the absmapsdata package, but in the provided RMD file the object “fort_aus” can be traced back to the “SIR Downloadable Data.csv” dataset, which is from an external source (and also not available on the github repo). Forgive me if I am missing something here (and it is possible that I am). If not, these SIR data should be embedded or example code fixed to not be dependent on the SIR data so that the illustrative maps are reproducible.* 
 
-The implementation section now focusses only on Tasmania, for the sake of speed.
-We have now included the R data file for a completed Australian thyroid hexagon map.
-There are two sets of data required to make the Australian thyroid map, the shape file and SIR data.
-The SIR Downloadable Data csv file can be found in the data folder.
+For improving the speed to knit the paper the implementation section uses only the small data set corresponding to Tasmania.  
+
+The data files for the full Australia thyroid choropleth and hexagon map are provided so that the Figures 1 and 2 can be produced quickly. The code to produce these data sets is provided, so that the interested reader can follow the entire hexagon map generating process. There are two sets of data required to make the Australian thyroid map, the shape file and thyroid SIR data. The `SIR Downloadable Data.csv` file is located in the data folder. The shape file is the `sa22011` data from the `absmapsdata` package, which would need to be installed with `remotes::install_github("wfmackey/absmapsdata")`.
 
 

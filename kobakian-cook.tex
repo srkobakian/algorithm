@@ -66,21 +66,22 @@ result in a distortion of the map space to represent features of the
 distribution across the areas \citep{ACCAC} as the statistic of interest
 is used to determine the cartogram layout.
 
-Alternative mapping methods, like cartograms, allow increased
-understanding of the spatial distribution of a variable across the
-population, by fairly representing the population in each administrative
-area \citep{TAAM}. This acknowledges that the number of residents can be
-different and also recognises that each area, or person within it is
-equally important.
+Alternative mapping methods, like cartograms implemented in
+\CRANpkg{cartogram}, allow increased understanding of the spatial
+distribution of a variable across the population, by fairly representing
+the population in each administrative area \citep{TAAM}. This
+acknowledges that the number of residents can be different and also
+recognises that each area, or person within it is equally important.
 
-This paper contains a discussion of Existing Mapping Practices. This is
-followed by details of the Algorithm. The implementation section
-discusses the algorithm in the \CRANpkg{sugarbag} package. Finally, the
-use and benefits of animation are presented.
+This paper contains a discussion of existing mapping practices, followed
+by details of the algorithm. The implementation section explains the
+algorithm available in the \CRANpkg{sugarbag} package. How to utilise
+animation with the hexagon map is described. The paper finishes with a
+summary and possible new directions for the algorithm.
 
 \hypertarget{existing-mapping-practices}{%
-\subsection{Existing Mapping
-Practices}\label{existing-mapping-practices}}
+\subsection{Existing mapping
+practices}\label{existing-mapping-practices}}
 
 The familiar choropleth map display is often used to allow the user to
 orient themselves. However, the emphasis on the land mass diminishes the
@@ -95,24 +96,25 @@ understand demographics within communities of the Australian population.
 Each SA2 \citep{abs2011} was designed to represent a community. This
 collection of communities presents an opportunity for explicit map
 transformations to improve communication of spatial distributions
-\citep{CBATCC}. In Figure \ref{fig:tas_displays} the choropleth map can
+\citep{CBATCC}. In Figure \ref{fig:tasdisplays} the choropleth map can
 be seen underneath each alternative map display to allow for comparisons
 to be made.
 
-There are several established alternative visualisation methods. Tile
-maps, rectangular cartograms \citep{ORC} and Dorling cartograms
-\citep{ACTUC} all use one simple shape to represent each geographic
-unit. They all minimise the emphasis on the size or shape of the
-geographic areas. These alternative map displays focus on the
+There are several established alternative visualisation methods.
+Rectangular cartograms \citep{ORC} and Dorling cartograms \citep{ACTUC}
+implemented in \pkg{cartogram} and tile maps implemented in
+\CRANpkg{tilemaps}, all use one simple shape to represent each
+geographic unit. They all minimise the emphasis on the size or shape of
+the geographic areas. These alternative map displays focus on the
 relationship between neighbours, attempting to preserve connections, and
 disregard the unique shapes of the administrative boundaries. Figure
-\ref{fig:tas_displays} shows a collection of alternative map displays,
+\ref{fig:tasdisplays} shows a collection of alternative map displays,
 this includes a) a contiguous cartogram, b) a non-contiguous cartogram,
 and c) a Dorling cartogram.
 
 \begin{Schunk}
 \begin{figure}
-\includegraphics[width=0.95\linewidth]{kobakian-cook_files/figure-latex/tas_displays-1} \caption[The three displays show alternative maps of the Australian state of Tasmania at SA2 level]{The three displays show alternative maps of the Australian state of Tasmania at SA2 level: (a) contiguous cartogram, (b) non-contiguous cartogram and (c) Dorling cartogram of Tasmania. The contiguous cartogram looks like the state has an hourglass figure, while the non-contiguous cartogram shrinks areas into invisibility. The Dorling expands the metropolitan regions.}\label{fig:tas_displays}
+\includegraphics[width=1\linewidth]{kobakian-cook_files/figure-latex/tasdisplays-1} \caption[The three displays show alternative maps of the Australian state of Tasmania at SA2 level]{The three displays show alternative maps of the Australian state of Tasmania at SA2 level: (a) contiguous cartogram, (b) non-contiguous cartogram and (c) Dorling cartogram of Tasmania. The contiguous cartogram looks like the state has an hourglass figure, while the non-contiguous cartogram shrinks areas into invisibility. The Dorling expands the metropolitan regions.}\label{fig:tasdisplays}
 \end{figure}
 \end{Schunk}
 
@@ -121,43 +123,41 @@ member of the population can be given equal representation by
 transforming the map \citep{TVSSS}. The connected communities can be
 recognised by allowing the boundaries to maintain connection in the
 transformed display. The contiguous cartogram displayed in Figure
-\ref{fig:tas_displays}a) draws attention to smaller geographic units
-when they are rescaled according to the population \citep{DMAHP}. These
-new shapes can now be coloured to represent a second variable. The
-algorithm uses the geographic shape of the areas and iterates toward
-sizing the areas to represent the population. This display can create
-twisted and unfamiliar shapes from the geographic units as the
-algorithms must satisfy the topology conditions, especially when there
-are communities located geographically far from their neighbours
-\citep{TVSSS}.
+\ref{fig:tasdisplays}a draws attention to smaller geographic units when
+they are rescaled according to the population \citep{DMAHP}. These new
+shapes can now be coloured to represent a second variable. The algorithm
+uses the geographic shape of the areas and iterates toward sizing the
+areas to represent the population. This display can create twisted and
+unfamiliar shapes from the geographic units as the algorithms must
+satisfy the topology conditions, especially when there are communities
+located geographically far from their neighbours \citep{TVSSS}.
 
-The non-contiguous cartogram in Figure \ref{fig:tas_displays}b) also
-uses the population to rescale the geographic units. Unlike the
-contiguous cartogram, the SA2 areas maintain their geographic shape, but
-they may not retain the connection with their neighbours. The population
-of the SA2 areas is used to scale the geographic units in the
-non-contiguous cartogram \citep{NAC}. The amount of background space can
-be meaningful in non-contiguous cartograms \citep{ECGC}. The size
-disparity between rural areas and urban areas result in reasonable
-display within the south eastern city of Hobart, but these units are not
-visible in the context of the Tasmania state map. Depending on the
-difference between the population and geographic land size, the amount
-of white space can also prevent meaningful understanding of the
-distribution \citep{TVSSS}.
+The non-contiguous cartogram in Figure \ref{fig:tasdisplays}b also uses
+the population to rescale the geographic units. Unlike the contiguous
+cartogram, the SA2 areas maintain their geographic shape, but they may
+not retain the connection with their neighbours. The population of the
+SA2 areas is used to scale the geographic units in the non-contiguous
+cartogram \citep{NAC}. The amount of background space can be meaningful
+in non-contiguous cartograms \citep{ECGC}. The size disparity between
+rural areas and urban areas result in reasonable display within the
+south eastern city of Hobart, but these units are not visible in the
+context of the Tasmania state map. Depending on the difference between
+the population and geographic land size, the amount of white space can
+also prevent meaningful understanding of the distribution \citep{TVSSS}.
 
 The Dorling cartogram presents each geographic unit as a circle, the
 size of the circle is scaled according to the population value of each
-area \citep{ACTUC}. Figure \ref{fig:tas_displays}c) shows the Tasmania
-SA2 areas as an individual circle located as close as possible to the
+area \citep{ACTUC}. Figure \ref{fig:tasdisplays}c shows the Tasmania SA2
+areas as an individual circle located as close as possible to the
 geographic centroid location. This map draws attention to the collection
 of coastal cities in Tasmania that were not apparent in Figure
-\ref{fig:tas_displays} a), or b). This display also highlights that the
+\ref{fig:tasdisplays} a or b. This display also highlights that the
 approximation of equal population is not easy to fulfil, as there is
 some disparity in the sizes of the circles.
 
 It is also common to treat all geographic units as equal, so that
 regardless of the population or other information, to generate equal
-size spatial polygons. The Dorling algorithm can beinduced to do this,
+size spatial polygons. The Dorling algorithm can be induced to do this,
 to make equallly sized circles. \citet{MDAC} describes a group of
 alternative maps called ``mosaic cartograms'' for tile displays. The
 geography of the USA has been transformed into a square-binned tile map
@@ -165,6 +165,16 @@ manually and made available in the R package \CRANpkg{statebins}
 \citep{statebins}.The algorithm described below is an automatic layout
 of hexagon tiles, where a continguity constraint is relaxed. This gives
 equal weight to each geographic area even if the population differs.
+
+The nature of Australian population boundaries means that there are many
+connecting neighbours of population areas. This solution was designed to
+visualise Australian population analysis, inspired by tile maps three
+sided triangles and four sided squares were considered, but this would
+not have allowed sufficient neighbours to connect. Hexagon tile maps
+utilise the tessellating features of hexagons to maximise the data ink
+and allow connectivity between six potential neighbours. Hexagons allow
+the alignment of geographic borders, this aides in comparison of colour
+values.
 
 \hypertarget{algorithm}{%
 \subsection{Algorithm}\label{algorithm}}
@@ -216,60 +226,27 @@ Australia are less noticeable.
 
 \begin{Schunk}
 \begin{figure}
-\includegraphics[width=0.95\linewidth]{kobakian-cook_files/figure-latex/hexmap-1} \caption[A hexagon tile map of female tyroid cancer incidence in Australia, the same data as shown in the choropleth map in Figure 1]{A hexagon tile map of female tyroid cancer incidence in Australia, the same data as shown in the choropleth map in Figure 1. The high incidence in several of the metropolitan regions (Brisbane, Sydney and Perth) can now be seen, along with numerous isolated spots.}\label{fig:hexmap}
+\includegraphics[width=0.95\linewidth]{kobakian-cook_files/figure-latex/hexmap-1} \caption[A hexagon tile map of female thyroid cancer incidence in Australia, the same data as shown in the choropleth map in Figure 1]{A hexagon tile map of female thyroid cancer incidence in Australia, the same data as shown in the choropleth map in Figure 1. The high incidence in several of the metropolitan regions (Brisbane, Sydney and Perth) can now be seen, along with numerous isolated spots.}\label{fig:hexmap}
 \end{figure}
 \end{Schunk}
 
 There are several key steps in the creation of the hexagon tile map as
-described in the flow chart in Figure \ref{fig:sugarbag_flow}. First,
+described in the flow chart in Figure \ref{fig:sugarbagflow}. First,
 derive the set of centroids from the polygons provided, then create the
 grid of hexagon locations. These two processes are defined in the blue
-left column of the flow chart in figure \ref{fig:sugarbag_flow}. Each
+left column of the flow chart in figure \ref{fig:sugarbagflow}. Each
 centroid can then be allocated to an available hexagon location. The
 steps for the allocation process are detailed in the right column of
-Figure \ref{fig:sugarbag_flow}. There are several filter steps to speed
+Figure \ref{fig:sugarbagflow}. There are several filter steps to speed
 the process of selecting an appropriate hexagon to represent each
 geographic unit. To make tessellated plots with the hexagon allocations,
 the point locations are converted into hexagon shapes.
 
+\begin{Schunk}
 \begin{figure}
-\includegraphics[width=14cm]{figs/sugarbag flow.png}
-\caption{\label{fig:sugarbag_flow}A flow diagram detailing the steps taken to create a hexagon tile map. There are two basic processes, one to make the grid, and the other to allocate centroids to grid points.}
+\includegraphics[width=1\linewidth]{figs/sugarbag_flow} \caption[A flow diagram detailing the steps taken to create a hexagon tile map]{A flow diagram detailing the steps taken to create a hexagon tile map. There are two basic processes, one to make the grid, and the other to allocate centroids to grid points.}\label{fig:sugarbagflow}
 \end{figure}
-
-\hypertarget{user-choices}{%
-\subsubsection{User choices}\label{user-choices}}
-
-Only two inputs are necessary to begin the algorithm; the shapefile, and
-the ID variable. The ID variable should uniquely identify each
-geographic unit in the shapefile.
-
-The centroids are derived from the shapefile. The amount of centroids
-within the geographic map is used to determine an appropriate hexagon
-size if one is not provided. The derived centroids are a necessary input
-for an appropriate grid to be constructed. Each grid point is located a
-hexagon size distance from the next closest point in all six directions.
-The grid will initially cover the entire map space, encompassing all the
-centroid locations and will extend in all directions to the extent of
-the buffer distance. This buffer distance can be helpful to account for
-densely populated coastal areas, allowing the hexagon locations to
-spread beyond the coastline, over the sea.
-
-The centroid set and hexagon tile map grid are necessary for the
-allocation process. Additionally, a set of reference locations can be
-provided as focal points, typically compact and/or densely populated
-areas such as major cities. The algorithm will use the focal points to
-create the order of allocation, prioritising the closest centroid
-locations to the focal points. The user can also specify the variable
-that should be used to determine the order for the allocation.
-
-When allocating representative hexagons, the width parameter can be used
-to determine the flexibility of positioning. Using the relationship with
-the nearest focal point, a larger width parameter will increase the
-amount of available hexagons nearer to the original centroid of the
-geographic unit. A smaller width will maintain the orientation from the
-focal point to the centroid when selecting the hexagon location.
-However, this could mean it is placed further away.
+\end{Schunk}
 
 \hypertarget{implementation}{%
 \subsection{Implementation}\label{implementation}}
@@ -370,8 +347,14 @@ A grid is created to allow tessellation of the hexagons that represent
 the geographic units. For a hexagon tile map, the grid of possible
 hexagon locations is made using the \code{create\_grid} function. It
 uses the centroids, the hexagon size and the buffer distance. Figure
-\ref{fig:filterprocess} 1a) shows the initial locations of grid points
+\ref{fig:filterprocess} 1a shows the initial locations of grid points
 created for Tasmania.
+
+\begin{verbatim}
+centroids <- create_centroids(
+  shp_sf = sa2 %>% filter(state_name_2011 == "Tasmania"), 
+  sf_id = "sa2_name_2011")
+\end{verbatim}
 
 \hypertarget{a-creating-a-tessellated-grid}{%
 \paragraph{(a) Creating a tessellated
@@ -384,9 +367,13 @@ created from the minimum longitude minus the buffer distance, up to the
 maximum longitude plus the buffer distance. Similarly, the rows are
 created from the latitude values and the buffer distance. A unique
 hexagon location is created from all intersections of the longitude
-columns and latitude rows. Figure \ref{fig:filterprocess} 1a) shows the
+columns and latitude rows. Figure \ref{fig:filterprocess} 1a shows the
 hexagon grid after every second latitude row on the grid is shifted
 right, by half of the hexagon size.
+
+\begin{verbatim}
+grid <- create_grid(centroids = centroids, hex_size = 0.2, buffer_dist = 2)
+\end{verbatim}
 
 \hypertarget{b-filtering-the-grid}{%
 \paragraph{(b) Filtering the grid}\label{b-filtering-the-grid}}
@@ -420,7 +407,7 @@ for the longitude columns and latitude rows.
 The hexagon grid points are kept only if they fall within the rolling
 average of the minimum and maximum centroid values after accounting for
 the buffer distance, for each row and column of the grid. Figure
-\ref{fig:filterprocess} 1b) displays remaining hexagon grid points after
+\ref{fig:filterprocess} 1b displays remaining hexagon grid points after
 applying the buffer filter. The sparsely populated South-West region of
 National Park has fewer points available in the water compared to the
 South-East region near the city of Hobart.
@@ -433,7 +420,7 @@ The distance is calculated between each centroid in the set, and each of
 the focal points provided. The order for allocation is determined by the
 distance between the polygon centroid and it's closest focal point. For
 this example, this distance is only calculated for the capital city of
-Hobart, represented in figure \ref{fig:filterprocess} 2a) and 2b) as a
+Hobart, represented in Figure \ref{fig:filterprocess} 2a and 2b as a
 white cross.
 
 \hypertarget{step-2-allocate-each-centroid-to-a-hexagon-grid-point}{%
@@ -449,6 +436,18 @@ that are further will then be accommodated. The following example
 considers the first of the Statistical Areas at Level 2. Within the
 algorithm, these steps are repeated for each polygon.
 
+\begin{verbatim}
+hex_allocated <- allocate(centroids = centroids,
+                          sf_id = "SA2_NAME16",
+                          hex_grid = grid,
+                          hex_size = 0.2, # same size used in create_grid
+                          hex_filter = 10,
+                          use_neighbours = tas_sa2,
+                          focal_points = capital_cities,
+                          # same column used in create_centroids
+                          width = 30, verbose = TRUE)
+\end{verbatim}
+
 \hypertarget{a-filter-the-grid-for-unassigned-hexagon-points}{%
 \paragraph{(a) Filter the grid for unassigned hexagon
 points}\label{a-filter-the-grid-for-unassigned-hexagon-points}}
@@ -457,8 +456,8 @@ The set of possible hexagon grid points reduces by one after each
 centroid is allocated, then only the grid points that have not yet been
 selected are considered. Keeping only the available hexagon points
 prevents multiple geographic units from being allocated to the same
-hexagon. This is demonstrated in figure \ref{fig:filterprocess} 2a) and
-2b) by the black hexagons that represent the seven closest polygons to
+hexagon. This is demonstrated in Figure \ref{fig:filterprocess} 2a and
+2b by the black hexagons that represent the seven closest polygons to
 the capital city of Hobart. As the allocation process begins for the
 eighth closest centroid there are seven unavailable hexagon locations.
 
@@ -481,8 +480,8 @@ a certain radial distance around the original centroid location.
 The \code{width} parameter is used to take a slice of the remaining
 points. The width is the amount of degrees used on either side of the
 angle from the focal point to centroid location. This uses the angle
-from the closest capital city, to the current centroid as seen in figure
-\ref{fig:filterprocess} 2a). This allows the spatial relationship to be
+from the closest capital city, to the current centroid as seen in Figure
+\ref{fig:filterprocess} 2a. This allows the spatial relationship to be
 preserved, even when it is allocated to a hexagon that is further from
 the focal point then the original centroid location.
 
@@ -501,6 +500,40 @@ to the geographic centroid. This will increase if no points can be found
 within the \code{hex\_filter} distance. The default angle of 30 was
 chosen to allow the algorithm to find hexagons that best maintained the
 spatial relationship between the focal point and geographic centroid.
+
+\hypertarget{user-choices}{%
+\subsubsection{User choices}\label{user-choices}}
+
+Only two inputs are necessary to begin the algorithm; the shapefile, and
+the ID variable. The ID variable should uniquely identify each
+geographic unit in the shapefile.
+
+The centroids are derived from the shapefile. The amount of centroids
+within the geographic map is used to determine an appropriate hexagon
+size if one is not provided. The derived centroids are a necessary input
+for an appropriate grid to be constructed. Each grid point is located a
+hexagon size distance from the next closest point in all six directions.
+The grid will initially cover the entire map space, encompassing all the
+centroid locations and will extend in all directions to the extent of
+the buffer distance. This buffer distance can be helpful to account for
+densely populated coastal areas, allowing the hexagon locations to
+spread beyond the coastline, over the sea.
+
+The centroid set and hexagon tile map grid are necessary for the
+allocation process. Additionally, a set of reference locations can be
+provided as focal points, typically compact and/or densely populated
+areas such as major cities. The algorithm will use the focal points to
+create the order of allocation, prioritising the closest centroid
+locations to the focal points. The user can also specify the variable
+that should be used to determine the order for the allocation.
+
+When allocating representative hexagons, the width parameter can be used
+to determine the flexibility of positioning. Using the relationship with
+the nearest focal point, a larger width parameter will increase the
+amount of available hexagons nearer to the original centroid of the
+geographic unit. A smaller width will maintain the orientation from the
+focal point to the centroid when selecting the hexagon location.
+However, this could mean it is placed further away.
 
 \hypertarget{animation}{%
 \subsection{Animation}\label{animation}}
@@ -548,21 +581,33 @@ the Northern territory do not draw attention because of their size as in
 the choropleth, but their colour is still noticeably below average when
 contrasted with the hexagons in New South Wales.
 
-This algorithm should be general enough to apply to other study regions
-and contexts. The algorithm has only been tested using single countries.
-While the buffer allows extension beyond the furthest centroids, there
-is no mechanism implemented to protect the borders and ensure centroids
-are placed within the geographic borders of a country. The algorithm is
-also currently limited to representing each geographic area with only
-one hexagon. Future developments may address these limitations, and
-refine the filter steps for final selection of a hexagon grid point for
-each centroid. A direct angle is currently implemented, but may narrowly
-miss appropriate hexagons, a logarithmic function may help to choose a
-closer hexagon to the original centroid location. This algorithm is an
-effective start to automatically creating hexagon tile maps for many
-geographic units. This contributes to an extensive body of work that
-encourages the use of alternative map displays for statistical displays
-of spatial data.
+Australia is used as an example, because it represents an extreme sparse
+geography and small dense population areas which produces unsatisfactory
+results with all existing cartogram-type algorithms. However, the
+algorithm is sufficiently general to apply to other geographic regions,
+and indeed has been applied to make hexagon maps of the UK, USA and
+France.
+
+There are many possible extensions to the algorithm that might be
+valuable future work. The buffer allows extension beyond the furthest
+centroids, but there is no mechanism to protect borders to force
+centroids are placed within the geographic borders of a region
+(e.g.~country or state). The algorithm is also currently limited to
+representing each geographic area with only one hexagon. In the filter
+step for final selection of a hexagon grid point for each centroid, a
+direct angle constraint is currently implemented, but it may narrowly
+miss potentially better hexagon allocation. Some other constraints, such
+as a logarithmic function may help to choose refine the final allocation
+to hexagons closer to the original centroid location. In a country like
+Australia, the vast centre produces a hexagon map with small isolated
+hexagons, even when the city centres are hugely expanded. It could be
+useful to allow variable sized hexagons, primarily to increase the size
+of the isolated hexagons to improve their visibility.
+
+This new algorithm provides an effective start point for automatically
+creating hexagon tile maps for any spatial polygon data, and contributes
+to an extensive body of work that encourages the use of alternative map
+displays for statistical displays of spatial data.
 
 \bibliography{kobakian-cook.bib}
 
