@@ -3,10 +3,10 @@ title: A Hexagon Tile Map Algorithm for Displaying Spatial Data
 author:
   # see ?rjournal_article for more information
   - name: Stephanie Kobakian
-    affiliation: Monash University
+    affiliation:  
     address:
-    - Department of Econometrics and Business Statistics
-    email:  stephanie.kobakian@monash.edu 
+    - Sydney, Australia
+    email:  stephanie.kobakian@gmail.com 
   - name: Dianne Cook
     affiliation: Monash University
     address:
