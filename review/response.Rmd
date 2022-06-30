@@ -30,8 +30,6 @@ Fixed, and paper has been carefully proofread again.
 
 > *The package itself seems to be reasonably well-organized, the code is clean, and there is sufficient built-in documentation. The progress bars are also useful. I don’t have any major suggestions for improving the functionality of the package itself, other than the fact that I couldn’t reproduce the example maps in the implementation section because the data were not self-contained. The article says that the example is reproducible using data from the absmapsdata package, but in the provided RMD file the object “fort_aus” can be traced back to the “SIR Downloadable Data.csv” dataset, which is from an external source (and also not available on the github repo). Forgive me if I am missing something here (and it is possible that I am). If not, these SIR data should be embedded or example code fixed to not be dependent on the SIR data so that the illustrative maps are reproducible.* 
 
-For improving the speed to knit the paper the implementation section uses only the small data set corresponding to Tasmania.  
-
 The data files for the full Australia thyroid choropleth and hexagon map are provided so that the Figures 1 and 2 can be produced quickly. The code to produce these data sets is provided, so that the interested reader can follow the entire hexagon map generating process. There are two sets of data required to make the Australian thyroid map, the shape file and thyroid SIR data. The `SIR Downloadable Data.csv` file is located in the data folder. The shape file is the `sa22011` data from the `absmapsdata` package, which would need to be installed with `remotes::install_github("wfmackey/absmapsdata")`.
 
 
