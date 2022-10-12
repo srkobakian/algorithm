@@ -52,8 +52,9 @@ library(sf)
 library(sugarbag)
 library(tidyverse)
 
-# remotes::install_github("wfmackey/absmapsdata")
-library(absmapsdata)
+# Rda files sourced from: https://github.com/wfmackey/absmapsdata
+load("data/sa22011.Rda")
+load("data/state2011.Rda")
 
 library(RefManageR)
 options("citation_format" = "pandoc")
@@ -97,7 +98,7 @@ for females was downloaded from the publicly accessible Australian Cancer Atlas 
 
 
 ```{r thyroiddata}
-sa2 <- absmapsdata::sa22011 %>% 
+sa2 <- sa22011 %>% 
   filter(!st_is_empty(geometry)) %>% 
   filter(!state_name_2011 == "Other Territories") %>% 
   filter(!sa2_name_2011 == "Lord Howe Island")
