@@ -1,4 +1,6 @@
-# Young statisticians conference presentation plots
+# Plots
+
+## Libraries 
 
 library(absmapsdata)
 library(tidyverse)
@@ -7,6 +9,11 @@ library(ggthemes)
 library(cowplot)
 library(sf)
 library(sp)
+
+## Data 
+# Rda files sourced from: https://github.com/wfmackey/absmapsdata
+load("data/sa22011.Rda")
+load("data/state2011.Rda")
 
 ### Theme set up
 
