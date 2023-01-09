@@ -219,7 +219,6 @@ tas_ggcont <- ggplot(cont) +
   geom_sf(aes(fill = SIR), colour = "grey", size = 0.01) + 
   scale_fill_identity() + guides(fill = "none") +
   theme_map()
-#tas_ggcont
 ```
 
 
