@@ -1,12 +1,20 @@
-# Young statisticians conference presentation plots
+# Plots
 
-library(absmapsdata)
+## Libraries 
 library(tidyverse)
 library(cartogram)
-library(ggthemes)
 library(cowplot)
+library(gganimate)
+library(ggthemes)
+library(gridExtra)
 library(sf)
 library(sp)
+library(sugarbag)
+
+## Data 
+# Rda files sourced from: https://github.com/wfmackey/absmapsdata
+load("data/sa22011.Rda")
+load("data/state2011.Rda")
 
 ### Theme set up
 
@@ -22,18 +30,22 @@ invthm <- theme_map() +
 
 ## States of Australia
 
-states <- absmapsdata::state2011 %>% 
+states <- state2011 %>% 
   filter(state_name_2011 != "Other Territories")
 
 ###############################################################################
 ###########################        ABS AREAS        ###########################
 ## sa2
-sa2 <- absmapsdata::sa22011 %>% 
-  filter(state_name_2011 != "Other Territories") %>% st_transform(., crs = 3112)
+sa2 <- sa22011 %>% 
+  filter(!st_is_empty(geometry)) %>% 
+  filter(!state_name_2011 == "Other Territories") %>% 
+  filter(!sa2_name_2011 == "Lord Howe Island") %>% 
+  st_transform(., crs = 3112)
 
 sa2_map <- ggplot(sa2) + 
-  geom_sf(aes(fill = albers_sqkm)) +
-  scale_fill_distiller(type = "seq", palette = "BuGn",  direction = 1, na.value = "light grey") + 
+  geom_sf(aes(fill = areasqkm_2011)) +
+  scale_fill_distiller(type = "seq", palette = "BuGn", 
+                       direction = 1, na.value = "light grey") + 
   theme_void() +
   coord_sf(crs = 3112) +
    theme(legend.position ="left", legend.title = element_text("Area (sqkm)"))
@@ -64,15 +76,14 @@ SIR <- read_csv("data/SIR Downloadable Data.csv")
 
 sa2 <- sa2 %>% 
   filter((sa2_name_2011 %in% SIR$SA2_name)) 
-save(sa2, file = "")
-# 
+
 # SIR_persons <- SIR %>% 
 #   filter(Year=="2010-2014") %>% 
 #   filter(Sex_name =="Persons") %>% 
 #   select(Cancer_name, SA2_name, p50) %>% 
 #   spread(Cancer_name, p50) %>% 
 #   left_join(sa2, ., by = c("sa2_name_2011"="SA2_name"))
-# 
+
 
 SIR_females <- SIR %>% 
   filter(Year=="2005-2014") %>% 
@@ -81,7 +92,7 @@ SIR_females <- SIR %>%
   spread(Cancer_name, p50) %>% 
   left_join(sa2, ., by = c("sa2_name_2011"="SA2_name"))
 
-# 
+ 
 # SIR_males <- SIR %>% 
 #   filter(Year=="2005-2014") %>% 
 #   filter(Sex_name =="Males") %>% 
@@ -117,7 +128,7 @@ sf_id <- "sa2_name_2011"
 # Create centroids set
 centroids <- create_centroids(sa2, "sa2_name_2011")
 # Create hexagon location grid
-grid <- create_grid(centroids = centroids, hex_size = 0.1, buffer_dist = 12)
+grid <- create_grid(centroids = centroids, hex_size = 0.1, buffer_dist = 1)
 # Allocate polygon centroids to hexagon grid points
 hex_allocated <- allocate(centroids = centroids,
  hex_grid = grid,
