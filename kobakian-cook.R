@@ -1,6 +1,16 @@
-## R Code for the paper "A Hexagon Tile Map Algorithm for Displaying Spatial Data"
+## ----defaults, echo=FALSE, message=FALSE, warning=FALSE, comment = FALSE----
+knitr::opts_chunk$set(warning = FALSE, 
+                      message = FALSE, 
+                      comment = FALSE,
+                      echo = FALSE,
+                      eval = TRUE,
+                      out.width = "95%",
+                      retina = 3,
+                      dev = "png",
+                      dpi = 300)
 
-## ----setup----------------------------------------------------------------------------------------
+
+## ----setup----------------------------------------------------
 library(cartogram)
 library(cowplot)
 library(gridExtra)
@@ -15,6 +25,10 @@ library(tidyverse)
 # Rda files sourced from: https://github.com/wfmackey/absmapsdata
 load("data/sa22011.Rda")
 load("data/state2011.Rda")
+
+library(RefManageR)
+options("citation_format" = "pandoc")
+BibOptions(check.entries = FALSE, style = "markdown", bib.style = "alphabetic", cite.style = 'alphabetic')
 
 
 invthm <- theme_map() + 
@@ -40,7 +54,7 @@ aus_colours <- function(sir_p50){
 }
 
 
-## ----thyroiddata----------------------------------------------------------------------------------
+## ----thyroiddata----------------------------------------------
 sa2 <- sa22011 %>% 
   filter(!st_is_empty(geometry)) %>% 
   filter(!state_name_2011 == "Other Territories") %>% 
@@ -114,13 +128,13 @@ fort_aus <- sa2thyroid_ERP %>%
 ## Make a plot
 aus_hexmap_plot <- ggplot() +
   geom_polygon(aes(x = long,  y = lat,  group = interaction(sa2_name_2011, polygon)),
-               fill = "black",  colour = "darkgrey",  size = 0.1, data = fort_aus) +
+               fill = "black",  colour = "darkgrey",  linewidth = 0.1, data = fort_aus) +
   geom_polygon(aes(x = long, y = lat, group = hex_id, fill = SIR), data = fort_hex) +
   scale_fill_identity() +
   invthm + coord_equal()
 
 
-## ----contcart-------------------------------------------------------------------------------------
+## ----contcart-------------------------------------------------
 # Projected data 
 sa2thyroid_ERP <- st_transform(sa2thyroid_ERP, crs = 3112) %>% 
   filter(state_name_2011 == "Tasmania")
@@ -146,7 +160,7 @@ tas_ggcont <- ggplot(cont) +
 #tas_ggcont
 
 
-## ----ncontcart------------------------------------------------------------------------------------
+## ----ncontcart------------------------------------------------
 # Non - Contiguous Cartograms
 if (!file.exists("data/ncont.rda")) {
   ncont <- cartogram_ncont(sa2thyroid_ERP, k = 1.5,
@@ -165,26 +179,27 @@ tas_ggncont <- ggplot(ncont %>% filter(state_name_2011 == "Tasmania")) +
   theme_map() 
 
 
-## ----dorl-----------------------------------------------------------------------------------------
+## ----dorl-----------------------------------------------------
 # Non - Contiguous Dorling Cartograms
-dorl <- sa2thyroid_ERP %>% 
-  filter(!is.na(Population)) %>% 
-  #mutate(pop = (Population/max(Population))*10) %>% # helpful for all of Australia
-  cartogram_dorling(., weight = "Population", k = 0.2, m_weight = 1) %>% st_as_sf()
-save(dorl, file = "data/dorl.rda")
-d <- st_bbox(dorl)
+if (!file.exists("data/dorl.rda")) {
+  dorl <- sa2thyroid_ERP %>% 
+    filter(!is.na(Population)) %>% 
+  # mutate(pop = (Population/max(Population))*10) %>% # helpful for all of Australia
+    cartogram_dorling(., weight = "Population", k = 0.2, m_weight = 1) %>% st_as_sf()
+  save(dorl, file = "data/dorl.rda")
+}
 
+load("data/dorl.rda")
+d <- st_bbox(dorl)
 tas_ggdorl <- ggplot(dorl) +
   geom_sf(fill = "#D3D3D3", colour = "white",  data = sa2thyroid_ERP) + 
   geom_sf(aes(fill = SIR), colour = "grey", size = 0.01) + 
   scale_fill_identity() +
   guides(fill = "none") +
   theme_map() #+ ggtitle("c")
-#tas_ggdorl
 
 
 ## ----tasdisplays, out.width="100%", fig.width = 8, fig.height = 3, layout = "l-body", fig.cap = "The three displays show alternative maps of the Australian state of Tasmania at SA2 level: (a) contiguous cartogram, (b) non-contiguous cartogram and (c) Dorling cartogram of Tasmania. The contiguous cartogram looks like the state has an hourglass figure, while the non-contiguous cartogram shrinks areas into invisibility. The Dorling expands the metropolitan regions."----
-#library(gridExtra)
 cowplot::plot_grid(tas_ggcont, 
                    tas_ggncont, 
                    tas_ggdorl, ncol=3,
@@ -199,7 +214,15 @@ aus_hexmap_plot
 knitr::include_graphics("figs/sugarbag_flow.png")
 
 
-## ----capital_cities-------------------------------------------------------------------------------
+## ----eval=FALSE, echo = TRUE----------------------------------
+## install.packages("sugarbag")
+
+
+## ----eval=FALSE, echo = TRUE----------------------------------
+## devtools::install_github("srkobakian","sugarbag")
+
+
+## ----capital_cities-------------------------------------------
 data(capital_cities)
 
 
@@ -237,7 +260,7 @@ tas_hexmap <- ggplot() +
   coord_equal()
 
 
-## ----grid, fig.cap = "Complete set of grid points to create a tile map.", height = 4--------------
+## ----grid, fig.cap = "Complete set of grid points to create a tile map.", height = 4----
 # Find every second latitude
 shift_lat <- grid %>% dplyr::select(hex_lat) %>%
   dplyr::distinct() %>%
@@ -399,16 +422,16 @@ g2 <- ggplot() +
 
 
 
-## ----centroids, eval = FALSE----------------------------------------------------------------------
-# hexmap_allocation <- allocate(
-#   centroids = centroids %>% select(sa2_name_2011, longitude, latitude),
-#   sf_id = "sa2_name_2011",
-#   hex_grid = grid,
-#   hex_size = 0.2, ## same size used in create_grid
-#   hex_filter = 10,
-#   width = 35,
-#   focal_points = capital_cities,
-#   verbose = TRUE)
+## ----centroids, eval = FALSE----------------------------------
+## hexmap_allocation <- allocate(
+##   centroids = centroids %>% select(sa2_name_2011, longitude, latitude),
+##   sf_id = "sa2_name_2011",
+##   hex_grid = grid,
+##   hex_size = 0.2, ## same size used in create_grid
+##   hex_filter = 10,
+##   width = 35,
+##   focal_points = capital_cities,
+##   verbose = TRUE)
 
 
 ## ----buffers, fig.cap = "Filter for grid points within a square, then circular, distance for those closest to the centroid.", echo = FALSE, out.width = "100%", height = 4----
@@ -434,7 +457,6 @@ flat <- f_centroid$latitude
 f_dist <- 10 * hex_size
 angle_width <- 35
   
-
 f_grid <- grid %>%
   ungroup() %>%
   filter((flat - f_dist) < hex_lat & hex_lat < (flat + f_dist)) %>%

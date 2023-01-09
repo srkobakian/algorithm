@@ -189,7 +189,7 @@ fort_aus <- sa2thyroid_ERP %>%
 ## Make a plot
 aus_hexmap_plot <- ggplot() +
   geom_polygon(aes(x = long,  y = lat,  group = interaction(sa2_name_2011, polygon)),
-               fill = "black",  colour = "darkgrey",  size = 0.1, data = fort_aus) +
+               fill = "black",  colour = "darkgrey",  linewidth = 0.1, data = fort_aus) +
   geom_polygon(aes(x = long, y = lat, group = hex_id, fill = SIR), data = fort_hex) +
   scale_fill_identity() +
   invthm + coord_equal()
@@ -245,10 +245,15 @@ tas_ggncont <- ggplot(ncont %>% filter(state_name_2011 == "Tasmania")) +
 
 ```{r dorl}
 # Non - Contiguous Dorling Cartograms
-dorl <- sa2thyroid_ERP %>% 
-  filter(!is.na(Population)) %>% 
-  #mutate(pop = (Population/max(Population))*10) %>% # helpful for all of Australia
-  cartogram_dorling(., weight = "Population", k = 0.2, m_weight = 1) %>% st_as_sf()
+if (!file.exists("data/dorl.rda")) {
+  dorl <- sa2thyroid_ERP %>% 
+    filter(!is.na(Population)) %>% 
+  # mutate(pop = (Population/max(Population))*10) %>% # helpful for all of Australia
+    cartogram_dorling(., weight = "Population", k = 0.2, m_weight = 1) %>% st_as_sf()
+  save(dorl, file = "data/dorl.rda")
+}
+
+load("data/dorl.rda")
 d <- st_bbox(dorl)
 tas_ggdorl <- ggplot(dorl) +
   geom_sf(fill = "#D3D3D3", colour = "white",  data = sa2thyroid_ERP) + 
@@ -256,12 +261,10 @@ tas_ggdorl <- ggplot(dorl) +
   scale_fill_identity() +
   guides(fill = "none") +
   theme_map() #+ ggtitle("c")
-#tas_ggdorl
 ```
 
 
 ```{r tasdisplays, out.width="100%", fig.width = 8, fig.height = 3, layout = "l-body", fig.cap = "The three displays show alternative maps of the Australian state of Tasmania at SA2 level: (a) contiguous cartogram, (b) non-contiguous cartogram and (c) Dorling cartogram of Tasmania. The contiguous cartogram looks like the state has an hourglass figure, while the non-contiguous cartogram shrinks areas into invisibility. The Dorling expands the metropolitan regions."}
-#library(gridExtra)
 cowplot::plot_grid(tas_ggcont, 
                    tas_ggncont, 
                    tas_ggdorl, ncol=3,
