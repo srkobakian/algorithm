@@ -6,16 +6,19 @@ author:
     address:
     - Sydney, Australia
     email:  stephanie.kobakian@gmail.com 
+    orcid: 0000-0002-4616-0048 
   - name: Dianne Cook
     affiliation: Monash University
     address:
     - Department of Econometrics and Business Statistics
-    email:  dicook@monash.edu 
+    email:  dicook@monash.edu
+    orcid: 0000-0002-3813-7155 
   - name: Earl Duncan
     affiliation: Queensland University of Technology
     address:
     - School of Mathematical Sciences
     email:  earl.duncan@qut.edu.au
+    orcid: 0000-0002-5146-7810 
 abstract: >
   Spatial distributions have been presented on alternative representations of geography, such as cartograms, for many years. In modern times, interactivity and animation have allowed alternative displays to play a larger role. Alternative representations have been popularised by online news sites, and digital atlases with a focus on public consumption. Applications are increasingly widespread, especially in the areas of disease mapping, and election results. The algorithm presented here creates a display that uses tessellated hexagons to represent a set of spatial polygons, and is implemented in the R package called sugarbag. It allocates these hexagons in a manner that preserves the spatial relationship of the geographic units, in light of their positions to points of interest. The display showcases spatial distributions, by emphasising the small geographical regions that are often difficult to locate on geographic maps. 
 preamble: |
