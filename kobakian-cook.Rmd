@@ -206,7 +206,7 @@ sa2thyroid_ERP <- sa2thyroid_ERP %>%
   mutate(sva = sqrt(as.numeric(Population)/as.numeric(areasqkm_2011)))
 
 # Contiguous Cartograms
-if (!file.exists("data/ncont.rda")) {
+if (!file.exists("data/cont.rda")) {
   cont <- sa2thyroid_ERP %>% 
     mutate(Population = Population + 1) %>% 
     cartogram_cont(., weight = "Population", itermax = 20) %>%
