@@ -1,0 +1,16 @@
+Simon Urbanek
+R Journal Editor-in-Chief
+
+Dear Simon,
+
+Thank you for the copy edit review of our article. We are grateful for the comments provided to us to improve the article. These are the changes that we have made in response. 
+
+We have addressed all comments included on the pdf titled 2021-13-copyedit.pdf. These changes are exactly what was requested, unless the comment asked for a paraphrase without specifying the next text.
+
+We have included citations for R and the packages that you suggested: absmapsdata, cartogram, sf, and tilemaps. We have also added our ORCIDs to the author information. 
+
+Please accept these changes and thank you for your consideration and support.
+
+Warm regards
+Stephanie Kobakian, MPhil
+stephanie.kobakian@gmail.com
