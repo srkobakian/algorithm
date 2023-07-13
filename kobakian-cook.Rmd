@@ -334,17 +334,7 @@ The hexagon size may need adjustments depending on the density of the population
 
 ## Algorithm steps
 
-The package can be installed from CRAN:
-
-```{r eval=FALSE, echo = TRUE}
-install.packages("sugarbag")
-```
-
-\noindent and the development version can be installed from the GitHub repository:
-
-```{r eval=FALSE, echo = TRUE}
-devtools::install_github("srkobakian","sugarbag")
-```
+The package can be installed from CRAN and the development version can be installed from the GitHub repository: https://github.com/srkobakian/sugarbag.
 
 The following steps create the hexagon tile map for all the Statistical Areas at Level 2 in Tasmania. These steps can be executed by the main function, \code{create\_hexmap}, or can be run separately for more flexibility.
 
